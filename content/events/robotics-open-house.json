@@ -1,0 +1,12 @@
+{
+  "slug": "robotics-open-house",
+  "title": "Robotics Open House",
+  "type": "Event",
+  "date": "2026-10-01",
+  "startTime": "10:30 AM",
+  "endTime": "01:30 PM",
+  "venue": "Robotics Lab, IIT Delhi",
+  "description": "Interact, explore and innovate with the future of robotics.",
+  "body": "The Robotics Lab opens its doors: live demos of our autonomous rover, manipulator arms and the SLAM stack behind them. No prior experience needed.",
+  "links": [{ "label": "Save to Google Calendar", "url": "#" }]
+}

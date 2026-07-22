@@ -1,0 +1,77 @@
+[
+  {
+    "title": "VS Code",
+    "description": "A powerful code editor with extensions for every developer.",
+    "type": "Tool",
+    "url": "https://code.visualstudio.com",
+    "addedOn": "2025-05-14",
+    "featured": true
+  },
+  {
+    "title": "Designing Data-Intensive Applications",
+    "description": "The big ideas behind reliable, scalable and maintainable systems.",
+    "type": "Book",
+    "url": "https://dataintensive.net",
+    "addedOn": "2025-05-11",
+    "featured": true
+  },
+  {
+    "title": "Deep Learning Specialization",
+    "description": "Master deep learning, from neural networks to advanced architectures.",
+    "type": "Course",
+    "url": "https://www.coursera.org/specializations/deep-learning",
+    "addedOn": "2025-05-09",
+    "featured": true
+  },
+  {
+    "title": "Git & GitHub Tutorial",
+    "description": "Step-by-step guide to version control and collaboration with GitHub.",
+    "type": "Tutorial",
+    "url": "https://docs.github.com/en/get-started",
+    "addedOn": "2025-05-07",
+    "featured": true
+  },
+  {
+    "title": "Kaggle – Titanic Dataset",
+    "description": "Classic dataset for learning data analysis and machine learning basics.",
+    "type": "Dataset",
+    "url": "https://www.kaggle.com/c/titanic",
+    "addedOn": "2025-05-05",
+    "featured": true
+  },
+  {
+    "title": "TensorFlow Documentation",
+    "description": "Official guides and API reference for TensorFlow.",
+    "type": "Tool",
+    "url": "https://www.tensorflow.org/learn",
+    "addedOn": "2025-05-12"
+  },
+  {
+    "title": "Clean Code",
+    "description": "A handbook of agile software craftsmanship.",
+    "type": "Book",
+    "url": "https://www.oreilly.com/library/view/clean-code-a/9780136083238/",
+    "addedOn": "2025-05-10"
+  },
+  {
+    "title": "Stanford CS229 – Machine Learning",
+    "description": "Complete machine learning course by Andrew Ng.",
+    "type": "Course",
+    "url": "https://cs229.stanford.edu",
+    "addedOn": "2025-05-08"
+  },
+  {
+    "title": "Python Pandas Tutorial",
+    "description": "Learn data manipulation and analysis with pandas.",
+    "type": "Tutorial",
+    "url": "https://pandas.pydata.org/docs/getting_started/index.html",
+    "addedOn": "2025-05-06"
+  },
+  {
+    "title": "UCI Machine Learning Repository",
+    "description": "Collection of datasets for machine learning research.",
+    "type": "Dataset",
+    "url": "https://archive.ics.uci.edu",
+    "addedOn": "2025-05-01"
+  }
+]

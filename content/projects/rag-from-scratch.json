@@ -1,0 +1,15 @@
+{
+  "slug": "rag-from-scratch",
+  "name": "RAG",
+  "tagline": "Production-ready retrieval-augmented generation.",
+  "description": "Build production-ready RAG systems from scratch with LLMs and vector databases.",
+  "category": "AI / ML",
+  "tags": ["NLP", "LangGraph"],
+  "techStack": ["Python", "LangGraph", "PostgreSQL", "pgvector"],
+  "highlights": [],
+  "features": [],
+  "screenshots": [],
+  "links": [{ "label": "GitHub", "url": "#" }],
+  "contributors": ["harsheet-kaur"],
+  "about": "A hands-on system that takes retrieval-augmented generation from a toy demo to a production-grade pipeline: chunking strategies, hybrid retrieval, reranking and evaluation."
+}

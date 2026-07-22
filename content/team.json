@@ -1,0 +1,66 @@
+{
+  "years": [
+    {
+      "year": "2026-27",
+      "coreTeam": [
+        { "name": "Harsheet Kaur", "role": "OC", "slug": "harsheet-kaur" },
+        { "name": "TBD", "role": "Co-OC" },
+        { "name": "TBD", "role": "Research Lead" },
+        { "name": "TBD", "role": "Panelist" }
+      ],
+      "coordinators": [
+        { "name": "Coordinator 1", "role": "Coordinator" },
+        { "name": "Coordinator 2", "role": "Coordinator" },
+        { "name": "Coordinator 3", "role": "Coordinator" },
+        { "name": "Coordinator 4", "role": "Coordinator" },
+        { "name": "Coordinator 5", "role": "Coordinator" },
+        { "name": "Coordinator 6", "role": "Coordinator" },
+        { "name": "Coordinator 7", "role": "Coordinator" },
+        { "name": "Coordinator 8", "role": "Coordinator" }
+      ],
+      "executives": [
+        {
+          "group": "BRAIN",
+          "members": [
+            { "name": "Executive 1", "role": "Executive" },
+            { "name": "Executive 2", "role": "Executive" },
+            { "name": "Executive 3", "role": "Executive" },
+            { "name": "Executive 4", "role": "Executive" },
+            { "name": "Executive 5", "role": "Executive" }
+          ]
+        },
+        {
+          "group": "CANVAS",
+          "members": [
+            { "name": "Executive 6", "role": "Executive" },
+            { "name": "Executive 7", "role": "Executive" },
+            { "name": "Executive 8", "role": "Executive" },
+            { "name": "Executive 9", "role": "Executive" },
+            { "name": "Executive 10", "role": "Executive" }
+          ]
+        }
+      ]
+    },
+    {
+      "year": "2025-26",
+      "coreTeam": [
+        { "name": "TBD", "role": "OC" },
+        { "name": "TBD", "role": "Co-OC" }
+      ],
+      "coordinators": [],
+      "executives": []
+    }
+  ],
+  "alumni": [
+    { "name": "Aditi Sharma", "role": "Product Manager", "org": "Google" },
+    { "name": "Rohan Verma", "role": "Software Engineer", "org": "Microsoft" },
+    { "name": "Mahak Bansal", "role": "Data Scientist", "org": "Amazon" },
+    { "name": "Arjun Singh", "role": "Founder & CEO", "org": "Novera Labs" },
+    { "name": "Rashmi Kaur", "role": "UX Designer", "org": "Adobe" },
+    { "name": "Karan Malhotra", "role": "ML Engineer", "org": "Meta" },
+    { "name": "Ishita Goyal", "role": "Consultant", "org": "Boston Consulting Group" },
+    { "name": "Vivek Nair", "role": "SDE-II", "org": "Flipkart" },
+    { "name": "Naina Aggarwal", "role": "Research Associate", "org": "IIT Bombay" },
+    { "name": "Pranav Mehta", "role": "Co-founder", "org": "FluxAI" }
+  ]
+}

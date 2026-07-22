@@ -1,0 +1,15 @@
+{
+  "slug": "graph-learning-suite",
+  "name": "Graph Learning Suite",
+  "tagline": "Research toolkit for learning on graphs.",
+  "description": "GNN baselines, benchmarks and visualisation for research on graph-structured data.",
+  "category": "Research",
+  "tags": ["Learning on graphs"],
+  "techStack": ["PyTorch Geometric", "NetworkX"],
+  "highlights": [],
+  "features": [],
+  "screenshots": [],
+  "links": [{ "label": "GitHub", "url": "#" }],
+  "contributors": [],
+  "about": "A research toolkit standardising our graph-learning experiments: reproducible GNN baselines, common benchmarks and interactive visualisation of learned embeddings."
+}

@@ -1,0 +1,36 @@
+{
+  "slug": "aries-call-ai",
+  "name": "Aries",
+  "accent": "Call AI",
+  "tagline": "Your voice. Our intelligence. Real conversations.",
+  "description": "An AI voice assistant that understands you in real-time, carries conversations naturally, and helps businesses engage better with their customers.",
+  "category": "AI / ML",
+  "tags": ["AI / ML", "NLP", "Real-time", "Voice Processing"],
+  "techStack": ["Python", "FastAPI", "Whisper", "Pydantic", "WebSockets", "Next.js", "TypeScript", "Tailwind CSS", "PostgreSQL"],
+  "highlights": [
+    { "title": "Real-time Conversations", "description": "Low-latency voice interactions that feel natural and human." },
+    { "title": "Context Aware", "description": "Remembers context and carries conversations seamlessly." },
+    { "title": "Secure & Reliable", "description": "Built with security, privacy and scalability in mind." },
+    { "title": "Business Ready", "description": "Designed for modern businesses and customer experiences." }
+  ],
+  "features": [
+    { "title": "Natural Voice Conversations", "description": "Engage in human-like conversations with real-time voice understanding." },
+    { "title": "Multi-turn Memory", "description": "Retains context across multiple turns for seamless interactions." },
+    { "title": "Multi-language Support", "description": "Supports multiple languages for a diverse user base." },
+    { "title": "Easy Integrations", "description": "REST APIs and SDKs to integrate smoothly into your platforms." },
+    { "title": "Analytics Dashboard", "description": "Monitor conversations, insights and performance in real-time." }
+  ],
+  "screenshots": [
+    { "title": "Voice Interface", "description": "Real-time voice interaction with live transcription." },
+    { "title": "Analytics Dashboard", "description": "Track usage, conversations and performance." },
+    { "title": "Conversation Flow", "description": "Context-aware multi-turn conversations." },
+    { "title": "Integrations", "description": "Seamless integration with your existing tools." }
+  ],
+  "links": [
+    { "label": "Live Demo", "url": "#" },
+    { "label": "View on GitHub", "url": "#" }
+  ],
+  "contributors": ["harsheet-kaur"],
+  "featured": true,
+  "about": "Aries Voice AI is a conversational voice assistant built to make customer interactions smarter and more human-like. It combines advanced speech recognition, natural language understanding, and intelligent response generation to deliver real-time solutions across industries."
+}

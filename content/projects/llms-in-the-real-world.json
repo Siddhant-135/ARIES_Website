@@ -1,0 +1,15 @@
+{
+  "slug": "llms-in-the-real-world",
+  "name": "LLMs in the Real World",
+  "tagline": "Applied large language models across industries.",
+  "description": "Explore how large language models are solving real-world problems across industries.",
+  "category": "Industry Project",
+  "tags": ["Product design", "AI tools"],
+  "techStack": ["Python", "Transformers", "FastAPI"],
+  "highlights": [],
+  "features": [],
+  "screenshots": [],
+  "links": [{ "label": "GitHub", "url": "#" }],
+  "contributors": [],
+  "about": "A collaboration series with industry partners exploring practical LLM deployments: summarisation, agents, retrieval and evaluation in messy real-world settings."
+}

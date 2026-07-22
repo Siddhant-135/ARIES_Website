@@ -1,0 +1,242 @@
+{
+  "slug": "harsheet-kaur",
+  "name": "Harsheet Kaur",
+  "role": "Executive, ARIES",
+  "tagline": "Passionate about design, technology and creating meaningful experiences through innovation.",
+  "year": "3rd Year, MAE",
+  "location": "IIT Delhi",
+  "resumeUrl": "#",
+  "socials": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://linkedin.com"
+    },
+    {
+      "label": "Twitter",
+      "url": "https://x.com"
+    },
+    {
+      "label": "Email",
+      "url": "mailto:someone@iitd.ac.in"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "tools",
+      "type": "tools",
+      "span": "full",
+      "title": "Tools",
+      "data": [
+        "Python",
+        "C++",
+        "PyTorch",
+        "TensorFlow",
+        "Git",
+        "Docker",
+        "Figma",
+        "SQL"
+      ]
+    },
+    {
+      "id": "achievements",
+      "type": "achievements",
+      "span": "full",
+      "title": "Achievements",
+      "data": [
+        {
+          "year": "2025",
+          "title": "Gold Medal",
+          "org": "ACM India Hackathon 2025",
+          "description": "Awarded Gold Medal for developing an AI-powered solution that enhances accessibility in education using computer vision and NLP technologies."
+        },
+        {
+          "year": "2024",
+          "title": "Winner",
+          "org": "Smart India Hackathon 2024",
+          "description": "Led the team to victory by building an intelligent waste management system integrated with IoT sensors and real-time analytics."
+        },
+        {
+          "year": "2023",
+          "title": "AIR 73",
+          "org": "IIT JAM (Mechanical)",
+          "description": "Secured All India Rank 73 among thousands of candidates in the IIT JAM examination for Mechanical Engineering."
+        },
+        {
+          "year": "2023",
+          "title": "Finalist",
+          "org": "Google Solution Challenge 2023",
+          "description": "Selected as a finalist among top teams for our sustainable urban mobility solution using ML and data-driven insights."
+        },
+        {
+          "year": "2021",
+          "title": "NTSE Scholar",
+          "org": "National Talent Search Examination",
+          "description": "Awarded scholarship for exceptional performance in the National Talent Search Examination conducted by NCERT."
+        },
+        {
+          "year": "2021",
+          "title": "IMO Qualifier",
+          "org": "Indian National Olympiad",
+          "description": "Qualified for the Indian National Olympiad in Mathematics with a top percentile ranking at the national level."
+        }
+      ]
+    },
+    {
+      "id": "projects",
+      "type": "projects",
+      "span": "full",
+      "title": "Projects",
+      "data": [
+        {
+          "name": "AURA \u2013 Anomaly Detection System",
+          "description": "Unsupervised anomaly detection pipeline for real-world industrial IoT sensor streams.",
+          "tags": [
+            "Python",
+            "PyTorch",
+            "Time Series",
+            "Anomaly Detection"
+          ],
+          "links": [
+            {
+              "label": "GitHub",
+              "url": "#"
+            },
+            {
+              "label": "Demo",
+              "url": "#"
+            },
+            {
+              "label": "Report",
+              "url": "#"
+            }
+          ]
+        },
+        {
+          "name": "Muse \u2013 Mindful Journal App",
+          "description": "A mobile journaling app that helps users track mood, reflect and build mindfulness.",
+          "tags": [
+            "Figma",
+            "UI/UX",
+            "Prototyping",
+            "Mobile"
+          ],
+          "links": [
+            {
+              "label": "GitHub",
+              "url": "#"
+            },
+            {
+              "label": "Prototype",
+              "url": "#"
+            },
+            {
+              "label": "Case Study",
+              "url": "#"
+            }
+          ]
+        },
+        {
+          "name": "Navix \u2013 Autonomous Rover",
+          "description": "A ROS-based autonomous navigation rover using LiDAR, SLAM and path-planning algorithms.",
+          "tags": [
+            "ROS",
+            "C++",
+            "SLAM",
+            "Navigation"
+          ],
+          "links": [
+            {
+              "label": "GitHub",
+              "url": "#"
+            },
+            {
+              "label": "Video",
+              "url": "#"
+            },
+            {
+              "label": "Docs",
+              "url": "#"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coursework",
+      "type": "coursework",
+      "span": "full",
+      "title": "Coursework",
+      "data": [
+        {
+          "name": "Machine Learning",
+          "topics": "Supervised & unsupervised learning, regression, classification, clustering."
+        },
+        {
+          "name": "Deep Learning",
+          "topics": "Neural networks, CNNs, RNNs, backpropagation, transfer learning."
+        },
+        {
+          "name": "Computer Vision",
+          "topics": "Image processing, object detection, segmentation, OpenCV, filters."
+        },
+        {
+          "name": "Robotics",
+          "topics": "Kinematics, dynamics, ROS, motion planning, sensor integration."
+        },
+        {
+          "name": "Data Structures & Algorithms",
+          "topics": "Arrays, linked lists, trees, graphs, DP, greedy algorithms, complexity analysis."
+        },
+        {
+          "name": "Operating Systems",
+          "topics": "Processes, threads, synchronization, memory management, scheduling."
+        }
+      ]
+    },
+    {
+      "id": "hobbies",
+      "type": "hobbies",
+      "span": "full",
+      "title": "Hobbies & Interests",
+      "data": [
+        "Sketching",
+        "Photography",
+        "Reading",
+        "Travel",
+        "Badminton",
+        "Music"
+      ]
+    },
+    {
+      "id": "internships",
+      "type": "internships",
+      "span": "full",
+      "title": "Internships and Professional work",
+      "data": [
+        {
+          "role": "Machine Learning",
+          "description": "Supervised & unsupervised learning, regression, classification, clustering."
+        },
+        {
+          "role": "Deep Learning",
+          "description": "Neural networks, CNNs, RNNs, backpropagation, transfer learning."
+        },
+        {
+          "role": "Computer Vision",
+          "description": "Image processing, object detection, segmentation, OpenCV, filters."
+        }
+      ]
+    },
+    {
+      "id": "research",
+      "type": "research",
+      "span": "full",
+      "title": "Research Interests",
+      "data": "Working at the intersection of machine learning and design \u2014 how intelligent systems can be made more interpretable, accessible and human-centred. Currently exploring anomaly detection in time-series data and multimodal learning.\n\nOpen to collaborations on applied ML research, especially in sustainability and education."
+    }
+  ]
+}
