@@ -1,0 +1,22 @@
+{
+  "slug": "mehul",
+  "name": "Mehul",
+  "role": "Research Coordinator",
+  "tagline": "",
+  "location": "IIT Delhi",
+  "socials": [
+    {
+      "label": "GitHub",
+      "url": "MehulShakya47"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/mehul-shakya-353b5a324/"
+    },
+    {
+      "label": "Email",
+      "url": "mailto:mehulshakya9@gmail.com"
+    }
+  ],
+  "blocks": []
+}

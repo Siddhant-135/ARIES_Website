@@ -1,0 +1,23 @@
+{
+  "slug": "vanshika",
+  "name": "Vanshika",
+  "role": "Research Executive",
+  "tagline": "",
+  "location": "IIT Delhi",
+  "avatar": "/images/members/vanshika.jpg",
+  "socials": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/Vk2008"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/vanshikakataria08"
+    },
+    {
+      "label": "Email",
+      "url": "mailto:kataria.vanshika08@gmail.com"
+    }
+  ],
+  "blocks": []
+}

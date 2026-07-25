@@ -1,0 +1,22 @@
+{
+  "slug": "shubham-goel",
+  "name": "Shubham Goel",
+  "role": "Research Executive",
+  "tagline": "",
+  "location": "IIT Delhi",
+  "socials": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/Shubzz-MasterPrix"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/shubham--goel"
+    },
+    {
+      "label": "Email",
+      "url": "mailto:shubhamgoelblr@gmail.com"
+    }
+  ],
+  "blocks": []
+}

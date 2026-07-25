@@ -1,0 +1,23 @@
+{
+  "slug": "anuvesha",
+  "name": "Anuvesha",
+  "role": "Executive",
+  "tagline": "",
+  "location": "IIT Delhi",
+  "avatar": "/images/members/anuvesha.jpg",
+  "socials": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/anuveshasingh"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "www.linkedin.com/in/anuvesha07"
+    },
+    {
+      "label": "Email",
+      "url": "mailto:anuvesha07@gmail.com"
+    }
+  ],
+  "blocks": []
+}

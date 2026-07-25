@@ -19,7 +19,8 @@ single-purpose components. Find the file, make the change, done.
 | Content schemas (add a field) | `src/lib/types.ts`, readers in `src/lib/content.ts` |
 | Left sidebar (collapse, mobile drawer, art) | `src/components/layout/Sidebar.tsx` |
 | Landing top navbar | `src/components/layout/TopNav.tsx` |
-| Footer | `src/components/layout/SiteFooter.tsx` |
+| Landing footer (mountain + copyright) | `src/components/sections/landing/FaqAndFooter.tsx` (also `SiteFooter.tsx`) |
+| Sticky landing header | `src/components/layout/TopNav.tsx` |
 | Landing sections | `src/components/sections/landing/*` |
 | Events page UI / filters | `src/components/sections/events/EventsExplorer.tsx`, card: `src/components/cards/EventCard.tsx` |
 | Projects page UI / search | `src/components/sections/projects/ProjectsExplorer.tsx`, card: `src/components/cards/ProjectCard.tsx` |
@@ -32,6 +33,7 @@ single-purpose components. Find the file, make the change, done.
 | Admin login (stub) | `src/app/admin/page.tsx` |
 | Admin editor (drag-drop blocks, project/event forms) | `src/components/admin/*` |
 | Content write API | `src/app/api/admin/save/route.ts` |
+| Import members from Excel + Drive photos | `npm run import:excel -- <file.xlsx>` → `scripts/import-from-excel.mjs` |
 
 ## Routing
 

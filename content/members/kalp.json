@@ -1,0 +1,22 @@
+{
+  "slug": "kalp",
+  "name": "Kalp",
+  "role": "Research Executive",
+  "tagline": "",
+  "location": "IIT Delhi",
+  "socials": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/khs2007"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/kalpshahiitd86"
+    },
+    {
+      "label": "Email",
+      "url": "mailto:kalp100807@gmail.com"
+    }
+  ],
+  "blocks": []
+}

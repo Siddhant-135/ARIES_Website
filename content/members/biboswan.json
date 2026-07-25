@@ -1,0 +1,23 @@
+{
+  "slug": "biboswan",
+  "name": "Biboswan",
+  "role": "Research Executive",
+  "tagline": "",
+  "location": "IIT Delhi",
+  "avatar": "/images/members/biboswan.jpg",
+  "socials": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/GittohubbonoAkuma"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/biboswan-201b2b310?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
+    },
+    {
+      "label": "Email",
+      "url": "mailto:susanchan29112@gmail.com"
+    }
+  ],
+  "blocks": []
+}

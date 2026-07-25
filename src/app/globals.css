@@ -112,3 +112,42 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Team page — continuously sliding executive rows */
+@keyframes marquee-ltr {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes marquee-rtl {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee-ltr {
+  animation: marquee-ltr 45s linear infinite;
+}
+
+.animate-marquee-rtl {
+  animation: marquee-rtl 45s linear infinite;
+}
+
+.marquee-mask:hover .animate-marquee-ltr,
+.marquee-mask:hover .animate-marquee-rtl {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee-ltr,
+  .animate-marquee-rtl {
+    animation: none;
+  }
+}

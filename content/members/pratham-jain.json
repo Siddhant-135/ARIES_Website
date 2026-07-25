@@ -1,0 +1,23 @@
+{
+  "slug": "pratham-jain",
+  "name": "Pratham Jain",
+  "role": "Research Executive",
+  "tagline": "",
+  "location": "IIT Delhi",
+  "avatar": "/images/members/pratham-jain.jpg",
+  "socials": [
+    {
+      "label": "GitHub",
+      "url": "github.com/prathammaxjain"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "linkedin.com/in/prathammaxjain"
+    },
+    {
+      "label": "Email",
+      "url": "mailto:pratham.mailbox@gmail.com"
+    }
+  ],
+  "blocks": []
+}

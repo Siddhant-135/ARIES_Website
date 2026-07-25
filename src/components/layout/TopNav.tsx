@@ -1,24 +1,51 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { topNavLinks } from "@/config/nav";
+import { colors } from "@/config/colors";
 import { AriesLogo } from "./AriesLogo";
+import { cn } from "@/lib/utils";
 
 /**
- * Landing-page top navbar. Transparent, sits over the hero artwork.
- * Collapses to a hamburger drawer below lg.
+ * Landing top navbar — fixed, follows you down the page.
+ * Clear over the hero; frosted cream bar once you leave it so links
+ * stay readable on mist / FAQ frames.
  */
 export function TopNav() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
+  const solid = scrolled || open;
 
   return (
-    <header className="absolute inset-x-0 top-0 z-40">
-      <div className="mx-auto flex max-w-[1480px] items-center justify-between px-6 py-5 lg:px-10">
+    <header
+      className={cn(
+        "fixed inset-x-0 top-0 z-50 transition-[background-color,box-shadow,backdrop-filter] duration-300",
+        solid && "shadow-[0_8px_28px_rgba(14,18,57,0.10)] backdrop-blur-md",
+      )}
+      style={{
+        backgroundColor: solid ? `${colors.cream}e0` : "transparent",
+      }}
+    >
+      <div className="mx-auto flex max-w-[1480px] items-center justify-between px-6 py-4 lg:px-10 lg:py-5">
         <AriesLogo tone="dark" />
 
-        {/* Desktop links */}
         <nav className="hidden items-center gap-8 lg:flex">
           {topNavLinks.map((l) => (
             <Link
@@ -37,19 +64,18 @@ export function TopNav() {
           </Link>
         </nav>
 
-        {/* Mobile hamburger */}
         <button
           className="rounded-lg p-2 text-navy lg:hidden"
           onClick={() => setOpen((v) => !v)}
           aria-label="Toggle navigation"
+          aria-expanded={open}
         >
           {open ? <X size={26} /> : <Menu size={26} />}
         </button>
       </div>
 
-      {/* Mobile drawer */}
       {open && (
-        <nav className="mx-4 rounded-2xl bg-white/95 p-4 shadow-card backdrop-blur lg:hidden">
+        <nav className="border-t border-navy/5 px-4 pb-5 pt-2 lg:hidden">
           {topNavLinks.map((l) => (
             <Link
               key={l.href}

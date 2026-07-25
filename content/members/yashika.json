@@ -1,0 +1,23 @@
+{
+  "slug": "yashika",
+  "name": "Yashika",
+  "role": "Research Executive",
+  "tagline": "",
+  "location": "IIT Delhi",
+  "avatar": "/images/members/yashika.jpg",
+  "socials": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/yashikaagg3"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "linkedin.com/in/yashika-aggarwal-046193343"
+    },
+    {
+      "label": "Email",
+      "url": "mailto:yashikaagg6@gmail.com"
+    }
+  ],
+  "blocks": []
+}

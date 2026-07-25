@@ -1,0 +1,23 @@
+{
+  "slug": "kashvi",
+  "name": "Kashvi",
+  "role": "Coordinator",
+  "tagline": "",
+  "location": "IIT Delhi",
+  "avatar": "/images/members/kashvi.jpg",
+  "socials": [
+    {
+      "label": "GitHub",
+      "url": "kashvi786"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/kashvi-khurana-05499a322/"
+    },
+    {
+      "label": "Email",
+      "url": "mailto:kashvikhurana7@gmail.com"
+    }
+  ],
+  "blocks": []
+}

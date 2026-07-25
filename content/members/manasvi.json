@@ -1,0 +1,22 @@
+{
+  "slug": "manasvi",
+  "name": "Manasvi",
+  "role": "Coordinator",
+  "tagline": "",
+  "location": "IIT Delhi",
+  "socials": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/manasviim"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/manasvi-mandal-5a028b336/"
+    },
+    {
+      "label": "Email",
+      "url": "mailto:manasvimandal0676@gmail.com"
+    }
+  ],
+  "blocks": []
+}

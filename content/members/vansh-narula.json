@@ -1,0 +1,22 @@
+{
+  "slug": "vansh-narula",
+  "name": "Vansh Narula",
+  "role": "Executive",
+  "tagline": "",
+  "location": "IIT Delhi",
+  "socials": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/vanshtheboss7-dev"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "www.linkedin.com/in/vansh-narula-7124783b7"
+    },
+    {
+      "label": "Email",
+      "url": "mailto:vanshtheboss7@gmail.com"
+    }
+  ],
+  "blocks": []
+}

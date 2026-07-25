@@ -1,0 +1,23 @@
+{
+  "slug": "rachit-goyal",
+  "name": "Rachit Goyal",
+  "role": "Executive",
+  "tagline": "",
+  "location": "IIT Delhi",
+  "avatar": "/images/members/rachit-goyal.jpg",
+  "socials": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/Rachit218?tab=overview&from=2026-05-01&to=2026-05-20"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/rachit-goyal-902226398/"
+    },
+    {
+      "label": "Email",
+      "url": "mailto:rachitgoyal218@gmail.com"
+    }
+  ],
+  "blocks": []
+}

@@ -1,0 +1,19 @@
+{
+  "slug": "aditya-kumar",
+  "name": "Aditya Kumar",
+  "role": "Research Executive",
+  "tagline": "",
+  "location": "IIT Delhi",
+  "avatar": "/images/members/aditya-kumar.jpg",
+  "socials": [
+    {
+      "label": "LinkedIn",
+      "url": "www.linkedin.com/in/aditya-kumar-98246133b"
+    },
+    {
+      "label": "Email",
+      "url": "mailto:adiku10.05@gmail.com"
+    }
+  ],
+  "blocks": []
+}

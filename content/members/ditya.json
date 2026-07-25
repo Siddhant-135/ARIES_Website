@@ -1,0 +1,22 @@
+{
+  "slug": "ditya",
+  "name": "Ditya",
+  "role": "Coordinator",
+  "tagline": "",
+  "location": "IIT Delhi",
+  "socials": [
+    {
+      "label": "GitHub",
+      "url": "dityagoel"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/ditya-goel-1b480b318/"
+    },
+    {
+      "label": "Email",
+      "url": "mailto:dityaagoel@gmail.com"
+    }
+  ],
+  "blocks": []
+}

@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
-import { footerNav } from "@/config/nav";
 
 const faqs = [
   {
@@ -33,15 +31,15 @@ const faqs = [
 ];
 
 /**
- * Landing frame 3 — FAQ + footer as one continuous block.
- * Mist → night gradient (no cream→purple clash); mountains are the
- * footer surface itself, not a second band layered on a flat rectangle.
+ * Landing frame 3 — FAQ + minimal mountain footer.
+ * Mountain art: `footer-overlay.png` (low-poly purple range).
+ * Text sits on the soft foreground with a light bottom wash for contrast.
  */
 export function FaqAndFooter() {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section className="landing-frame flex flex-col overflow-hidden bg-gradient-to-b from-mist via-lilac to-night">
+    <section className="landing-frame flex flex-col overflow-hidden bg-gradient-to-b from-mist via-lilac to-[#3a2d78]">
       {/* FAQ */}
       <div className="relative mx-auto grid w-full max-w-[1400px] flex-1 content-center gap-10 px-6 py-16 lg:grid-cols-[1fr_1.6fr] lg:gap-16 lg:px-12 lg:py-20">
         <div>
@@ -93,100 +91,30 @@ export function FaqAndFooter() {
         </div>
       </div>
 
-      {/* Footer — mountain art is the ground, dark wash only for readability */}
-      <footer className="relative mt-auto overflow-hidden text-white">
+      {/* Minimal mountain footer — full artwork, two end-aligned lines */}
+      <footer className="relative mt-auto aspect-[672/384] w-full min-h-[200px] max-h-[420px] overflow-hidden">
         <Image
-          src="/images/landing/footer-mountains.png"
+          src="/images/landing/footer-overlay.png"
           alt=""
           fill
           sizes="100vw"
-          className="object-cover object-bottom"
+          className="object-cover object-center"
+          priority={false}
         />
-        {/* Soft top blend from lilac into the art; darken mid for type */}
-        <div className="absolute inset-0 bg-gradient-to-b from-lilac via-night/55 to-night/80" />
+        {/* Soft blend from FAQ gradient into the mountain sky */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-[#3a2d78]/70 to-transparent" />
+        {/* Bottom wash so white type stays crisp on the lilac foreground */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#2a1f5c]/45 to-transparent" />
 
-        <div className="relative mx-auto grid max-w-[1400px] gap-10 px-6 py-14 md:grid-cols-[1.2fr_1fr_1fr_1fr_1.4fr] lg:px-12">
-          <div>
-            <div className="flex items-center gap-3">
-              <Image
-                src="/images/brand/logo-white.svg"
-                alt=""
-                width={44}
-                height={52}
-                className="h-12 w-auto"
-              />
-              <span className="leading-none">
-                <span className="block text-lg font-black tracking-[0.35em]">ARIES</span>
-                <span className="mt-1 block text-xs font-black tracking-[0.28em]">
-                  IIT DELHI
-                </span>
-              </span>
-            </div>
-            <p className="mt-6 max-w-64 text-[15px] leading-7 text-white/90">
-              Building AI beyond the classroom. Together, we learn, build and
-              create impact.
-            </p>
-          </div>
-
-          <FooterCol title="Navigate" links={footerNav.navigate} />
-          <FooterCol title="Connect" links={footerNav.connect} />
-          <FooterCol title="Legal" links={footerNav.legal} />
-
-          <div>
-            <h3 className="text-base font-bold">Stay in the loop</h3>
-            <p className="mt-4 text-[15px] leading-7 text-white/90">
-              Get updates on events, projects and opportunities.
-            </p>
-            <form
-              className="mt-6 flex items-center rounded-full border border-white/90 bg-night/30 p-1 pl-5 backdrop-blur-sm"
-              action="#"
-            >
-              <input
-                type="email"
-                required
-                placeholder="Enter your email"
-                className="w-full bg-transparent text-sm text-white placeholder-white/70 outline-none"
-              />
-              <button
-                aria-label="Subscribe"
-                className="grid size-11 shrink-0 place-items-center rounded-full bg-gradient-to-br from-purple-3 to-purple-2 text-xl"
-              >
-                →
-              </button>
-            </form>
-          </div>
+        <div className="absolute inset-x-0 bottom-0 z-10 flex items-end justify-between gap-4 px-6 pb-5 md:px-12 md:pb-6">
+          <p className="text-xs font-semibold tracking-wide text-white drop-shadow-[0_2px_10px_rgba(20,10,60,0.65)] md:text-sm">
+            © 2026 ARIES, IIT Delhi
+          </p>
+          <p className="font-mono text-xs font-semibold tracking-wide text-white drop-shadow-[0_2px_10px_rgba(20,10,60,0.65)] md:text-sm">
+            while(alive)&nbsp;learn();
+          </p>
         </div>
-
-        <p className="relative pb-8 text-center text-sm text-white/85">
-          © 2026 Aries, IIT Delhi. All rights reserved.
-        </p>
       </footer>
     </section>
-  );
-}
-
-function FooterCol({
-  title,
-  links,
-}: {
-  title: string;
-  links: { label: string; href: string }[];
-}) {
-  return (
-    <div>
-      <h3 className="text-base font-bold">{title}</h3>
-      <ul className="mt-5 space-y-4">
-        {links.map((l) => (
-          <li key={l.label}>
-            <Link
-              href={l.href}
-              className="text-[15px] text-white/90 transition-colors hover:text-purple-3"
-            >
-              {l.label}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </div>
   );
 }

@@ -1,0 +1,22 @@
+{
+  "slug": "saumya",
+  "name": "Saumya",
+  "role": "Executive",
+  "tagline": "",
+  "location": "IIT Delhi",
+  "socials": [
+    {
+      "label": "GitHub",
+      "url": "http://github.com/saumyasharma2498-coder"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/saumya-sharma-158bb9377?utm_source=share_via&utm_content=profile&utm_medium=member_android"
+    },
+    {
+      "label": "Email",
+      "url": "mailto:saumyasharma2498@gmail.com"
+    }
+  ],
+  "blocks": []
+}

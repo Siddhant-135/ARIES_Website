@@ -1,0 +1,23 @@
+{
+  "slug": "dev-shah",
+  "name": "Dev Shah",
+  "role": "Executive",
+  "tagline": "",
+  "location": "IIT Delhi",
+  "avatar": "/images/members/dev-shah.webp",
+  "socials": [
+    {
+      "label": "GitHub",
+      "url": "dv-sh"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/dev-shah-99b187310?utm_source=share_via&utm_content=profile&utm_medium=member_android"
+    },
+    {
+      "label": "Email",
+      "url": "mailto:devshah7707@gmail.com"
+    }
+  ],
+  "blocks": []
+}

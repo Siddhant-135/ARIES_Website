@@ -1,0 +1,23 @@
+{
+  "slug": "parth-yadav",
+  "name": "Parth Yadav",
+  "role": "Executive",
+  "tagline": "",
+  "location": "IIT Delhi",
+  "avatar": "/images/members/parth-yadav.jpg",
+  "socials": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/parth-456-ai"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/parth-y-741a69302/"
+    },
+    {
+      "label": "Email",
+      "url": "mailto:parth.nuniwal433@gmail.com"
+    }
+  ],
+  "blocks": []
+}

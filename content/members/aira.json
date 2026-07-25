@@ -1,0 +1,22 @@
+{
+  "slug": "aira",
+  "name": "Aira",
+  "role": "Executive",
+  "tagline": "",
+  "location": "IIT Delhi",
+  "socials": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/aira-j"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "www.linkedin.com/in/aira-jethani-4a7a333b9"
+    },
+    {
+      "label": "Email",
+      "url": "mailto:jethaniaira@gmail.com"
+    }
+  ],
+  "blocks": []
+}

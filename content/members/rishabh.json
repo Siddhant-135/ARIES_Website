@@ -1,0 +1,22 @@
+{
+  "slug": "rishabh",
+  "name": "Rishabh",
+  "role": "Coordinator",
+  "tagline": "",
+  "location": "IIT Delhi",
+  "socials": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/rizzhubsane"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/rishabh-sain/"
+    },
+    {
+      "label": "Email",
+      "url": "mailto:rishabhsain088@gmail.com"
+    }
+  ],
+  "blocks": []
+}

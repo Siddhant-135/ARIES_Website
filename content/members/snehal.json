@@ -1,0 +1,23 @@
+{
+  "slug": "snehal",
+  "name": "Snehal",
+  "role": "Research Coordinator",
+  "tagline": "",
+  "location": "IIT Delhi",
+  "avatar": "/images/members/snehal.jpg",
+  "socials": [
+    {
+      "label": "GitHub",
+      "url": "snehalgupta1911"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/snehal-gupta-3ab670313/"
+    },
+    {
+      "label": "Email",
+      "url": "mailto:snehalguptaiitd@gmail.com"
+    }
+  ],
+  "blocks": []
+}

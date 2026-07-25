@@ -1,0 +1,22 @@
+{
+  "slug": "ambar",
+  "name": "Ambar",
+  "role": "Research Coordinator",
+  "tagline": "",
+  "location": "IIT Delhi",
+  "socials": [
+    {
+      "label": "GitHub",
+      "url": "AmbarGogia05"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/ambargogia"
+    },
+    {
+      "label": "Email",
+      "url": "mailto:ambargogia@gmail.com"
+    }
+  ],
+  "blocks": []
+}

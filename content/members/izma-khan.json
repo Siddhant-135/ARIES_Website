@@ -1,0 +1,23 @@
+{
+  "slug": "izma-khan",
+  "name": "Izma Khan",
+  "role": "Executive",
+  "tagline": "",
+  "location": "IIT Delhi",
+  "avatar": "/images/members/izma-khan.png",
+  "socials": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/Izma810"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/khan-izma/"
+    },
+    {
+      "label": "Email",
+      "url": "mailto:izmahilalkhan08@gmail.com"
+    }
+  ],
+  "blocks": []
+}

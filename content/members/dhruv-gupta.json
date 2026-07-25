@@ -1,0 +1,23 @@
+{
+  "slug": "dhruv-gupta",
+  "name": "Dhruv Gupta",
+  "role": "Executive",
+  "tagline": "",
+  "location": "IIT Delhi",
+  "avatar": "/images/members/dhruv-gupta.jpg",
+  "socials": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/RemnantG"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/dhruv-gupta-087b8b390?utm_source=share_via&utm_content=profile&utm_medium=member_android"
+    },
+    {
+      "label": "Email",
+      "url": "mailto:dhruvgupta1234d@gmail.com"
+    }
+  ],
+  "blocks": []
+}

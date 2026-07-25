@@ -1,0 +1,23 @@
+{
+  "slug": "atharva-singh",
+  "name": "Atharva Singh",
+  "role": "Research Executive",
+  "tagline": "",
+  "location": "IIT Delhi",
+  "avatar": "/images/members/atharva-singh.jpg",
+  "socials": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/Atharva6907"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/atharva-singh-0b6881277/"
+    },
+    {
+      "label": "Email",
+      "url": "mailto:atharvasingh607@gmail.com"
+    }
+  ],
+  "blocks": []
+}

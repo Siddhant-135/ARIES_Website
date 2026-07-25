@@ -1,0 +1,23 @@
+{
+  "slug": "reyansh",
+  "name": "Reyansh",
+  "role": "Coordinator",
+  "tagline": "",
+  "location": "IIT Delhi",
+  "avatar": "/images/members/reyansh.jpg",
+  "socials": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/Reyansh04"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "linkedin.com/in/reyansh-thigulla-8095a231b/"
+    },
+    {
+      "label": "Email",
+      "url": "mailto:reyanshthigulla@yahoo.com"
+    }
+  ],
+  "blocks": []
+}

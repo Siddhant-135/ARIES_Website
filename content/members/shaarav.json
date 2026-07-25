@@ -1,0 +1,22 @@
+{
+  "slug": "shaarav",
+  "name": "Shaarav",
+  "role": "Coordinator",
+  "tagline": "",
+  "location": "IIT Delhi",
+  "socials": [
+    {
+      "label": "GitHub",
+      "url": "sh44rg"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/shaarav-gunsi/"
+    },
+    {
+      "label": "Email",
+      "url": "mailto:shaaravgunsi@gmail.com"
+    }
+  ],
+  "blocks": []
+}

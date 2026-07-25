@@ -1,0 +1,23 @@
+{
+  "slug": "vandita",
+  "name": "Vandita",
+  "role": "Research Executive",
+  "tagline": "",
+  "location": "IIT Delhi",
+  "avatar": "/images/members/vandita.jpg",
+  "socials": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/vanditajain2006"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "www.linkedin.com/in/vandita-jain-9366a13a3"
+    },
+    {
+      "label": "Email",
+      "url": "mailto:vanditajain2006@gmail.com"
+    }
+  ],
+  "blocks": []
+}

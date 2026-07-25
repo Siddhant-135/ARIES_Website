@@ -1,0 +1,23 @@
+{
+  "slug": "dhairya",
+  "name": "Dhairya",
+  "role": "Research Coordinator",
+  "tagline": "",
+  "location": "IIT Delhi",
+  "avatar": "/images/members/dhairya.jpg",
+  "socials": [
+    {
+      "label": "GitHub",
+      "url": "Dhairyakuchhal"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/dhairya-kuchhal-a793361bb/"
+    },
+    {
+      "label": "Email",
+      "url": "mailto:kuchhaldhairya@gmail.com"
+    }
+  ],
+  "blocks": []
+}

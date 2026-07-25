@@ -33,8 +33,8 @@ export default function ContactPage() {
           </span>
         </h1>
         <p className="mt-6 max-w-md text-sm leading-6 text-ink/70">
-          We&rsquo;d love to hear from you. Reach out for collaborations,
-          opportunities or any queries.
+          Reach out for collaborations, opportunities, or to update or add your
+          alumni profile on the team page.
         </p>
 
         <div className="mt-10 grid gap-6 lg:grid-cols-[1.4fr_1fr]">
@@ -44,7 +44,8 @@ export default function ContactPage() {
           <aside className="rounded-2xl bg-white p-7 shadow-card-sm">
             <h2 className="text-lg font-bold text-ink">Get in touch</h2>
             <p className="mt-2 text-xs text-ink/60">
-              We&rsquo;re always happy to connect and explore new ideas together.
+              Alumni can update or add their details here — we&rsquo;ll take care
+              of the rest.
             </p>
             <div className="mt-8 space-y-6">
               <p className="flex items-start gap-4">

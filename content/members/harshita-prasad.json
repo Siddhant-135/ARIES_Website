@@ -1,0 +1,22 @@
+{
+  "slug": "harshita-prasad",
+  "name": "Harshita Prasad",
+  "role": "Executive",
+  "tagline": "",
+  "location": "IIT Delhi",
+  "socials": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/hp3047"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/harshita-prasad-30b04b260/"
+    },
+    {
+      "label": "Email",
+      "url": "mailto:harshitaprasad.p@gmail.com"
+    }
+  ],
+  "blocks": []
+}

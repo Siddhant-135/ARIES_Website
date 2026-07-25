@@ -1,0 +1,18 @@
+{
+  "slug": "ujjwal",
+  "name": "Ujjwal",
+  "role": "Executive",
+  "tagline": "",
+  "location": "IIT Delhi",
+  "socials": [
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/ujjwal-aditya-530993404/"
+    },
+    {
+      "label": "Email",
+      "url": "mailto:ujjwaladitya01@gmail.com"
+    }
+  ],
+  "blocks": []
+}

@@ -1,0 +1,23 @@
+{
+  "slug": "siddhant",
+  "name": "Siddhant",
+  "role": "Coordinator",
+  "tagline": "",
+  "location": "IIT Delhi",
+  "avatar": "/images/members/siddhant.jpg",
+  "socials": [
+    {
+      "label": "GitHub",
+      "url": "Siddhant-135"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/siddhantiitd"
+    },
+    {
+      "label": "Email",
+      "url": "mailto:agrawalsiddhant14@gmail.com"
+    }
+  ],
+  "blocks": []
+}

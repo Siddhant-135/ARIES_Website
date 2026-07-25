@@ -1,0 +1,22 @@
+{
+  "slug": "ayosh-s-yadav",
+  "name": "Ayosh S. yadav",
+  "role": "Executive",
+  "tagline": "",
+  "location": "IIT Delhi",
+  "socials": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/syntrax-wolf"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "www.linkedin.com/in/ayosh-singh-yadav"
+    },
+    {
+      "label": "Email",
+      "url": "mailto:ayoshyadav0001@gmail.com"
+    }
+  ],
+  "blocks": []
+}

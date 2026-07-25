@@ -1,0 +1,23 @@
+{
+  "slug": "khushi-gupta",
+  "name": "Khushi Gupta",
+  "role": "Executive",
+  "tagline": "",
+  "location": "IIT Delhi",
+  "avatar": "/images/members/khushi-gupta.png",
+  "socials": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/khushi1000gupta-dev"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "www.linkedin.com/in/khushi-gupta-48a112393"
+    },
+    {
+      "label": "Email",
+      "url": "mailto:khushi1000gupta@gmail.com"
+    }
+  ],
+  "blocks": []
+}

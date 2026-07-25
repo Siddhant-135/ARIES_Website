@@ -1,0 +1,23 @@
+{
+  "slug": "shivam",
+  "name": "Shivam",
+  "role": "Research Executive",
+  "tagline": "",
+  "location": "IIT Delhi",
+  "avatar": "/images/members/shivam.jpg",
+  "socials": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/shivxmgarg"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "www.linkedin.com/in/shivam-garg-683777378"
+    },
+    {
+      "label": "Email",
+      "url": "mailto:shivam.iitd29@gmail.com"
+    }
+  ],
+  "blocks": []
+}

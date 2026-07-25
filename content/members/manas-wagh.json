@@ -1,0 +1,23 @@
+{
+  "slug": "manas-wagh",
+  "name": "Manas Wagh",
+  "role": "Research Executive",
+  "tagline": "",
+  "location": "IIT Delhi",
+  "avatar": "/images/members/manas-wagh.jpg",
+  "socials": [
+    {
+      "label": "GitHub",
+      "url": "https://huggingface.co/spaces/Manas2307/ my documentation of git is in shambles currently"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "Manas Wagh | LinkedIn"
+    },
+    {
+      "label": "Email",
+      "url": "mailto:maverickmc7128@gmail.com"
+    }
+  ],
+  "blocks": []
+}

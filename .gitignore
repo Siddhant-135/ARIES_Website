@@ -42,3 +42,5 @@ next-env.d.ts
 
 aries-website
 
+# imported sheet exports (re-fetch via import script)
+/data/

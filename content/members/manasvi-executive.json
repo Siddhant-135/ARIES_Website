@@ -1,0 +1,19 @@
+{
+  "slug": "manasvi-executive",
+  "name": "Manasvi",
+  "role": "Executive",
+  "tagline": "",
+  "location": "IIT Delhi",
+  "avatar": "/images/members/manasvi-executive.jpg",
+  "socials": [
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/manasvi-gupta-70a32738b?utm_source=share_via&utm_content=profile&utm_medium=member_android"
+    },
+    {
+      "label": "Email",
+      "url": "mailto:manasvigupta8686@gmail.com"
+    }
+  ],
+  "blocks": []
+}

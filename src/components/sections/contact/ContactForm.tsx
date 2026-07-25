@@ -1,18 +1,23 @@
 "use client";
 
-import { useState } from "react";
 import { MessageSquare, Send } from "lucide-react";
+import { clubEmail } from "@/config/socials";
 
-/** "Send us a message" form. Submission endpoint TBD — currently a stub. */
+/** Opens a pre-addressed message in the visitor's email client. */
 export function ContactForm() {
-  const [sent, setSent] = useState(false);
-
   return (
     <form
       className="rounded-2xl bg-white p-7 shadow-card-sm"
       onSubmit={(e) => {
         e.preventDefault();
-        setSent(true);
+        const data = new FormData(e.currentTarget);
+        const name = String(data.get("name") ?? "").trim();
+        const email = String(data.get("email") ?? "").trim();
+        const subject = String(data.get("subject") ?? "").trim();
+        const message = String(data.get("message") ?? "").trim();
+        const body = [`Name: ${name}`, `Email: ${email}`, "", message].join("\n");
+
+        window.location.href = `mailto:${clubEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
       }}
     >
       <div className="flex items-center gap-3">
@@ -20,9 +25,9 @@ export function ContactForm() {
           <MessageSquare size={18} />
         </span>
         <div>
-          <h2 className="text-lg font-bold text-ink">Send us a message</h2>
+          <h2 className="text-lg font-bold text-ink">Update or add your profile</h2>
           <p className="text-xs text-ink/60">
-            Fill in the details below and we&rsquo;ll get back to you soon.
+            Tell us what to change or share your details if you&rsquo;re not listed yet.
           </p>
         </div>
       </div>
@@ -31,14 +36,14 @@ export function ContactForm() {
         <Field label="Your Name" name="name" placeholder="Enter your name" />
         <Field label="Email Address" name="email" type="email" placeholder="you@example.com" />
       </div>
-      <Field className="mt-4" label="Subject" name="subject" placeholder="What's this about?" />
+      <Field className="mt-4" label="Subject" name="subject" placeholder="Update or add my alumni profile" />
       <label className="mt-4 block">
         <span className="text-xs font-semibold text-ink">Message</span>
         <textarea
           name="message"
           required
           rows={5}
-          placeholder="Write your message here..."
+          placeholder="Share your name, role, org, and any links or updates you'd like on the alumni page..."
           className="mt-2 w-full rounded-lg bg-[#f3eef8] px-4 py-3 text-sm text-ink outline-none placeholder-[#9a95b3] focus:ring-2 focus:ring-purple/40"
         />
       </label>
@@ -49,12 +54,9 @@ export function ContactForm() {
       >
         Send Message <Send size={15} />
       </button>
-      {sent && (
-        <p className="mt-4 text-sm font-semibold text-teal">
-          Thanks! Message sending isn&rsquo;t wired to a backend yet — we&rsquo;ll
-          hook this up soon.
-        </p>
-      )}
+      <p className="mt-3 text-xs text-ink/50">
+        This opens your email app with the message addressed to {clubEmail}.
+      </p>
     </form>
   );
 }
