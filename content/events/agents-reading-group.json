@@ -3,9 +3,6 @@
   "title": "Agents Reading Group",
   "type": "Talk",
   "date": "2026-01-20",
-  "startTime": "06:00 PM",
-  "endTime": "07:30 PM",
-  "venue": "Bharti 101, IIT Delhi",
   "description": "Weekly deep-dive into the latest agentic AI papers.",
   "body": "A recurring reading group covering tool use, planning and multi-agent systems. Papers announced a week ahead on the newsletter.",
   "links": []

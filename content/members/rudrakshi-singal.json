@@ -1,0 +1,36 @@
+{
+  "slug": "rudrakshi-singal",
+  "name": "Rudrakshi Singal",
+  "role": "Alumni, ARIES",
+  "tagline": "Founder's Office at Ola · Summer Associate at BCG.",
+  "location": "Ola",
+  "avatar": "/images/members/rudrakshi-singal.png",
+  "socials": [],
+  "blocks": [
+    {
+      "id": "about",
+      "type": "text",
+      "span": "full",
+      "title": "About",
+      "data": "ARIES alum working at the intersection of strategy and technology — Founder's Office at Ola and former Summer Associate at BCG."
+    },
+    {
+      "id": "internships",
+      "type": "internships",
+      "span": "full",
+      "title": "Experience",
+      "data": [
+        {
+          "role": "Founder's Office",
+          "org": "Ola",
+          "description": "Strategy and operations at one of India's largest mobility platforms."
+        },
+        {
+          "role": "Summer Associate",
+          "org": "BCG",
+          "description": "Management consulting internship."
+        }
+      ]
+    }
+  ]
+}

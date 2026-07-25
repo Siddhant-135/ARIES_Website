@@ -1,0 +1,16 @@
+{
+  "slug": "military-camouflage",
+  "name": "Dynamic Military Camouflage",
+  "tagline": "CV-driven adaptive camouflage.",
+  "description": "Computer vision project with the Indian military on environment-aware camouflage.",
+  "category": "Computer Vision",
+  "tags": ["Computer Vision", "Defense"],
+  "techStack": ["Computer Vision", "Color Analysis"],
+  "highlights": [],
+  "features": [],
+  "screenshots": [],
+  "links": [],
+  "contributors": [],
+  "featured": true,
+  "about": "Finds dominant colors in the surroundings and generates dynamic camouflage patterns to match — developed in collaboration with the Indian military."
+}

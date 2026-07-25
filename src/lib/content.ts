@@ -1,6 +1,8 @@
 /**
- * Content readers. All pages get data through these functions,
- * so swapping JSON files for a database later touches only this file.
+ * Content readers. All pages get data through these functions.
+ * Source of truth for public pages: content/*.json
+ * (kept in sync with database/aries.db by the Express API + admin save).
+ * Seed/merge: npm run db:seed
  */
 import fs from "node:fs";
 import path from "node:path";

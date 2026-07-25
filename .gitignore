@@ -40,7 +40,12 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-aries-website
-
 # imported sheet exports (re-fetch via import script)
 /data/
+
+# SQLite runtime DB (regenerate with npm run db:seed)
+/database/aries.db
+/database/*.db-journal
+
+# backend deps
+/aries-website/node_modules

@@ -65,12 +65,12 @@ export type Project = {
   description: string;
   category: string; // e.g. "AI / ML", "Hackathon", "Publication"
   tags: string[];
-  techStack: string[];
-  features: { title: string; description: string }[];
-  highlights: { title: string; description: string }[]; // the 4 stat-ish cards
-  screenshots: { title: string; description: string; image?: string }[];
-  links: { label: string; url: string }[];
-  contributors: string[]; // member slugs
+  techStack?: string[];
+  features?: { title: string; description: string }[];
+  highlights?: { title: string; description: string }[];
+  screenshots?: { title: string; description: string; image?: string }[];
+  links?: { label: string; url: string }[];
+  contributors?: string[]; // member slugs
   image?: string;
   featured?: boolean;
   about?: string; // long-form "About the Project" text
@@ -81,7 +81,7 @@ export type Project = {
 export type AriesEvent = {
   slug: string;
   title: string;
-  type: "Talk" | "Workshop" | "Hackathon" | "Event";
+  type: "Talk" | "Workshop" | "Hackathon" | "External";
   date: string; // ISO date
   startTime?: string;
   endTime?: string;

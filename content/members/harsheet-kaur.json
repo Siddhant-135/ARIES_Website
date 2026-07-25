@@ -92,7 +92,7 @@
       "title": "Projects",
       "data": [
         {
-          "name": "AURA \u2013 Anomaly Detection System",
+          "name": "AURA – Anomaly Detection System",
           "description": "Unsupervised anomaly detection pipeline for real-world industrial IoT sensor streams.",
           "tags": [
             "Python",
@@ -116,7 +116,7 @@
           ]
         },
         {
-          "name": "Muse \u2013 Mindful Journal App",
+          "name": "Muse – Mindful Journal App",
           "description": "A mobile journaling app that helps users track mood, reflect and build mindfulness.",
           "tags": [
             "Figma",
@@ -140,7 +140,7 @@
           ]
         },
         {
-          "name": "Navix \u2013 Autonomous Rover",
+          "name": "Navix – Autonomous Rover",
           "description": "A ROS-based autonomous navigation rover using LiDAR, SLAM and path-planning algorithms.",
           "tags": [
             "ROS",
@@ -236,7 +236,7 @@
       "type": "research",
       "span": "full",
       "title": "Research Interests",
-      "data": "Working at the intersection of machine learning and design \u2014 how intelligent systems can be made more interpretable, accessible and human-centred. Currently exploring anomaly detection in time-series data and multimodal learning.\n\nOpen to collaborations on applied ML research, especially in sustainability and education."
+      "data": "Working at the intersection of machine learning and design — how intelligent systems can be made more interpretable, accessible and human-centred. Currently exploring anomaly detection in time-series data and multimodal learning.\n\nOpen to collaborations on applied ML research, especially in sustainability and education."
     }
   ]
 }

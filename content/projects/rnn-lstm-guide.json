@@ -1,0 +1,16 @@
+{
+  "slug": "rnn-lstm-guide",
+  "name": "Guide to RNN & LSTM",
+  "tagline": "Theory and implementation without matrix calculus.",
+  "description": "Papers walking through RNN and LSTM theory and implementations.",
+  "category": "Publication",
+  "tags": ["Deep Learning", "Education"],
+  "techStack": ["RNN", "LSTM"],
+  "highlights": [],
+  "features": [],
+  "screenshots": [],
+  "links": [],
+  "contributors": ["har-ashish", "dhairya"],
+  "featured": false,
+  "about": "A complete guide to RNN and LSTM by Har Ashish Arora and Dhairya Kuchhal — walking through theory and implementations that doesn't require formal matrix calculus."
+}

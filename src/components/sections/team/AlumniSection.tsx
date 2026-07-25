@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { Search } from "lucide-react";
 import type { Alumnus } from "@/lib/types";
@@ -45,9 +46,15 @@ export function AlumniSection({ alumni }: { alumni: Alumnus[] }) {
             const slug = memberProfileSlug(a);
             const card = (
               <article className="rounded-xl bg-white px-4 py-5 text-center shadow-card-sm transition-transform hover:-translate-y-1">
-                <span className="mx-auto grid size-14 place-items-center rounded-full bg-[linear-gradient(135deg,#7a50ff,#4711d9)] text-lg font-bold text-white">
-                  {initialsOf(a.name)}
-                </span>
+                {a.photo ? (
+                  <span className="relative mx-auto block size-14 overflow-hidden rounded-full">
+                    <Image src={a.photo} alt={a.name} fill sizes="56px" className="object-cover" />
+                  </span>
+                ) : (
+                  <span className="mx-auto grid size-14 place-items-center rounded-full bg-[linear-gradient(135deg,#7a50ff,#4711d9)] text-lg font-bold text-white">
+                    {initialsOf(a.name)}
+                  </span>
+                )}
                 <h3 className="mt-3 truncate text-sm font-bold text-ink">{a.name}</h3>
                 <p className="mt-1 truncate text-xs text-ink/70">{a.role}</p>
                 <p className="truncate text-xs text-ink/50">{a.org}</p>

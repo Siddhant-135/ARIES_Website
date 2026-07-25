@@ -6,7 +6,7 @@ import type { AriesEvent } from "@/lib/types";
 import { EventCard } from "@/components/cards/EventCard";
 import { cn } from "@/lib/utils";
 
-const TABS = ["All Events", "Workshops", "Talks", "Hackathons", "Flagship Events"] as const;
+const TABS = ["All Events", "Workshops", "Talks", "Hackathons", "Externals"] as const;
 
 const tabMatches = (tab: (typeof TABS)[number], e: AriesEvent) => {
   switch (tab) {
@@ -16,8 +16,8 @@ const tabMatches = (tab: (typeof TABS)[number], e: AriesEvent) => {
       return e.type === "Talk";
     case "Hackathons":
       return e.type === "Hackathon";
-    case "Flagship Events":
-      return e.type === "Event";
+    case "Externals":
+      return e.type === "External";
     default:
       return true;
   }

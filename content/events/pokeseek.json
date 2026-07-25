@@ -1,0 +1,9 @@
+{
+  "slug": "pokeseek",
+  "title": "PokeSeek",
+  "type": "Hackathon",
+  "date": "2025-03-10",
+  "description": "AI Pok\u00e9mon battling competition \u2014 188 registrations, 100% shortlist attendance.",
+  "body": "PokeSeek is an AI-based Pok\u00e9mon battling competition where teams of two develop AI bots (heuristics or RL) to battle each other. Participants choose a starter Pok\u00e9mon and strategically command their team. While participants can use search algorithms and neural networks, the battle simulator is a greybox \u2014 they only have direct information about their own Pok\u00e9mon and moves, not the exact outcome of a turn. The competition involved an online preliminary quiz, followed by offline Round Robin and Knockout stages at IIT Delhi on March 10. The event witnessed 188 registrations and 100% shortlist attendance.",
+  "links": []
+}

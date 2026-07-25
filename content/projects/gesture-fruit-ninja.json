@@ -1,0 +1,16 @@
+{
+  "slug": "gesture-fruit-ninja",
+  "name": "Gesture Fruit Ninja",
+  "tagline": "Hand-tracked Fruit Ninja clone.",
+  "description": "Gesture-controlled game using hand and finger tracking.",
+  "category": "Computer Vision",
+  "tags": ["Gesture Recognition", "Gaming"],
+  "techStack": ["OpenCV", "Hand Tracking"],
+  "highlights": [],
+  "features": [],
+  "screenshots": [],
+  "links": [],
+  "contributors": [],
+  "featured": true,
+  "about": "Gesture-controlled Fruit Ninja using real-time hand and finger tracking — slash fruit with your hands, no controller needed."
+}

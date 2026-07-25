@@ -1,0 +1,15 @@
+{
+  "slug": "ai-grand-challenge-top-5",
+  "name": "AI Grand Challenge — Top 5",
+  "tagline": "Locating unknown emitters from noisy spectral and angular data.",
+  "description": "Defence problem statement — identify and locate an unknown number of emitters from spectral parameters and highly noisy angular data, with a CPU-efficient solution.",
+  "category": "Hackathon",
+  "tags": ["Defence", "Signal Processing", "Top 5"],
+  "techStack": [],
+  "highlights": [],
+  "features": [],
+  "screenshots": [],
+  "links": [],
+  "contributors": ["preesha"],
+  "about": "Defence-based problem statement: identifying and locating an unknown number of emitters from spectral parameters along with highly noisy angular data. Very compute-efficient solution — runs on CPU."
+}

@@ -5,22 +5,14 @@ import { ContactForm } from "@/components/sections/contact/ContactForm";
 
 export const metadata: Metadata = { title: "Contact" };
 
-/** Brand glyphs (lucide dropped brand icons) — simple monogram tiles. */
 const socialGlyphs: Record<string, string> = {
   LinkedIn: "in",
-  GitHub: "gh",
-  Kaggle: "k",
-  Instagram: "ig",
-  LeetCode: "lc",
-  "Twitter / X": "𝕏",
   Email: "@",
-  Medium: "M",
 };
 
 export default function ContactPage() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#fbf4ec]">
-      {/* soft background shapes */}
       <div className="absolute -right-20 -top-16 size-72 rounded-full bg-[#e4dcf7]" />
       <div className="absolute right-40 top-28 size-40 rounded-full bg-[#f3e7d3]" />
 
@@ -40,7 +32,6 @@ export default function ContactPage() {
         <div className="mt-10 grid gap-6 lg:grid-cols-[1.4fr_1fr]">
           <ContactForm />
 
-          {/* Get in touch card */}
           <aside className="rounded-2xl bg-white p-7 shadow-card-sm">
             <h2 className="text-lg font-bold text-ink">Get in touch</h2>
             <p className="mt-2 text-xs text-ink/60">
@@ -71,37 +62,30 @@ export default function ContactPage() {
             </div>
             <hr className="my-8 border-[#f0e8dc]" />
             <p className="text-center text-sm italic text-ink/60">
-              ✨ Great things happen when we collaborate.
+              Great things happen when we collaborate.
             </p>
           </aside>
         </div>
 
-        {/* Social tiles */}
-        <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {clubSocials.map((s) => {
-            const glyph = socialGlyphs[s.label] ?? "↗";
-            return (
-              <a
-                key={s.label}
-                href={s.url}
-                target="_blank"
-                rel="noreferrer"
-                className="group flex items-center gap-4 rounded-2xl bg-white p-5 shadow-card-sm transition-transform hover:-translate-y-1"
-              >
-                <span className="grid size-12 shrink-0 place-items-center rounded-xl bg-lilac text-lg font-black text-purple">
-                  {glyph}
-                </span>
-                <span className="min-w-0">
-                  <span className="block text-sm font-bold text-ink">{s.label}</span>
-                  <span className="block truncate text-xs text-ink/60">{s.handle}</span>
-                </span>
-                <ExternalLink
-                  size={14}
-                  className="ml-auto shrink-0 text-ink/30 group-hover:text-purple"
-                />
-              </a>
-            );
-          })}
+        <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2">
+          {clubSocials.map((s) => (
+            <a
+              key={s.label}
+              href={s.url}
+              target={s.url.startsWith("mailto:") ? undefined : "_blank"}
+              rel="noreferrer"
+              className="group flex items-center gap-4 rounded-2xl bg-white p-5 shadow-card-sm transition-transform hover:-translate-y-0.5"
+            >
+              <span className="grid size-12 place-items-center rounded-xl bg-navy text-sm font-black text-white">
+                {socialGlyphs[s.label] ?? s.label[0]}
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block text-sm font-bold text-ink">{s.label}</span>
+                <span className="block truncate text-xs text-ink/55">{s.handle}</span>
+              </span>
+              <ExternalLink size={15} className="shrink-0 text-ink/30 transition-colors group-hover:text-purple" />
+            </a>
+          ))}
         </div>
       </div>
     </div>

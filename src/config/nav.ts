@@ -1,14 +1,16 @@
 /**
  * Single source of truth for site navigation.
  * Agents: add/remove/reorder links here — every navbar/sidebar/footer reads this file.
+ *
+ * Resources stays in code (`/resources`) but is hidden from public nav for now.
  */
 import {
   Home,
   CalendarDays,
   FolderKanban,
   Users,
-  BookOpen,
   Mail,
+  LogIn,
   type LucideIcon,
 } from "lucide-react";
 
@@ -18,14 +20,14 @@ export type NavLink = {
   icon: LucideIcon;
 };
 
-/** Links shown in the left sidebar (inner pages). */
+/** Links shown in the left sidebar (inner pages). Resources intentionally omitted. */
 export const sidebarLinks: NavLink[] = [
   { label: "Home", href: "/", icon: Home },
   { label: "Events", href: "/events", icon: CalendarDays },
   { label: "Projects", href: "/projects", icon: FolderKanban },
   { label: "Team", href: "/team", icon: Users },
-  { label: "Resources", href: "/resources", icon: BookOpen },
   { label: "Contact", href: "/contact", icon: Mail },
+  { label: "Member Login", href: "/admin", icon: LogIn },
 ];
 
 /** Links shown in the landing-page top navbar (no Home — logo does that). */
@@ -37,12 +39,11 @@ export const footerNav = {
     { label: "Events", href: "/events" },
     { label: "Projects", href: "/projects" },
     { label: "Team", href: "/team" },
-    { label: "Resources", href: "/resources" },
+    { label: "Contact Us", href: "/contact" },
   ],
   connect: [
     { label: "Contact Us", href: "/contact" },
-    { label: "Join Us", href: "/contact" },
-    { label: "Newsletter", href: "/contact" },
+    { label: "Member Login", href: "/admin" },
   ],
   legal: [
     { label: "Privacy Policy", href: "/privacy" },

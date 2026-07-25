@@ -52,21 +52,24 @@ export function EventCard({
           {event.description}
         </p>
 
-        <div className="mt-4 space-y-2 border-t border-[#e8ddd2] pt-4 text-xs text-[#081634]">
-          {event.startTime && (
-            <p className="flex items-center gap-2">
-              <Clock size={15} className="text-[#5b4eb5]" />
-              {event.startTime}
-              {event.endTime && ` - ${event.endTime}`}
-            </p>
-          )}
-          {event.venue && (
-            <p className="flex items-center gap-2">
-              <MapPin size={15} className="text-[#5b4eb5]" />
-              {event.venue}
-            </p>
-          )}
-        </div>
+        {/* Time/venue only on upcoming cards — past events stay date + story */}
+        {variant === "upcoming" && (event.startTime || event.venue) && (
+          <div className="mt-4 space-y-2 border-t border-[#e8ddd2] pt-4 text-xs text-[#081634]">
+            {event.startTime && (
+              <p className="flex items-center gap-2">
+                <Clock size={15} className="text-[#5b4eb5]" />
+                {event.startTime}
+                {event.endTime && ` - ${event.endTime}`}
+              </p>
+            )}
+            {event.venue && (
+              <p className="flex items-center gap-2">
+                <MapPin size={15} className="text-[#5b4eb5]" />
+                {event.venue}
+              </p>
+            )}
+          </div>
+        )}
 
         <div className="mt-auto flex items-center justify-between border-t border-[#efe5db] pt-4 text-sm font-bold text-[#081634]">
           View Details

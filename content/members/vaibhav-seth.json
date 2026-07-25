@@ -1,0 +1,53 @@
+{
+  "slug": "vaibhav-seth",
+  "name": "Vaibhav Seth",
+  "role": "Alumni, ARIES · Founder & ex-OC",
+  "tagline": "Quantitative researcher at Graviton.",
+  "location": "Graviton",
+  "avatar": "/images/members/vaibhav-seth.png",
+  "socials": [],
+  "blocks": [
+    {
+      "id": "about",
+      "type": "text",
+      "span": "full",
+      "title": "About",
+      "data": "Founder and former Overall Coordinator at ARIES. Quantitative researcher at Graviton with prior internships at Quadeye, CMU, and Inria."
+    },
+    {
+      "id": "research",
+      "type": "research",
+      "span": "full",
+      "title": "Publications",
+      "data": "Robust and Efficient Fine-tuning of LLMs with Bayesian Reparameterization of Low-Rank Adaptation (MonteCLora)\nIntroduces an efficient fine-tuning technique for LLMs with significant improvements in accuracy and robustness under noisy or adversarial conditions."
+    },
+    {
+      "id": "internships",
+      "type": "internships",
+      "span": "full",
+      "title": "Experience",
+      "data": [
+        {
+          "role": "Quantitative Researcher",
+          "org": "Graviton",
+          "description": "Quantitative research in finance."
+        },
+        {
+          "role": "Intern",
+          "org": "Quadeye",
+          "description": "Quantitative trading internship."
+        },
+        {
+          "role": "Intern",
+          "org": "Carnegie Mellon University",
+          "description": "Research internship at CMU."
+        },
+        {
+          "role": "Intern",
+          "org": "Inria",
+          "description": "Research internship at Inria."
+        }
+      ]
+    }
+  ]
+}

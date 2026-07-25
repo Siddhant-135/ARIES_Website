@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -44,9 +45,14 @@ export default async function ProjectDetailPage({
   if (!project) notFound();
 
   const members = getMembers();
-  const contributors = project.contributors
+  const contributors = (project.contributors ?? [])
     .map((c) => members.find((m) => m.slug === c))
     .filter(Boolean);
+  const links = project.links ?? [];
+  const highlights = project.highlights ?? [];
+  const features = project.features ?? [];
+  const screenshots = project.screenshots ?? [];
+  const techStack = project.techStack ?? [];
 
   return (
     <div className="min-h-screen bg-[#fdf6ee]">
@@ -54,9 +60,11 @@ export default async function ProjectDetailPage({
         {/* Hero */}
         <div className="grid items-center gap-10 lg:grid-cols-[1.15fr_1fr]">
           <div>
-            <span className="inline-block rounded-full bg-lilac px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-purple">
-              Featured Project
-            </span>
+            {project.featured && (
+              <span className="inline-block rounded-full bg-lilac px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-purple">
+                Featured Project
+              </span>
+            )}
             <h1 className="mt-5 text-4xl font-black leading-tight text-ink md:text-6xl">
               {project.name}{" "}
               {project.accent && <span className="text-purple">{project.accent}</span>}
@@ -65,23 +73,25 @@ export default async function ProjectDetailPage({
             <p className="mt-4 max-w-lg text-[15px] leading-7 text-ink/80">
               {project.description}
             </p>
-            <div className="mt-7 flex flex-wrap gap-3">
-              {project.links.map((l, i) => (
-                <a
-                  key={l.label}
-                  href={l.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className={
-                    i === 0
-                      ? "rounded-xl bg-purple px-6 py-3 text-sm font-bold text-white shadow-cta transition-transform hover:scale-105"
-                      : "rounded-xl border border-[#d9d1c0] bg-white px-6 py-3 text-sm font-bold text-ink"
-                  }
-                >
-                  {l.label} {i === 0 ? "→" : ""}
-                </a>
-              ))}
-            </div>
+            {links.length > 0 && (
+              <div className="mt-7 flex flex-wrap gap-3">
+                {links.map((l, i) => (
+                  <a
+                    key={l.label}
+                    href={l.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={
+                      i === 0
+                        ? "rounded-xl bg-purple px-6 py-3 text-sm font-bold text-white shadow-cta transition-transform hover:scale-105"
+                        : "rounded-xl border border-[#d9d1c0] bg-white px-6 py-3 text-sm font-bold text-ink"
+                    }
+                  >
+                    {l.label} {i === 0 ? "→" : ""}
+                  </a>
+                ))}
+              </div>
+            )}
             <div className="mt-6 flex flex-wrap gap-2">
               {project.tags.map((t) => (
                 <span
@@ -94,27 +104,22 @@ export default async function ProjectDetailPage({
             </div>
           </div>
 
-          {/* Visual */}
-          <div className="relative grid aspect-[3/2] place-items-center overflow-hidden rounded-3xl bg-[radial-gradient(circle_at_50%_45%,#2c2069_0%,#161042_55%,#0d0a30_100%)] shadow-[0px_30px_60px_rgba(21,14,65,0.35)]">
-            <span className="grid size-24 place-items-center rounded-full bg-white/10">
-              <Mic size={44} className="text-white" />
-            </span>
-            <span className="absolute left-6 top-6 rounded-xl bg-[#241b57] px-4 py-2 text-xs text-white/90">
-              Hello! How can I help you today?
-            </span>
-            <span className="absolute bottom-8 left-8 rounded-xl bg-[#241b57] px-4 py-2 text-xs text-white/90">
-              Book a table for two at 7 PM.
-            </span>
-            <span className="absolute right-8 top-1/2 rounded-xl bg-[#3c2f7d] px-4 py-2 text-xs text-white">
-              Sure! Table booked for 7 PM.
-            </span>
+          <div className="relative aspect-[3/2] overflow-hidden rounded-3xl bg-[radial-gradient(circle_at_50%_45%,#2c2069_0%,#161042_55%,#0d0a30_100%)] shadow-[0px_30px_60px_rgba(21,14,65,0.35)]">
+            {project.image ? (
+              <Image src={project.image} alt="" fill className="object-cover" sizes="560px" />
+            ) : (
+              <div className="grid h-full place-items-center">
+                <span className="grid size-24 place-items-center rounded-full bg-white/10">
+                  <Mic size={44} className="text-white" />
+                </span>
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Highlights */}
-        {project.highlights.length > 0 && (
+        {highlights.length > 0 && (
           <div className="mt-14 grid gap-6 rounded-2xl border border-[#eee4d6] bg-white/80 p-8 shadow-card-sm sm:grid-cols-2 lg:grid-cols-4">
-            {project.highlights.map((h, i) => {
+            {highlights.map((h, i) => {
               const Icon = highlightIcons[i % highlightIcons.length];
               return (
                 <div key={h.title} className="text-center">
@@ -127,19 +132,22 @@ export default async function ProjectDetailPage({
           </div>
         )}
 
-        {/* About + features */}
         <div className="mt-16 grid gap-10 lg:grid-cols-[1.1fr_1fr]">
           <div>
-            <SectionTitle>About the Project</SectionTitle>
-            <p className="mt-6 text-[15px] font-medium leading-8 text-ink">
-              {project.about}
-            </p>
+            {(project.about || project.description) && (
+              <>
+                <SectionTitle>About the Project</SectionTitle>
+                <p className="mt-6 text-[15px] font-medium leading-8 text-ink">
+                  {project.about || project.description}
+                </p>
+              </>
+            )}
 
-            {project.techStack.length > 0 && (
+            {techStack.length > 0 && (
               <>
                 <SectionTitle className="mt-10">Tech Stack</SectionTitle>
                 <div className="mt-5 flex flex-wrap gap-2.5">
-                  {project.techStack.map((t) => (
+                  {techStack.map((t) => (
                     <Tag key={t} className="bg-white px-4 py-2 text-[13px] shadow-card-sm">
                       {t}
                     </Tag>
@@ -169,11 +177,11 @@ export default async function ProjectDetailPage({
             )}
           </div>
 
-          {project.features.length > 0 && (
+          {features.length > 0 && (
             <aside className="self-start rounded-2xl bg-[#f3ecfa] p-8">
               <h2 className="text-lg font-bold text-ink">Key Features</h2>
               <ul className="mt-6 space-y-6">
-                {project.features.map((f, i) => {
+                {features.map((f, i) => {
                   const Icon = featureIcons[i % featureIcons.length];
                   return (
                     <li key={f.title} className="flex gap-4">
@@ -194,12 +202,11 @@ export default async function ProjectDetailPage({
           )}
         </div>
 
-        {/* Screenshots */}
-        {project.screenshots.length > 0 && (
+        {screenshots.length > 0 && (
           <div className="mt-16">
             <SectionTitle>Screenshots</SectionTitle>
             <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {project.screenshots.map((s, i) => (
+              {screenshots.map((s, i) => (
                 <figure
                   key={s.title}
                   className="overflow-hidden rounded-xl border border-[#eee4d6] bg-white shadow-card-sm"

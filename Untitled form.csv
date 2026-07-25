@@ -1,0 +1,11 @@
+"Timestamp","Name","entering for project or event ?","Name of Project / Event 
+"2026/07/22 3:07:23 PM GMT+3","Preesha Agrawal","Project"," ""BAH 2026: Student Teacher Knowledge distillation for GAN based cloud removal""","Entry to finals at BAH hackathon. Performs knowledge distillation from reacher model with LUPI (learning usig priviledged information), student trained on indigenous satellite data lacking an independent cannel to replicate teacher results. MAE based ViT pretrained backbone (on indian data) for student model "
+"2026/07/22 3:52:26 PM GMT+3","Preesha","Project","AI grand challenge, top 5 teams","defence based problem statement, identifying and locating unknown number of emitters from spectral parameters along with highly noisy angular data. very compute effificient solution, runs on CPU"
+"2026/07/22 6:36:43 PM GMT+3","Nishant Mathuriya","Project","Shipathon S4: Problem Statement 3 -  Movie character predictor using WhatsApp chat","Used Word2Vec to create a vector space of context based dialogues to classify the jargon into six movie character representing different behaviours. Recreated Centroid classifier using Euclidean distances to classify the the chats as per the movie character they resemble to most."
+"2026/07/22 6:39:34 PM GMT+3","Vanshika Kataria ","Project","BAH 2026: IR  Infrared image colorization and enhancement","based on satellite TIR images, super resolution using SwinIR architecture and colorisation using a modified GAN architecture "
+"2026/07/22 8:12:47 PM GMT+3","Manasvi Gupta","Event","Shipathon 1 : NLP based Hackathon","A beginner level tutorial cum hackathon curated especially for freshers! 
+From understanding the basics of NLP to choosing your own problem statement and working to connect its frontend , backend , and ML into a complete pipeline for two packed days .
+date: 17.01.2026-18.01.2026 
+"
+"2026/07/23 2:42:40 PM GMT+3","Shivam Garg","Project","Fresher project: Pseudo atari game","https://github.com/shivxmgarg/Pseudo-Atari-Game
+taught an RL agent to play an atari game. "

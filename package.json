@@ -4,15 +4,19 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:api": "npm --prefix aries-website run dev",
+    "dev:all": "npm run db:seed && npm run dev:api & npm run dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "db:seed": "node database/seed.mjs",
     "import:excel": "node scripts/import-from-excel.mjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
+    "better-sqlite3": "^11.10.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^1.25.0",
@@ -22,7 +26,6 @@
     "react-dom": "19.2.4"
   },
   "devDependencies": {
-    "xlsx": "^0.18.5",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -30,6 +33,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.11",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "xlsx": "^0.18.5"
   }
 }

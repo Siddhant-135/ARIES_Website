@@ -1,0 +1,31 @@
+{
+  "slug": "vaibhav-gupta",
+  "name": "Vaibhav Gupta",
+  "role": "Alumni, ARIES · Founding Member",
+  "tagline": "Quant researcher at WorldQuant — IQC Global Rank 1, TedX speaker.",
+  "location": "WorldQuant",
+  "avatar": "/images/members/vaibhav-gupta.png",
+  "socials": [],
+  "blocks": [
+    {
+      "id": "about",
+      "type": "text",
+      "span": "full",
+      "title": "About",
+      "data": "Founding member of ARIES. IQC Global Rank 1, TedX speaker, and quant researcher at WorldQuant with expertise in financial modelling."
+    },
+    {
+      "id": "internships",
+      "type": "internships",
+      "span": "full",
+      "title": "Experience",
+      "data": [
+        {
+          "role": "Quant Researcher",
+          "org": "WorldQuant",
+          "description": "Quantitative research and financial modelling."
+        }
+      ]
+    }
+  ]
+}

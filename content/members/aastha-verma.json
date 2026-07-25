@@ -1,0 +1,30 @@
+{
+  "slug": "aastha-verma",
+  "name": "Aastha Verma",
+  "role": "Alumni, ARIES",
+  "tagline": "Software engineer at Glean.",
+  "location": "Glean",
+  "socials": [],
+  "blocks": [
+    {
+      "id": "about",
+      "type": "text",
+      "span": "full",
+      "title": "About",
+      "data": "ARIES alum and software engineer at Glean, building enterprise AI-powered search and knowledge tools."
+    },
+    {
+      "id": "internships",
+      "type": "internships",
+      "span": "full",
+      "title": "Experience",
+      "data": [
+        {
+          "role": "Software Engineer",
+          "org": "Glean",
+          "description": "Building enterprise search and knowledge discovery products."
+        }
+      ]
+    }
+  ]
+}

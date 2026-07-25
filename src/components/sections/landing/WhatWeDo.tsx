@@ -15,7 +15,7 @@ const items = [
   {
     icon: "/images/landing/icon-discuss.svg",
     label: "Discussing Interesting Topics",
-    href: "/resources",
+    href: "/events",
   },
   {
     icon: "/images/landing/icon-events.svg",

@@ -27,6 +27,8 @@ export default async function EventDetailPage({
   if (!event) notFound();
 
   const d = new Date(event.date + "T00:00:00");
+  const today = new Date().toISOString().slice(0, 10);
+  const isPast = event.date < today;
   const dateLabel = d.toLocaleDateString("en-IN", {
     weekday: "long",
     day: "numeric",
@@ -49,19 +51,19 @@ export default async function EventDetailPage({
           {event.title}
         </h1>
 
-        {/* Meta row */}
+        {/* Meta row — time/venue only for upcoming */}
         <div className="mt-6 flex flex-wrap gap-x-8 gap-y-3 text-sm text-ink">
           <span className="flex items-center gap-2">
             <CalendarDays size={16} className="text-purple" /> {dateLabel}
           </span>
-          {event.startTime && (
+          {!isPast && event.startTime && (
             <span className="flex items-center gap-2">
               <Clock size={16} className="text-purple" />
               {event.startTime}
               {event.endTime && ` – ${event.endTime}`}
             </span>
           )}
-          {event.venue && (
+          {!isPast && event.venue && (
             <span className="flex items-center gap-2">
               <MapPin size={16} className="text-purple" /> {event.venue}
             </span>

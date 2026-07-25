@@ -1,0 +1,36 @@
+{
+  "slug": "pranav-khaterpal",
+  "name": "Pranav Khaterpal",
+  "role": "Alumni, ARIES · Founder & ex-OC",
+  "tagline": "Researcher at UTBD & M3RG.",
+  "location": "UTBD & M3RG",
+  "avatar": "/images/members/pranav-khaterpal.png",
+  "socials": [],
+  "blocks": [
+    {
+      "id": "about",
+      "type": "text",
+      "span": "full",
+      "title": "About",
+      "data": "Founder and former Overall Coordinator at ARIES, also served as Panel Member. Now a researcher at UTBD & M3RG, with prior research internship experience at ANU."
+    },
+    {
+      "id": "internships",
+      "type": "internships",
+      "span": "full",
+      "title": "Experience",
+      "data": [
+        {
+          "role": "Researcher",
+          "org": "UTBD & M3RG",
+          "description": "Active research in machine learning."
+        },
+        {
+          "role": "Research Intern",
+          "org": "Australian National University",
+          "description": "Prior research internship at ANU."
+        }
+      ]
+    }
+  ]
+}

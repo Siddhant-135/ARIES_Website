@@ -1,9 +1,24 @@
 {
   "slug": "tamanna",
-  "name": "Tamanna",
+  "name": "Tamanna Verma",
   "role": "Co-OC",
-  "tagline": "",
+  "tagline": "Tamanna co-runs the club and owns the research vertical. Works on interpretability of language models; firmly believes a",
   "location": "IIT Delhi",
   "socials": [],
-  "blocks": []
+  "blocks": [
+    {
+      "id": "about",
+      "type": "text",
+      "span": "full",
+      "title": "About",
+      "data": "Tamanna co-runs the club and owns the research vertical. Works on interpretability of language models; firmly believes attention is not explanation and will cite the paper."
+    },
+    {
+      "id": "research",
+      "type": "research",
+      "span": "full",
+      "title": "Publications",
+      "data": "Sequential Mining Rule Sets from Event Sequences for 3D Pose Prediction\nInternational Conference on Learning Representations (ICLR) (2026)"
+    }
+  ]
 }

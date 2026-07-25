@@ -397,61 +397,71 @@
       "name": "Vaibhav Gupta",
       "slug": "vaibhav-gupta",
       "role": "Quant Researcher",
-      "org": "WorldQuant"
+      "org": "WorldQuant",
+      "photo": "/images/members/vaibhav-gupta.png"
     },
     {
       "name": "Aryan Dua",
       "slug": "aryan-dua",
       "role": "Asynchronous Optimization",
-      "org": "Zuse Institute"
+      "org": "Zuse Institute",
+      "photo": "/images/members/aryan-dua.png"
     },
     {
       "name": "Sabhya Khurana",
       "slug": "sabhya-khurana",
       "role": "RAG + Chatbot Development",
-      "org": "Highway 9 Networks"
+      "org": "Highway9 Networks",
+      "photo": "/images/members/sabhya-khurana.png"
     },
     {
       "name": "Ansh Singh",
       "slug": "ansh-singh",
       "role": "AI Safety & Evaluation",
-      "org": "Aarhus UC"
+      "org": "Aarhus UC",
+      "photo": "/images/members/ansh-singh.png"
     },
     {
       "name": "Vansh Ramani",
       "slug": "vansh-ramani",
-      "role": "ML Training Efficiency",
-      "org": "CMU"
+      "role": "Graph Learning & Dataset Compression",
+      "org": "CMU",
+      "photo": "/images/members/vansh-ramani.png"
     },
     {
       "name": "Manas Jain",
       "slug": "manas-jain",
       "role": "SDE",
-      "org": "Graviton Research Capital LLP"
+      "org": "Graviton Research Capital LLP",
+      "photo": "/images/members/manas-jain.png"
     },
     {
       "name": "Maithili Joshi",
       "slug": "maithili-joshi",
       "role": "SWE",
-      "org": "Samsung Korea"
+      "org": "Samsung Korea",
+      "photo": "/images/members/maithili-joshi.png"
     },
     {
       "name": "Vaibhav Seth",
       "slug": "vaibhav-seth",
-      "role": "QR",
-      "org": "Graviton"
+      "role": "Quantitative Researcher",
+      "org": "Graviton",
+      "photo": "/images/members/vaibhav-seth.png"
     },
     {
       "name": "Rudrakshi Singal",
       "slug": "rudrakshi-singal",
       "role": "Founder's Office",
-      "org": "Ola"
+      "org": "Ola",
+      "photo": "/images/members/rudrakshi-singal.png"
     },
     {
       "name": "Pranav Khaterpal",
       "slug": "pranav-khaterpal",
       "role": "Researcher",
-      "org": "UTBD & M3RG"
+      "org": "UTBD & M3RG",
+      "photo": "/images/members/pranav-khaterpal.png"
     },
     {
       "name": "Aastha Verma",

@@ -2,13 +2,33 @@
 
 import { useState } from "react";
 import { Save } from "lucide-react";
+import { ImageField } from "./ImageField";
 
 /**
- * Create/edit a project. Comma-separated fields keep the form compact;
- * they map to arrays in the project JSON.
+ * Simplified project create/edit — essentials + cover image.
+ * No empty highlight/feature scaffolding required.
  */
-export function ProjectForm() {
+export function ProjectForm({
+  initial,
+}: {
+  initial?: {
+    slug?: string;
+    name?: string;
+    tagline?: string;
+    description?: string;
+    about?: string;
+    category?: string;
+    tags?: string[];
+    techStack?: string[];
+    contributors?: string[];
+    image?: string;
+    featured?: boolean;
+    links?: { label: string; url: string }[];
+  };
+}) {
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
+  const [image, setImage] = useState(initial?.image ?? "");
+  const [featured, setFeatured] = useState(!!initial?.featured);
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -23,22 +43,25 @@ export function ProjectForm() {
         .map((s) => s.trim())
         .filter(Boolean);
 
+    const github = String(f.get("github") ?? "").trim();
+    const demo = String(f.get("demo") ?? "").trim();
+
     const data = {
+      slug,
       name,
-      tagline: f.get("tagline"),
-      description: f.get("description"),
-      about: f.get("about"),
-      category: f.get("category"),
+      tagline: String(f.get("tagline") ?? ""),
+      description: String(f.get("description") ?? ""),
+      about: String(f.get("about") ?? ""),
+      category: String(f.get("category") ?? "Project"),
       tags: csv("tags"),
       techStack: csv("techStack"),
       contributors: csv("contributors"),
+      image: image || undefined,
+      featured,
       links: [
-        f.get("github") && { label: "GitHub", url: f.get("github") },
-        f.get("demo") && { label: "Live Demo", url: f.get("demo") },
+        github && { label: "GitHub", url: github },
+        demo && { label: "Live Demo", url: demo },
       ].filter(Boolean),
-      highlights: [],
-      features: [],
-      screenshots: [],
     };
 
     setStatus("saving");
@@ -48,34 +71,55 @@ export function ProjectForm() {
       body: JSON.stringify({ kind: "projects", slug, data }),
     });
     setStatus(res.ok ? "saved" : "error");
-    if (res.ok) (e.target as HTMLFormElement).reset();
+    if (res.ok && !initial?.slug) (e.target as HTMLFormElement).reset();
     setTimeout(() => setStatus("idle"), 2500);
   };
 
+  const linkUrl = (label: string) =>
+    initial?.links?.find((l) => l.label.toLowerCase().includes(label))?.url ?? "";
+
   return (
     <form onSubmit={submit} className="max-w-2xl space-y-4 rounded-2xl bg-white p-6 shadow-card-sm">
-      <h2 className="text-base font-bold text-ink">New project</h2>
+      <h2 className="text-base font-bold text-ink">
+        {initial?.slug ? `Edit project · ${initial.slug}` : "New project"}
+      </h2>
       <div className="grid gap-4 sm:grid-cols-2">
-        <Input name="name" label="Project name *" required />
-        <Input name="slug" label="Slug (optional, auto from name)" />
-        <Input name="category" label="Category *" placeholder="AI / ML, Hackathon, Research..." required />
-        <Input name="tagline" label="Tagline *" required />
+        <Input name="name" label="Project name *" required defaultValue={initial?.name} />
+        <Input name="slug" label="Slug (optional)" defaultValue={initial?.slug} />
+        <Input
+          name="category"
+          label="Category *"
+          required
+          defaultValue={initial?.category}
+          placeholder="Hackathon, Research, Industry…"
+        />
+        <Input name="tagline" label="Tagline *" required defaultValue={initial?.tagline} />
       </div>
-      <TextArea name="description" label="Short description (cards) *" rows={2} required />
-      <TextArea name="about" label="About the project (detail page)" rows={4} />
+      <TextArea name="description" label="Short description (cards) *" rows={2} required defaultValue={initial?.description} />
+      <TextArea name="about" label="About (detail page)" rows={4} defaultValue={initial?.about} />
       <div className="grid gap-4 sm:grid-cols-2">
-        <Input name="tags" label="Tags (comma separated)" placeholder="NLP, Computer vision" />
-        <Input name="techStack" label="Tech stack (comma separated)" placeholder="Python, PyTorch" />
-        <Input name="contributors" label="Contributor slugs (comma separated)" placeholder="harsheet-kaur" />
-        <Input name="github" label="GitHub URL" />
-        <Input name="demo" label="Demo URL" />
+        <Input name="tags" label="Tags (comma separated)" defaultValue={initial?.tags?.join(", ")} />
+        <Input name="techStack" label="Tech stack (comma separated)" defaultValue={initial?.techStack?.join(", ")} />
+        <Input
+          name="contributors"
+          label="Contributor slugs (comma separated)"
+          defaultValue={initial?.contributors?.join(", ")}
+          placeholder="preesha, sanidhya"
+        />
+        <Input name="github" label="GitHub URL" defaultValue={linkUrl("git")} />
+        <Input name="demo" label="Demo / paper URL" defaultValue={linkUrl("demo") || linkUrl("arxiv")} />
       </div>
+      <ImageField label="Cover image" kind="projects" value={image} onChange={setImage} />
+      <label className="flex items-center gap-2 text-sm font-semibold text-ink">
+        <input type="checkbox" checked={featured} onChange={(e) => setFeatured(e.target.checked)} />
+        Featured on projects page
+      </label>
       <button
         disabled={status === "saving"}
         className="flex items-center gap-2 rounded-lg bg-purple px-5 py-2.5 text-sm font-bold text-white disabled:opacity-50"
       >
         <Save size={15} />
-        {status === "saving" ? "Saving..." : status === "saved" ? "Saved ✓" : status === "error" ? "Failed — retry" : "Create project"}
+        {status === "saving" ? "Saving…" : status === "saved" ? "Saved ✓" : status === "error" ? "Failed" : "Save project"}
       </button>
     </form>
   );
@@ -87,12 +131,14 @@ export function Input({
   required,
   placeholder,
   type = "text",
+  defaultValue,
 }: {
   label: string;
   name: string;
   required?: boolean;
   placeholder?: string;
   type?: string;
+  defaultValue?: string;
 }) {
   return (
     <label className="block">
@@ -102,6 +148,7 @@ export function Input({
         type={type}
         required={required}
         placeholder={placeholder}
+        defaultValue={defaultValue}
         className="mt-1.5 w-full rounded-lg bg-[#f3eef8] px-3.5 py-2.5 text-sm outline-none focus:ring-2 focus:ring-purple/40"
       />
     </label>
@@ -113,11 +160,13 @@ export function TextArea({
   name,
   rows,
   required,
+  defaultValue,
 }: {
   label: string;
   name: string;
   rows: number;
   required?: boolean;
+  defaultValue?: string;
 }) {
   return (
     <label className="block">
@@ -126,6 +175,7 @@ export function TextArea({
         name={name}
         rows={rows}
         required={required}
+        defaultValue={defaultValue}
         className="mt-1.5 w-full rounded-lg bg-[#f3eef8] px-3.5 py-2.5 text-sm outline-none focus:ring-2 focus:ring-purple/40"
       />
     </label>

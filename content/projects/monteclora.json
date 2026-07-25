@@ -1,0 +1,16 @@
+{
+  "slug": "monteclora",
+  "name": "MonteCLora",
+  "tagline": "Bayesian low-rank LLM fine-tuning.",
+  "description": "Efficient fine-tuning for LLMs with improved accuracy and robustness.",
+  "category": "Publication",
+  "tags": ["LLM", "Fine-tuning", "Research"],
+  "techStack": ["LoRA", "Bayesian Methods"],
+  "highlights": [],
+  "features": [],
+  "screenshots": [],
+  "links": [],
+  "contributors": [],
+  "featured": false,
+  "about": "Robust and Efficient Fine-tuning of LLMs with Bayesian Reparameterization of Low-Rank Adaptation by Vaibhav Seth et al. — MonteCLora shows significant improvements in accuracy and robustness under noisy or adversarial conditions."
+}

@@ -1,0 +1,17 @@
+{
+  "name": "aries-api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "ARIES club API — Express + SQLite (database/aries.db)",
+  "scripts": {
+    "dev": "node --watch src/index.js",
+    "start": "node src/index.js",
+    "seed": "node ../database/seed.mjs"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.10.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0"
+  }
+}

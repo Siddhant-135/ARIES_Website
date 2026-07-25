@@ -1,0 +1,16 @@
+{
+  "slug": "simulated-touchscreen",
+  "name": "Simulated Touch Screen",
+  "tagline": "Projector + camera gesture interface.",
+  "description": "A low-cost, hardware-light alternative to traditional touchscreens.",
+  "category": "Computer Vision",
+  "tags": ["Computer Vision", "HCI"],
+  "techStack": ["OpenCV", "Computer Vision"],
+  "highlights": [],
+  "features": [],
+  "screenshots": [],
+  "links": [],
+  "contributors": [],
+  "featured": true,
+  "about": "Uses computer vision to detect and interpret hand gestures — a projector-and-camera setup that mimics a touch screen without dedicated hardware."
+}

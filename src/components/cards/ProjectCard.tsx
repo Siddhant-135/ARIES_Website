@@ -30,10 +30,10 @@ export function ProjectCard({ project }: { project: Project }) {
           {project.name}
           {project.accent ? ` ${project.accent}` : ""}
         </h3>
-        {project.contributors.length > 0 && (
+        {(project.contributors?.length ?? 0) > 0 && (
           <p className="text-xs italic text-[#8a8daa]">
             with{" "}
-            {project.contributors
+            {project.contributors!
               .map((c) =>
                 c
                   .split("-")

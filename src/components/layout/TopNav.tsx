@@ -60,7 +60,7 @@ export function TopNav() {
             href="/contact"
             className="rounded-full bg-navy px-7 py-2.5 text-sm font-bold text-white shadow-cta transition-transform hover:scale-105"
           >
-            Join Us →
+            Contact Us →
           </Link>
         </nav>
 
@@ -91,7 +91,7 @@ export function TopNav() {
             className="mt-2 block rounded-full bg-navy px-6 py-3 text-center text-sm font-bold text-white"
             onClick={() => setOpen(false)}
           >
-            Join Us →
+            Contact Us →
           </Link>
         </nav>
       )}

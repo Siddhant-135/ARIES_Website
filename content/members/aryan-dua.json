@@ -1,0 +1,31 @@
+{
+  "slug": "aryan-dua",
+  "name": "Aryan Dua",
+  "role": "Alumni, ARIES · ex-Panel Member Coordinator",
+  "tagline": "Asynchronous optimization and standardized testing at Zuse Institute.",
+  "location": "Zuse Institute",
+  "avatar": "/images/members/aryan-dua.png",
+  "socials": [],
+  "blocks": [
+    {
+      "id": "about",
+      "type": "text",
+      "span": "full",
+      "title": "About",
+      "data": "Former Panel Member Coordinator at ARIES. Works on asynchronous optimization, data collection, and standardized testing."
+    },
+    {
+      "id": "internships",
+      "type": "internships",
+      "span": "full",
+      "title": "Experience",
+      "data": [
+        {
+          "role": "Researcher",
+          "org": "Zuse Institute",
+          "description": "Asynchronous optimization, data collection, and standardized testing."
+        }
+      ]
+    }
+  ]
+}

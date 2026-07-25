@@ -1,0 +1,16 @@
+{
+  "slug": "yolov1-tensorflow",
+  "name": "YOLOv1 TensorFlow",
+  "tagline": "Single-pass object detection from scratch.",
+  "description": "Built a single-pass structure for image recognition with up to 87% accuracy.",
+  "category": "Computer Vision",
+  "tags": ["Object Detection", "Deep Learning"],
+  "techStack": ["TensorFlow", "YOLO"],
+  "highlights": [],
+  "features": [],
+  "screenshots": [],
+  "links": [],
+  "contributors": [],
+  "featured": true,
+  "about": "TensorFlow implementation of YOLOv1 — a single-pass structure for image recognition with up to 87% accuracy, with tremendous industrial-use derivatives."
+}
