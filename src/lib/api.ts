@@ -1,12 +1,22 @@
+/**
+ * Public pages don't need this. Auth uses same-origin Next routes (`/api/auth/*`)
+ * so Vercel works without the Express API. Optional Express CRUD still targets
+ * NEXT_PUBLIC_API_URL when set.
+ */
 const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
 
-async function apiFetch<T>(path: string, options: RequestInit = {}, token?: string): Promise<T> {
+async function apiFetch<T>(
+  path: string,
+  options: RequestInit = {},
+  token?: string,
+  base: string = API,
+): Promise<T> {
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
     ...(options.headers as Record<string, string>),
   };
   if (token) headers.Authorization = `Bearer ${token}`;
-  const res = await fetch(`${API}${path}`, { ...options, headers });
+  const res = await fetch(`${base}${path}`, { ...options, headers });
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
     throw new Error((err as { error?: string })?.error ?? `API error ${res.status}`);
@@ -16,6 +26,9 @@ async function apiFetch<T>(path: string, options: RequestInit = {}, token?: stri
 
 export const apiBase = API;
 
+/** Same-origin Next.js auth — works on Vercel without Express. */
+const AUTH = "/api";
+
 export const login = (entryNumber: string, password: string) =>
   apiFetch<{
     token: string;
@@ -23,10 +36,10 @@ export const login = (entryNumber: string, password: string) =>
     level: string;
     name: string;
     email: string;
-  }>("/auth/login", { method: "POST", body: JSON.stringify({ entryNumber, password }) });
+  }>("/auth/login", { method: "POST", body: JSON.stringify({ entryNumber, password }) }, undefined, AUTH);
 
-export const me = (token: string) => apiFetch("/auth/me", {}, token);
-export const logout = (token: string) => apiFetch("/auth/logout", { method: "POST" }, token);
+export const me = (token: string) => apiFetch("/auth/me", {}, token, AUTH);
+export const logout = (token: string) => apiFetch("/auth/logout", { method: "POST" }, token, AUTH);
 
 export const getAdminStats = (token: string) =>
   apiFetch<{ members: number; projects: number; events: number; problems: number }>(
