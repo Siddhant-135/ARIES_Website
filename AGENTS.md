@@ -55,3 +55,7 @@ single-purpose components. Find the file, make the change, done.
 - Category chip colors: `src/components/ui/CategoryBadge.tsx`.
 - Icons: `lucide-react` (no brand icons — use monogram tiles like Contact page).
 - Run: `npm run dev`. Content saves from the admin editor only persist in dev.
+
+## Contributors
+* @devsh - Developer / Collaborator Request
+
