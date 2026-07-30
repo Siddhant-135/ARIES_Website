@@ -57,5 +57,5 @@ single-purpose components. Find the file, make the change, done.
 - Run: `npm run dev`. Content saves from the admin editor only persist in dev.
 
 ## Contributors
-* @devsh - Developer / Collaborator Request
+* @dv-sh - Developer / Collaborator Request
 
