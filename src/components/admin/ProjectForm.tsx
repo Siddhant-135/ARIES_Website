@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Save } from "lucide-react";
+import { Save, Trash2 } from "lucide-react";
 import type { Project } from "@/lib/types";
 import { MediaField } from "./ImageField";
 
@@ -11,12 +11,14 @@ import { MediaField } from "./ImageField";
 export function ProjectForm({
   initial,
   onSaved,
+  onDeleted,
 }: {
   initial?: Partial<Project> & { slug?: string };
   /** Called after a successful direct publish (not pending approval). */
   onSaved?: (project: Project, mode: "direct" | "pending") => void;
+  onDeleted?: (slug: string, mode: "direct" | "pending") => void;
 }) {
-  const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
+  const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error" | "deleting">("idle");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [image, setImage] = useState(initial?.image ?? "");
   const [video, setVideo] = useState(initial?.video ?? "");
@@ -91,6 +93,30 @@ export function ProjectForm({
     setTimeout(() => setStatus("idle"), 2500);
   };
 
+  const remove = async () => {
+    if (!initial?.slug) return;
+    if (!confirm(`Delete project “${initial.name || initial.slug}”? This cannot be undone.`)) return;
+    setStatus("deleting");
+    setErrorMsg(null);
+    const res = await fetch("/api/admin/save", {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ kind: "projects", slug: initial.slug, action: "delete" }),
+    });
+    const body = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      setStatus("error");
+      setErrorMsg(body.error ?? `Delete failed (${res.status})`);
+      setTimeout(() => setStatus("idle"), 2500);
+      return;
+    }
+    const mode = body.mode === "pending" ? "pending" : "direct";
+    if (mode === "pending") alert("Delete submitted for approval.");
+    onDeleted?.(initial.slug, mode);
+    setStatus("idle");
+  };
+
   const linkUrl = (label: string) =>
     initial?.links?.find((l) => l.label.toLowerCase().includes(label))?.url ?? "";
 
@@ -139,13 +165,26 @@ export function ProjectForm({
         <input type="checkbox" checked={featured} onChange={(e) => setFeatured(e.target.checked)} />
         Featured on projects page
       </label>
-      <button
-        disabled={status === "saving"}
-        className="flex items-center gap-2 rounded-lg bg-purple px-5 py-2.5 text-sm font-bold text-white disabled:opacity-50"
-      >
-        <Save size={15} />
-        {status === "saving" ? "Saving…" : status === "saved" ? "Saved ✓" : status === "error" ? "Failed" : "Save project"}
-      </button>
+      <div className="flex flex-wrap items-center gap-3">
+        <button
+          disabled={status === "saving" || status === "deleting"}
+          className="flex items-center gap-2 rounded-lg bg-purple px-5 py-2.5 text-sm font-bold text-white disabled:opacity-50"
+        >
+          <Save size={15} />
+          {status === "saving" ? "Saving…" : status === "saved" ? "Saved ✓" : status === "error" ? "Failed" : "Save project"}
+        </button>
+        {initial?.slug && (
+          <button
+            type="button"
+            disabled={status === "saving" || status === "deleting"}
+            onClick={() => void remove()}
+            className="flex items-center gap-2 rounded-lg bg-red-50 px-4 py-2.5 text-sm font-bold text-red-600 hover:bg-red-100 disabled:opacity-50"
+          >
+            <Trash2 size={15} />
+            {status === "deleting" ? "Deleting…" : "Delete"}
+          </button>
+        )}
+      </div>
       {errorMsg && <p className="text-xs font-semibold text-red-600">{errorMsg}</p>}
     </form>
   );

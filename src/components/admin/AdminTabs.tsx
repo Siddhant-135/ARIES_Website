@@ -224,6 +224,14 @@ export function AdminTabs({
                 setProjectFormKey((k) => k + 1);
                 router.refresh();
               }}
+              onDeleted={(slug, mode) => {
+                if (mode === "direct") {
+                  setProjects((prev) => prev.filter((p) => p.slug !== slug));
+                  setEditProject("");
+                }
+                setProjectFormKey((k) => k + 1);
+                router.refresh();
+              }}
             />
           </>
         )}
@@ -270,6 +278,14 @@ export function AdminTabs({
                     return [...prev, event];
                   });
                   setEditEvent(event.slug);
+                }
+                setEventFormKey((k) => k + 1);
+                router.refresh();
+              }}
+              onDeleted={(slug, mode) => {
+                if (mode === "direct") {
+                  setEvents((prev) => prev.filter((e) => e.slug !== slug));
+                  setEditEvent("");
                 }
                 setEventFormKey((k) => k + 1);
                 router.refresh();

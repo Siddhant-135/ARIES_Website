@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Upload } from "lucide-react";
+import { Upload, X } from "lucide-react";
 
 type MediaKind = "members" | "projects" | "events" | "team" | "misc";
 
@@ -55,7 +55,7 @@ export function MediaField({
   return (
     <div>
       <span className="text-xs font-semibold text-ink">{label}</span>
-      <div className="mt-1.5 flex items-center gap-3">
+      <div className="mt-1.5 flex flex-wrap items-center gap-3">
         <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-dashed border-ink/20 bg-[#f3eef8] px-3 py-2.5 text-xs font-semibold text-ink hover:border-purple/40">
           <Upload size={14} />
           {busy ? "Uploading…" : accept === "video" ? "Choose video" : "Choose file"}
@@ -77,6 +77,15 @@ export function MediaField({
           <div className="relative size-12 overflow-hidden rounded-lg bg-lilac">
             <Image src={value} alt="" fill className="object-cover" sizes="48px" />
           </div>
+        )}
+        {value && (
+          <button
+            type="button"
+            onClick={() => onChange("")}
+            className="flex items-center gap-1 rounded-lg bg-red-50 px-2.5 py-2 text-xs font-bold text-red-600 hover:bg-red-100"
+          >
+            <X size={12} /> Remove
+          </button>
         )}
       </div>
       {value && <p className="mt-1 truncate text-[11px] text-ink/45">{value}</p>}

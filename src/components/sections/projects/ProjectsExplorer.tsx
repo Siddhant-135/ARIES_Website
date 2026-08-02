@@ -29,7 +29,17 @@ export function ProjectsExplorer({ projects: initialProjects }: { projects: Proj
     const q = query.trim().toLowerCase();
     if (!q) return projects;
     return projects.filter((p) =>
-      [p.name, p.accent, p.description, p.category, ...p.tags]
+      [
+        p.name,
+        p.accent,
+        p.tagline,
+        p.description,
+        p.category,
+        p.about,
+        ...(p.tags ?? []),
+        ...(p.techStack ?? []),
+        ...(p.contributors ?? []),
+      ]
         .filter(Boolean)
         .join(" ")
         .toLowerCase()
@@ -108,6 +118,14 @@ export function ProjectsExplorer({ projects: initialProjects }: { projects: Proj
             initial={selected}
             onSaved={(project, mode) => {
               if (mode === "direct") upsertLocal(project);
+              setEditing(null);
+              setFormKey((k) => k + 1);
+              router.refresh();
+            }}
+            onDeleted={(slug, mode) => {
+              if (mode === "direct") {
+                setProjects((prev) => prev.filter((p) => p.slug !== slug));
+              }
               setEditing(null);
               setFormKey((k) => k + 1);
               router.refresh();

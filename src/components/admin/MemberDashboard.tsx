@@ -10,6 +10,7 @@ import {
   ExternalLink,
   FolderPlus,
   LogOut,
+  Search,
   UserRound,
 } from "lucide-react";
 import type { AriesEvent, Member, Project, TeamData } from "@/lib/types";
@@ -66,6 +67,8 @@ export function MemberDashboard({
   const [editEvent, setEditEvent] = useState("");
   const [projectFormKey, setProjectFormKey] = useState(0);
   const [eventFormKey, setEventFormKey] = useState(0);
+  const [projectQuery, setProjectQuery] = useState("");
+  const [eventQuery, setEventQuery] = useState("");
 
   const tabs: { id: DashTab; label: string; icon: typeof UserRound; show: boolean }[] = [
     { id: "profile", label: "My profile", icon: UserRound, show: true },
@@ -73,6 +76,30 @@ export function MemberDashboard({
     { id: "projects", label: "Projects", icon: FolderPlus, show: showCreate },
     { id: "events", label: "Events", icon: CalendarPlus, show: showCreate },
   ];
+
+  const filteredProjects = useMemo(() => {
+    const q = projectQuery.trim().toLowerCase();
+    if (!q) return projects;
+    return projects.filter((p) =>
+      [p.name, p.tagline, p.description, p.category, ...(p.tags ?? [])]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase()
+        .includes(q),
+    );
+  }, [projects, projectQuery]);
+
+  const filteredEvents = useMemo(() => {
+    const q = eventQuery.trim().toLowerCase();
+    if (!q) return events;
+    return events.filter((e) =>
+      [e.title, e.type, e.description, e.venue, e.date]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase()
+        .includes(q),
+    );
+  }, [events, eventQuery]);
 
   const selectedProject = projects.find((p) => p.slug === editProject);
   const selectedEvent = events.find((e) => e.slug === editEvent);
@@ -197,6 +224,15 @@ export function MemberDashboard({
                   ? "Creates and edits are submitted for OC / Co-Overall Coordinator / Research Lead approval."
                   : "You can publish projects directly."}
               </p>
+              <label className="flex max-w-md items-center gap-2 rounded-lg bg-white px-3 py-2.5 text-sm shadow-card-sm">
+                <Search size={15} className="text-[#8a8daa]" />
+                <input
+                  value={projectQuery}
+                  onChange={(e) => setProjectQuery(e.target.value)}
+                  placeholder="Search projects…"
+                  className="w-full bg-transparent outline-none"
+                />
+              </label>
               <label className="block max-w-md text-xs font-semibold text-[#140b3c]">
                 Edit existing project
                 <select
@@ -208,7 +244,7 @@ export function MemberDashboard({
                   className="mt-1.5 w-full rounded-lg bg-white px-3 py-2.5 text-sm shadow-card-sm"
                 >
                   <option value="">— create new —</option>
-                  {projects.map((p) => (
+                  {filteredProjects.map((p) => (
                     <option key={p.slug} value={p.slug}>
                       {p.name}
                     </option>
@@ -234,6 +270,14 @@ export function MemberDashboard({
                   setProjectFormKey((k) => k + 1);
                   router.refresh();
                 }}
+                onDeleted={(slug, mode) => {
+                  if (mode === "direct") {
+                    setProjects((prev) => prev.filter((p) => p.slug !== slug));
+                    setEditProject("");
+                  }
+                  setProjectFormKey((k) => k + 1);
+                  router.refresh();
+                }}
               />
             </div>
           )}
@@ -245,6 +289,15 @@ export function MemberDashboard({
                   ? "Creates and edits need leadership approval."
                   : "You can publish events directly."}
               </p>
+              <label className="flex max-w-md items-center gap-2 rounded-lg bg-white px-3 py-2.5 text-sm shadow-card-sm">
+                <Search size={15} className="text-[#8a8daa]" />
+                <input
+                  value={eventQuery}
+                  onChange={(e) => setEventQuery(e.target.value)}
+                  placeholder="Search events…"
+                  className="w-full bg-transparent outline-none"
+                />
+              </label>
               <label className="block max-w-md text-xs font-semibold text-[#140b3c]">
                 Edit existing event
                 <select
@@ -256,7 +309,7 @@ export function MemberDashboard({
                   className="mt-1.5 w-full rounded-lg bg-white px-3 py-2.5 text-sm shadow-card-sm"
                 >
                   <option value="">— create new —</option>
-                  {events.map((ev) => (
+                  {filteredEvents.map((ev) => (
                     <option key={ev.slug} value={ev.slug}>
                       {ev.title}
                     </option>
@@ -282,6 +335,14 @@ export function MemberDashboard({
                       return [...prev, event];
                     });
                     setEditEvent(event.slug);
+                  }
+                  setEventFormKey((k) => k + 1);
+                  router.refresh();
+                }}
+                onDeleted={(slug, mode) => {
+                  if (mode === "direct") {
+                    setEvents((prev) => prev.filter((e) => e.slug !== slug));
+                    setEditEvent("");
                   }
                   setEventFormKey((k) => k + 1);
                   router.refresh();

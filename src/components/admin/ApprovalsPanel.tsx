@@ -95,6 +95,7 @@ export function ApprovalsPanel() {
             >
               <div>
                 <p className="text-sm font-bold text-ink">
+                  {r.payload && (r.payload as { __delete?: boolean }).__delete ? "delete " : ""}
                   {r.entity_type} · {r.entity_slug}
                 </p>
                 <p className="text-xs text-ink/55">

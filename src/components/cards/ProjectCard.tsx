@@ -4,15 +4,25 @@ import type { Project } from "@/lib/types";
 import { CategoryBadge } from "@/components/ui/CategoryBadge";
 import { Tag } from "@/components/ui/Tag";
 
-/** Project card: image, category badge, name, description, tags. */
+/** Project card: cover (image or event-style gradient), category, name, description, tags. */
 export function ProjectCard({ project }: { project: Project }) {
   return (
     <Link
       href={`/projects/${project.slug}`}
       className="group flex flex-col overflow-hidden rounded-xl border border-[#d9d1c0] bg-white transition-transform hover:-translate-y-1 hover:shadow-card"
     >
-      <div className="relative h-48 shrink-0 bg-[linear-gradient(135deg,#ede6d8_0%,#e8e2d6_100%)]">
-        {project.image && (
+      <div
+        className="relative h-48 shrink-0"
+        style={
+          project.image
+            ? undefined
+            : {
+                backgroundImage:
+                  "radial-gradient(260px 200px at 20% 85%, rgba(125,91,184,1), transparent 55%), linear-gradient(90deg, #080d24, #10172b)",
+              }
+        }
+      >
+        {project.image ? (
           <Image
             src={project.image}
             alt=""
@@ -20,6 +30,12 @@ export function ProjectCard({ project }: { project: Project }) {
             sizes="(max-width: 768px) 100vw, 33vw"
             className="object-cover"
           />
+        ) : (
+          <div className="absolute inset-0 flex items-end p-4">
+            <span className="rounded-md bg-[#fffaf4]/95 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#081634]">
+              {project.category || "Project"}
+            </span>
+          </div>
         )}
       </div>
       <div className="flex flex-1 flex-col gap-2 px-5 py-5">

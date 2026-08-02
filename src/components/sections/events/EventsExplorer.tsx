@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { CalendarPlus, ChevronDown, Pencil, Plus } from "lucide-react";
+import { CalendarPlus, ChevronDown, Pencil, Plus, Search } from "lucide-react";
 import type { AriesEvent } from "@/lib/types";
 import { EventCard } from "@/components/cards/EventCard";
 import { EventForm } from "@/components/admin/EventForm";
@@ -36,6 +36,15 @@ const isUpcoming = (e: AriesEvent) => {
   return d >= today;
 };
 
+const matchesQuery = (e: AriesEvent, q: string) => {
+  if (!q) return true;
+  return [e.title, e.type, e.description, e.body, e.venue, e.date]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase()
+    .includes(q);
+};
+
 /** Filterable upcoming/past event grids + logged-in create/edit. */
 export function EventsExplorer({
   upcoming: initialUpcoming,
@@ -54,6 +63,7 @@ export function EventsExplorer({
   const [past, setPast] = useState(initialPast);
   const [editing, setEditing] = useState<string | null>(null);
   const [formKey, setFormKey] = useState(0);
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
     setUpcoming(initialUpcoming);
@@ -64,13 +74,14 @@ export function EventsExplorer({
   const selected = editing ? all.find((e) => e.slug === editing) : undefined;
 
   const filteredUpcoming = useMemo(() => {
-    const list = upcoming.filter((e) => tabMatches(tab, e));
+    const q = query.trim().toLowerCase();
+    const list = upcoming.filter((e) => tabMatches(tab, e) && matchesQuery(e, q));
     return sortAsc ? list : [...list].reverse();
-  }, [upcoming, tab, sortAsc]);
-  const filteredPast = useMemo(
-    () => past.filter((e) => tabMatches(tab, e)),
-    [past, tab],
-  );
+  }, [upcoming, tab, sortAsc, query]);
+  const filteredPast = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return past.filter((e) => tabMatches(tab, e) && matchesQuery(e, q));
+  }, [past, tab, query]);
 
   const openNew = () => {
     setEditing("");
@@ -97,6 +108,15 @@ export function EventsExplorer({
   return (
     <div>
       <div className="mt-6 flex flex-wrap items-center gap-3">
+        <label className="flex max-w-md flex-1 items-center gap-2 rounded-lg border border-[#d9d1c0] bg-white px-4 py-2.5">
+          <Search size={16} className="text-[#8a8daa]" />
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search events by title, type, or venue"
+            className="w-full bg-transparent text-sm text-[#11154a] placeholder-[#8a8daa] outline-none"
+          />
+        </label>
         {canEdit && (
           <button
             type="button"
@@ -136,6 +156,15 @@ export function EventsExplorer({
             }
             onSaved={(event, mode) => {
               if (mode === "direct") upsertLocal(event);
+              setEditing(null);
+              setFormKey((k) => k + 1);
+              router.refresh();
+            }}
+            onDeleted={(slug, mode) => {
+              if (mode === "direct") {
+                setUpcoming((prev) => prev.filter((e) => e.slug !== slug));
+                setPast((prev) => prev.filter((e) => e.slug !== slug));
+              }
               setEditing(null);
               setFormKey((k) => k + 1);
               router.refresh();
