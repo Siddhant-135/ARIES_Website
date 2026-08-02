@@ -2,8 +2,11 @@
 
 import { useState } from "react";
 import { Save, Trash2 } from "lucide-react";
-import type { Project } from "@/lib/types";
+import type { Member, Project, ProjectContributor } from "@/lib/types";
+import { normalizeContributors } from "@/lib/contributors";
 import { MediaField } from "./ImageField";
+import { TagPicker } from "./TagPicker";
+import { ContributorPicker } from "./ContributorPicker";
 
 /**
  * Simplified project create/edit — essentials + cover image + short video.
@@ -12,17 +15,25 @@ export function ProjectForm({
   initial,
   onSaved,
   onDeleted,
+  members = [],
+  knownTags = [],
 }: {
   initial?: Partial<Project> & { slug?: string };
   /** Called after a successful direct publish (not pending approval). */
   onSaved?: (project: Project, mode: "direct" | "pending") => void;
   onDeleted?: (slug: string, mode: "direct" | "pending") => void;
+  members?: Pick<Member, "slug" | "name">[];
+  knownTags?: string[];
 }) {
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error" | "deleting">("idle");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [image, setImage] = useState(initial?.image ?? "");
   const [video, setVideo] = useState(initial?.video ?? "");
   const [featured, setFeatured] = useState(!!initial?.featured);
+  const [tags, setTags] = useState<string[]>(initial?.tags ?? []);
+  const [contributors, setContributors] = useState<ProjectContributor[]>(() =>
+    normalizeContributors(initial?.contributors, members),
+  );
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -48,9 +59,9 @@ export function ProjectForm({
       description: String(f.get("description") ?? ""),
       about: String(f.get("about") ?? ""),
       category: String(f.get("category") ?? "Project"),
-      tags: csv("tags"),
+      tags,
       techStack: csv("techStack"),
-      contributors: csv("contributors"),
+      contributors,
       image: image || undefined,
       video: video || undefined,
       featured,
@@ -89,6 +100,8 @@ export function ProjectForm({
       setImage("");
       setVideo("");
       setFeatured(false);
+      setTags([]);
+      setContributors([]);
     }
     setTimeout(() => setStatus("idle"), 2500);
   };
@@ -140,13 +153,20 @@ export function ProjectForm({
       <TextArea name="description" label="Short description (cards) *" rows={2} required defaultValue={initial?.description} />
       <TextArea name="about" label="About (detail page)" rows={4} defaultValue={initial?.about} />
       <div className="grid gap-4 sm:grid-cols-2">
-        <Input name="tags" label="Tags (comma separated)" defaultValue={initial?.tags?.join(", ")} />
+        <TagPicker
+          label="Tags"
+          value={tags}
+          onChange={setTags}
+          suggestions={knownTags}
+          placeholder="Search or add a tag…"
+        />
         <Input name="techStack" label="Tech stack (comma separated)" defaultValue={initial?.techStack?.join(", ")} />
-        <Input
-          name="contributors"
-          label="Contributor slugs (comma separated)"
-          defaultValue={initial?.contributors?.join(", ")}
-          placeholder="preesha, sanidhya"
+        <ContributorPicker
+          label="Contributors"
+          value={contributors}
+          onChange={setContributors}
+          members={members}
+          placeholder="Search by name or slug…"
         />
         <Input name="github" label="GitHub URL" defaultValue={linkUrl("git")} />
         <Input name="demo" label="Demo / paper URL" defaultValue={linkUrl("demo") || linkUrl("arxiv")} />

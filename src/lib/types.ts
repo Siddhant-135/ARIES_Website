@@ -57,6 +57,14 @@ export type Member = {
 
 /* ---------- Projects ---------- */
 
+/** Contributor on a project — member slug, alumni, or external (non-ARIES). */
+export type ProjectContributor = {
+  name: string;
+  kind: "member" | "alumni" | "external";
+  /** Present when kind is "member" (and optionally for alumni with a known slug). */
+  slug?: string;
+};
+
 export type Project = {
   slug: string;
   name: string;
@@ -70,7 +78,8 @@ export type Project = {
   highlights?: { title: string; description: string }[];
   screenshots?: { title: string; description: string; image?: string }[];
   links?: { label: string; url: string }[];
-  contributors?: string[]; // member slugs
+  /** Member slugs (legacy) or rich contributor refs. */
+  contributors?: Array<string | ProjectContributor>;
   image?: string;
   video?: string; // short clip URL (mp4/webm)
   featured?: boolean;

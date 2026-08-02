@@ -4,14 +4,21 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Pencil, Plus, Search } from "lucide-react";
-import type { Project } from "@/lib/types";
+import type { Member, Project } from "@/lib/types";
 import { ProjectCard } from "@/components/cards/ProjectCard";
 import { ProjectForm } from "@/components/admin/ProjectForm";
 import { useAuth } from "@/context/AuthContext";
 import { canDirectCreate, canSubmitForApproval } from "@/lib/roles";
+import { contributorSearchText, normalizeContributors } from "@/lib/contributors";
 
 /** Search + grid; logged-in members can create/edit from this page. */
-export function ProjectsExplorer({ projects: initialProjects }: { projects: Project[] }) {
+export function ProjectsExplorer({
+  projects: initialProjects,
+  members = [],
+}: {
+  projects: Project[];
+  members?: Pick<Member, "slug" | "name">[];
+}) {
   const router = useRouter();
   const { session } = useAuth();
   const canEdit =
@@ -24,6 +31,14 @@ export function ProjectsExplorer({ projects: initialProjects }: { projects: Proj
   useEffect(() => {
     setProjects(initialProjects);
   }, [initialProjects]);
+
+  const knownTags = useMemo(() => {
+    const set = new Set<string>();
+    for (const p of projects) {
+      for (const t of p.tags ?? []) if (t.trim()) set.add(t.trim());
+    }
+    return [...set].sort((a, b) => a.localeCompare(b));
+  }, [projects]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -38,14 +53,14 @@ export function ProjectsExplorer({ projects: initialProjects }: { projects: Proj
         p.about,
         ...(p.tags ?? []),
         ...(p.techStack ?? []),
-        ...(p.contributors ?? []),
+        ...normalizeContributors(p.contributors, members).map(contributorSearchText),
       ]
         .filter(Boolean)
         .join(" ")
         .toLowerCase()
         .includes(q),
     );
-  }, [projects, query]);
+  }, [projects, query, members]);
 
   const selected = editing ? projects.find((p) => p.slug === editing) : undefined;
 
@@ -116,6 +131,8 @@ export function ProjectsExplorer({ projects: initialProjects }: { projects: Proj
           <ProjectForm
             key={`${editing || "new"}-${formKey}`}
             initial={selected}
+            members={members}
+            knownTags={knownTags}
             onSaved={(project, mode) => {
               if (mode === "direct") upsertLocal(project);
               setEditing(null);

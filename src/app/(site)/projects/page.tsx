@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { getProjects } from "@/lib/content";
+import { getMembers, getProjects } from "@/lib/content";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { ProjectsExplorer } from "@/components/sections/projects/ProjectsExplorer";
 
 export const metadata: Metadata = { title: "Projects" };
 
 export default async function ProjectsPage() {
-  const projects = await getProjects();
+  const [projects, members] = await Promise.all([getProjects(), getMembers()]);
 
   return (
     <div className="min-h-screen bg-[linear-gradient(180deg,#fbf7f0_35%,#b5a0ea_130%)]">
@@ -53,7 +53,7 @@ export default async function ProjectsPage() {
 
       <div className="mx-auto max-w-[1360px] px-6 md:px-14">
         <Eyebrow className="mb-2 mt-4">Projects</Eyebrow>
-        <ProjectsExplorer projects={projects} />
+        <ProjectsExplorer projects={projects} members={members} />
       </div>
     </div>
   );

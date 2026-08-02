@@ -3,9 +3,11 @@ import Link from "next/link";
 import type { Project } from "@/lib/types";
 import { CategoryBadge } from "@/components/ui/CategoryBadge";
 import { Tag } from "@/components/ui/Tag";
+import { contributorLabel, normalizeContributors } from "@/lib/contributors";
 
 /** Project card: cover (image or event-style gradient), category, name, description, tags. */
 export function ProjectCard({ project }: { project: Project }) {
+  const contributors = normalizeContributors(project.contributors);
   return (
     <Link
       href={`/projects/${project.slug}`}
@@ -46,17 +48,9 @@ export function ProjectCard({ project }: { project: Project }) {
           {project.name}
           {project.accent ? ` ${project.accent}` : ""}
         </h3>
-        {(project.contributors?.length ?? 0) > 0 && (
+        {contributors.length > 0 && (
           <p className="text-xs italic text-[#8a8daa]">
-            with{" "}
-            {project.contributors!
-              .map((c) =>
-                c
-                  .split("-")
-                  .map((w) => w[0]?.toUpperCase() + w.slice(1))
-                  .join(" "),
-              )
-              .join(", ")}
+            with {contributors.map(contributorLabel).join(", ")}
           </p>
         )}
         <p className="line-clamp-2 text-sm leading-6 text-[#5b5e82]">

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   Clock,
@@ -15,8 +14,10 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { getProject, getProjects, getMembers } from "@/lib/content";
+import { normalizeContributors } from "@/lib/contributors";
 import { CategoryBadge } from "@/components/ui/CategoryBadge";
 import { Tag } from "@/components/ui/Tag";
+import { ContributorList } from "@/components/projects/ContributorList";
 
 export async function generateStaticParams() {
   const projects = await getProjects();
@@ -46,9 +47,7 @@ export default async function ProjectDetailPage({
   if (!project) notFound();
 
   const members = await getMembers();
-  const contributors = (project.contributors ?? [])
-    .map((c) => members.find((m) => m.slug === c))
-    .filter(Boolean);
+  const contributors = normalizeContributors(project.contributors, members);
   const links = project.links ?? [];
   const highlights = project.highlights ?? [];
   const features = project.features ?? [];
@@ -170,20 +169,7 @@ export default async function ProjectDetailPage({
             {contributors.length > 0 && (
               <>
                 <SectionTitle className="mt-10">Team</SectionTitle>
-                <div className="mt-5 flex flex-wrap gap-3">
-                  {contributors.map((m) => (
-                    <Link
-                      key={m!.slug}
-                      href={`/${m!.slug}?from=project:${project.slug}`}
-                      className="flex items-center gap-3 rounded-full bg-white py-2 pl-2 pr-5 shadow-card-sm transition-transform hover:-translate-y-0.5"
-                    >
-                      <span className="grid size-9 place-items-center rounded-full bg-purple text-xs font-bold text-white">
-                        {m!.name.split(" ").map((w) => w[0]).join("")}
-                      </span>
-                      <span className="text-sm font-bold text-ink">{m!.name}</span>
-                    </Link>
-                  ))}
-                </div>
+                <ContributorList contributors={contributors} projectSlug={project.slug} />
               </>
             )}
           </div>

@@ -103,6 +103,13 @@ export function MemberDashboard({
 
   const selectedProject = projects.find((p) => p.slug === editProject);
   const selectedEvent = events.find((e) => e.slug === editEvent);
+  const knownTags = useMemo(() => {
+    const set = new Set<string>();
+    for (const p of projects) {
+      for (const t of p.tags ?? []) if (t.trim()) set.add(t.trim());
+    }
+    return [...set].sort((a, b) => a.localeCompare(b));
+  }, [projects]);
 
   return (
     <div className="min-h-screen bg-[linear-gradient(175deg,#c4b2ee_0%,#b5a0ea_35%,#cabcee_70%,#b9a6ea_100%)]">
@@ -254,6 +261,8 @@ export function MemberDashboard({
               <ProjectForm
                 key={`${editProject || "new-project"}-${projectFormKey}`}
                 initial={selectedProject}
+                members={members}
+                knownTags={knownTags}
                 onSaved={(project, mode) => {
                   if (mode === "direct") {
                     setProjects((prev) => {

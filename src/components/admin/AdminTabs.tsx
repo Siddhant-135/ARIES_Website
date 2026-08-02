@@ -80,6 +80,13 @@ export function AdminTabs({
 
   const selectedMember = members.find((m) => m.slug === editMember);
   const selectedProject = projects.find((p) => p.slug === editProject);
+  const knownTags = useMemo(() => {
+    const set = new Set<string>();
+    for (const p of projects) {
+      for (const t of p.tags ?? []) if (t.trim()) set.add(t.trim());
+    }
+    return [...set].sort((a, b) => a.localeCompare(b));
+  }, [projects]);
   const selectedEvent = events.find((e) => e.slug === editEvent);
 
   const saveTeamPhoto = async () => {
@@ -208,6 +215,8 @@ export function AdminTabs({
             <ProjectForm
               key={`${editProject || "new-project"}-${projectFormKey}`}
               initial={selectedProject}
+              members={members}
+              knownTags={knownTags}
               onSaved={(project, mode) => {
                 if (mode === "direct") {
                   setProjects((prev) => {
