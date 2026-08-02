@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import {
   canDirectPublish,
+  canManageTeamContent,
   canSubmitForApproval,
   isLeadership,
 } from "@/lib/roles";
@@ -179,7 +180,22 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: true, mode: "direct" });
   }
 
-  if (kind === "projects" || kind === "events" || kind === "team") {
+  if (kind === "team") {
+    if (!canManageTeamContent(level)) {
+      return NextResponse.json(
+        { error: "Forbidden — only OC / Co-Overall Coordinator / Research Lead can edit team content" },
+        { status: 403 },
+      );
+    }
+    const result = await publishDirect(supabase, "team", slug, payload, memberSlug, level);
+    if ("error" in result && result.error) {
+      return NextResponse.json({ error: result.error }, { status: 400 });
+    }
+    revalidateContent("team", slug);
+    return NextResponse.json({ ok: true, mode: "direct" });
+  }
+
+  if (kind === "projects" || kind === "events") {
     if (canDirectPublish(level)) {
       const result = await publishDirect(supabase, kind, slug, payload, memberSlug, level);
       if ("error" in result && result.error) {
@@ -190,11 +206,10 @@ export async function POST(req: Request) {
     }
 
     if (canSubmitForApproval(level)) {
-      const entityType = kind === "projects" ? "project" : kind === "events" ? "event" : "team";
-      const entitySlug = kind === "team" ? "team" : slug!;
+      const entityType = kind === "projects" ? "project" : "event";
       const { error } = await supabase.from("change_requests").insert({
         entity_type: entityType,
-        entity_slug: entitySlug,
+        entity_slug: slug!,
         payload,
         submitted_by: memberSlug,
         status: "pending",

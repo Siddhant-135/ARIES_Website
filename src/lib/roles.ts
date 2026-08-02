@@ -37,6 +37,11 @@ export function canApprove(level: string | null | undefined) {
   return isLeadership(level);
 }
 
+/** Alumni roster + full team photos — leadership (admin UI role) only. */
+export function canManageTeamContent(level: string | null | undefined) {
+  return isLeadership(level);
+}
+
 /** May submit project/event/team changes into the approval queue. */
 export function canSubmitForApproval(level: string | null | undefined) {
   return level === "executive";

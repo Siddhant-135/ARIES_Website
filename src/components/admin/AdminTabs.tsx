@@ -12,37 +12,41 @@ import {
   ExternalLink,
   Image as ImageIcon,
   ClipboardList,
+  GraduationCap,
 } from "lucide-react";
 import type { AriesEvent, Member, Project, TeamData } from "@/lib/types";
 import { ProfileEditor } from "./ProfileEditor";
 import { ProjectForm } from "./ProjectForm";
 import { EventForm } from "./EventForm";
 import { MemberForm } from "./MemberForm";
-import { ImageField } from "./ImageField";
+import { AlumniForm } from "./AlumniForm";
+import { TeamPhotoForm } from "./TeamPhotoForm";
 import { ApprovalsPanel } from "./ApprovalsPanel";
 import { useAuth } from "@/context/AuthContext";
-import { canApprove } from "@/lib/roles";
+import { canApprove, canManageTeamContent } from "@/lib/roles";
 import { cn } from "@/lib/utils";
 
 const BASE_TABS = [
   { id: "members", label: "Members", icon: Users },
+  { id: "alumni", label: "Alumni", icon: GraduationCap, adminOnly: true },
   { id: "projects", label: "Projects", icon: FolderPlus },
   { id: "events", label: "Events", icon: CalendarPlus },
-  { id: "team-photo", label: "Team photo", icon: ImageIcon },
+  { id: "team-photo", label: "Team photo", icon: ImageIcon, adminOnly: true },
   { id: "profile", label: "My profile", icon: UserRound },
-  { id: "approvals", label: "Approvals", icon: ClipboardList },
+  { id: "approvals", label: "Approvals", icon: ClipboardList, adminOnly: true },
 ] as const;
 
 type TabId = (typeof BASE_TABS)[number]["id"];
 
 /**
  * Full CMS shell — create/edit members, projects, events, team photos.
+ * Alumni + full team photo tabs are leadership (admin) only.
  */
 export function AdminTabs({
   members: initialMembers,
   projects: initialProjects,
   events: initialEvents,
-  team,
+  team: initialTeam,
 }: {
   members: Member[];
   projects: Project[];
@@ -51,27 +55,39 @@ export function AdminTabs({
 }) {
   const router = useRouter();
   const { session, signOut, role } = useAuth();
-  const showApprovals = canApprove(session?.level); // OC / Co-OC / Research Lead only
-  const TABS = showApprovals
-    ? BASE_TABS
-    : BASE_TABS.filter((t) => t.id !== "approvals");
+  const isAdmin = canManageTeamContent(session?.level);
+  const showApprovals = canApprove(session?.level);
+
+  const TABS = useMemo(
+    () =>
+      BASE_TABS.filter((t) => {
+        if ("adminOnly" in t && t.adminOnly) return isAdmin;
+        return true;
+      }),
+    [isAdmin],
+  );
+
   const [tab, setTab] = useState<TabId>("projects");
   const [members, setMembers] = useState(initialMembers);
   const [projects, setProjects] = useState(initialProjects);
   const [events, setEvents] = useState(initialEvents);
+  const [teamData, setTeamData] = useState(initialTeam);
   const [editMember, setEditMember] = useState<string>("");
   const [editProject, setEditProject] = useState<string>("");
   const [editEvent, setEditEvent] = useState<string>("");
   const [projectFormKey, setProjectFormKey] = useState(0);
   const [eventFormKey, setEventFormKey] = useState(0);
-  const [teamPhoto, setTeamPhoto] = useState(team.years[0]?.photo ?? "");
-  const [teamStatus, setTeamStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
 
   useEffect(() => {
     setMembers(initialMembers);
     setProjects(initialProjects);
     setEvents(initialEvents);
-  }, [initialMembers, initialProjects, initialEvents]);
+    setTeamData(initialTeam);
+  }, [initialMembers, initialProjects, initialEvents, initialTeam]);
+
+  useEffect(() => {
+    if (!TABS.some((t) => t.id === tab)) setTab("projects");
+  }, [TABS, tab]);
 
   const member = useMemo(
     () => members.find((m) => m.slug === (session?.memberSlug || members[0]?.slug)) ?? members[0],
@@ -88,23 +104,6 @@ export function AdminTabs({
     return [...set].sort((a, b) => a.localeCompare(b));
   }, [projects]);
   const selectedEvent = events.find((e) => e.slug === editEvent);
-
-  const saveTeamPhoto = async () => {
-    if (!team.years[0]) return;
-    setTeamStatus("saving");
-    const next: TeamData = {
-      ...team,
-      years: team.years.map((y, i) => (i === 0 ? { ...y, photo: teamPhoto || undefined } : y)),
-    };
-    const res = await fetch("/api/admin/save", {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ kind: "team", slug: "team", data: next }),
-    });
-    setTeamStatus(res.ok ? "saved" : "error");
-    setTimeout(() => setTeamStatus("idle"), 2500);
-  };
 
   return (
     <div>
@@ -190,6 +189,16 @@ export function AdminTabs({
               }
             />
           </>
+        )}
+
+        {tab === "alumni" && isAdmin && (
+          <AlumniForm
+            team={teamData}
+            onSaved={(next) => {
+              setTeamData(next);
+              router.refresh();
+            }}
+          />
         )}
 
         {tab === "projects" && (
@@ -303,26 +312,14 @@ export function AdminTabs({
           </>
         )}
 
-        {tab === "team-photo" && (
-          <div className="max-w-2xl space-y-4 rounded-2xl bg-white p-6 shadow-card-sm">
-            <h2 className="text-base font-bold text-ink">
-              Full team photo · {team.years[0]?.year ?? "current year"}
-            </h2>
-            <ImageField label="Group photo" kind="team" value={teamPhoto} onChange={setTeamPhoto} />
-            <button
-              type="button"
-              onClick={() => void saveTeamPhoto()}
-              className="rounded-lg bg-purple px-5 py-2.5 text-sm font-bold text-white"
-            >
-              {teamStatus === "saving"
-                ? "Saving…"
-                : teamStatus === "saved"
-                  ? "Saved ✓"
-                  : teamStatus === "error"
-                    ? "Failed"
-                    : "Save team photo"}
-            </button>
-          </div>
+        {tab === "team-photo" && isAdmin && (
+          <TeamPhotoForm
+            team={teamData}
+            onSaved={(next) => {
+              setTeamData(next);
+              router.refresh();
+            }}
+          />
         )}
 
         {tab === "profile" && member && (
