@@ -25,6 +25,7 @@ export function EventForm({
   };
 }) {
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [image, setImage] = useState(initial?.image ?? "");
   const [video, setVideo] = useState(initial?.video ?? "");
 
@@ -53,6 +54,7 @@ export function EventForm({
     };
 
     setStatus("saving");
+    setErrorMsg(null);
     const res = await fetch("/api/admin/save", {
       method: "POST",
       credentials: "include",
@@ -66,6 +68,7 @@ export function EventForm({
     } else {
       setStatus(res.ok ? "saved" : "error");
     }
+    if (!res.ok) setErrorMsg(body.error ?? `Save failed (${res.status})`);
     if (res.ok && !initial?.slug) (e.target as HTMLFormElement).reset();
     setTimeout(() => setStatus("idle"), 2500);
   };
@@ -117,6 +120,7 @@ export function EventForm({
         <Save size={15} />
         {status === "saving" ? "Saving…" : status === "saved" ? "Saved ✓" : status === "error" ? "Failed" : "Save event"}
       </button>
+      {errorMsg && <p className="text-xs font-semibold text-red-600">{errorMsg}</p>}
     </form>
   );
 }

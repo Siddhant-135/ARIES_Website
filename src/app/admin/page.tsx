@@ -72,7 +72,7 @@ export default function AdminLoginPage() {
           <p className="mt-2 text-center text-xs leading-5 text-ink/55">
             {mode === "login"
               ? "Kerberos ID or username + password."
-              : "Secret code (TONY / THOR / STEVE) + Kerberos ID + password."}
+              : "Enter your secret code, Kerberos ID, and password."}
           </p>
 
           <form
@@ -121,7 +121,6 @@ export default function AdminLoginPage() {
                   value={secret}
                   onChange={(e) => setSecret(e.target.value)}
                   className="mt-2 w-full rounded-xl border border-ink/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-purple/35"
-                  placeholder="TONY / THOR / STEVE"
                   autoComplete="off"
                   required
                 />

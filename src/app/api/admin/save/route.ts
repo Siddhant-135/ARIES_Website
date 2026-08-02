@@ -11,15 +11,24 @@ async function sessionInfo(supabase: Awaited<ReturnType<typeof createSupabaseSer
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return null;
-  const level = String(user.app_metadata?.level ?? "");
-  const memberSlug = String(user.app_metadata?.member_slug ?? "");
-  return {
-    user,
-    level,
-    memberSlug,
-    name: String(user.user_metadata?.name || memberSlug || "Member"),
-    email: user.email ?? "",
-  };
+
+  // Prefer live members row (JWT app_metadata can be stale until refresh)
+  const { data: member } = await supabase
+    .from("members")
+    .select("slug, level, data")
+    .eq("auth_user_id", user.id)
+    .maybeSingle();
+
+  const level = String(member?.level || user.app_metadata?.level || "");
+  const memberSlug = String(member?.slug || user.app_metadata?.member_slug || "");
+  const name = String(
+    (member?.data as { name?: string } | null)?.name ||
+      user.user_metadata?.name ||
+      memberSlug ||
+      "Member",
+  );
+
+  return { user, level, memberSlug, name, email: user.email ?? "" };
 }
 
 async function publishDirect(
@@ -64,16 +73,18 @@ async function publishDirect(
     if (error) return { error: error.message };
   }
 
-  await supabase.from("change_log").insert({
+  const { error: logErr } = await supabase.from("change_log").insert({
     entity_type: kind === "team" ? "team" : kind.slice(0, -1),
     entity_slug: entitySlug,
-    actor_slug: memberSlug,
+    actor_slug: memberSlug || "unknown",
     actor_level: level,
     source: "direct",
     summary: `Direct publish ${kind}`,
     before_data: before,
     after_data: payload,
   });
+  // Don't fail the save if audit log insert fails
+  if (logErr) console.warn("[admin/save] change_log:", logErr.message);
 
   return { ok: true as const };
 }
@@ -82,7 +93,7 @@ export async function POST(req: Request) {
   const supabase = await createSupabaseServerClient();
   const session = await sessionInfo(supabase);
   if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: "Unauthorized — please sign in again" }, { status: 401 });
   }
 
   const { kind, slug, data } = (await req.json()) as {
@@ -124,7 +135,7 @@ export async function POST(req: Request) {
     await supabase.from("change_log").insert({
       entity_type: "member",
       entity_slug: slug!,
-      actor_slug: memberSlug,
+      actor_slug: memberSlug || "unknown",
       actor_level: level,
       source: "direct",
       summary: isOwn ? "Updated own profile" : `Updated member ${slug}`,
@@ -136,7 +147,6 @@ export async function POST(req: Request) {
   }
 
   if (kind === "projects" || kind === "events" || kind === "team") {
-    // Coordinators + leadership: always live
     if (canDirectPublish(level)) {
       const result = await publishDirect(supabase, kind, slug, payload, memberSlug, level);
       if ("error" in result && result.error) {
@@ -145,7 +155,6 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: true, mode: "direct" });
     }
 
-    // Executives: queue for leadership approval
     if (canSubmitForApproval(level)) {
       const entityType = kind === "projects" ? "project" : kind === "events" ? "event" : "team";
       const entitySlug = kind === "team" ? "team" : slug!;
@@ -164,7 +173,10 @@ export async function POST(req: Request) {
       });
     }
 
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    return NextResponse.json(
+      { error: `Forbidden — your role (${level || "none"}) cannot edit ${kind}` },
+      { status: 403 },
+    );
   }
 
   return NextResponse.json({ error: "Unhandled" }, { status: 400 });

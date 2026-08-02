@@ -27,6 +27,7 @@ export function ProjectForm({
   };
 }) {
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [image, setImage] = useState(initial?.image ?? "");
   const [video, setVideo] = useState(initial?.video ?? "");
   const [featured, setFeatured] = useState(!!initial?.featured);
@@ -67,6 +68,7 @@ export function ProjectForm({
     };
 
     setStatus("saving");
+    setErrorMsg(null);
     const res = await fetch("/api/admin/save", {
       method: "POST",
       credentials: "include",
@@ -76,6 +78,7 @@ export function ProjectForm({
     const body = await res.json().catch(() => ({}));
     if (res.ok && body.mode === "pending") setStatus("saved");
     else setStatus(res.ok ? "saved" : "error");
+    if (!res.ok) setErrorMsg(body.error ?? `Save failed (${res.status})`);
     if (res.ok && body.mode === "pending") {
       alert("Submitted for approval (OC / Co-Overall Coordinator / Research Lead).");
     }
@@ -138,6 +141,7 @@ export function ProjectForm({
         <Save size={15} />
         {status === "saving" ? "Saving…" : status === "saved" ? "Saved ✓" : status === "error" ? "Failed" : "Save project"}
       </button>
+      {errorMsg && <p className="text-xs font-semibold text-red-600">{errorMsg}</p>}
     </form>
   );
 }
