@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 import { Save } from "lucide-react";
+import type { AriesEvent } from "@/lib/types";
 import { Input, TextArea } from "./ProjectForm";
 import { MediaField } from "./ImageField";
 
 /** Create/edit an event with optional cover image + short video. */
 export function EventForm({
   initial,
+  onSaved,
 }: {
   initial?: {
     slug?: string;
@@ -23,6 +25,7 @@ export function EventForm({
     video?: string;
     calendar?: string;
   };
+  onSaved?: (event: AriesEvent, mode: "direct" | "pending") => void;
 }) {
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -31,17 +34,18 @@ export function EventForm({
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const f = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const f = new FormData(form);
     const title = String(f.get("title") ?? "").trim();
     const slug =
       String(f.get("slug") ?? "").trim() ||
       title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
     const calendar = String(f.get("calendar") ?? "").trim();
 
-    const data = {
+    const data: AriesEvent = {
       slug,
       title,
-      type: String(f.get("type") ?? "Workshop"),
+      type: String(f.get("type") ?? "Workshop") as AriesEvent["type"],
       date: String(f.get("date") ?? ""),
       startTime: String(f.get("startTime") ?? "") || undefined,
       endTime: String(f.get("endTime") ?? "") || undefined,
@@ -62,14 +66,23 @@ export function EventForm({
       body: JSON.stringify({ kind: "events", slug, data }),
     });
     const body = await res.json().catch(() => ({}));
-    if (res.ok && body.mode === "pending") {
-      alert("Submitted for approval.");
-      setStatus("saved");
-    } else {
-      setStatus(res.ok ? "saved" : "error");
+    if (!res.ok) {
+      setStatus("error");
+      setErrorMsg(body.error ?? `Save failed (${res.status})`);
+      setTimeout(() => setStatus("idle"), 2500);
+      return;
     }
-    if (!res.ok) setErrorMsg(body.error ?? `Save failed (${res.status})`);
-    if (res.ok && !initial?.slug) (e.target as HTMLFormElement).reset();
+
+    const mode = body.mode === "pending" ? "pending" : "direct";
+    setStatus("saved");
+    if (mode === "pending") alert("Submitted for approval.");
+    onSaved?.(data, mode);
+
+    if (!initial?.slug && mode === "direct") {
+      form.reset();
+      setImage("");
+      setVideo("");
+    }
     setTimeout(() => setStatus("idle"), 2500);
   };
 

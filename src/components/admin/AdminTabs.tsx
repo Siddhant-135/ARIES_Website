@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   UserRound,
   FolderPlus,
@@ -38,9 +39,9 @@ type TabId = (typeof BASE_TABS)[number]["id"];
  * Full CMS shell — create/edit members, projects, events, team photos.
  */
 export function AdminTabs({
-  members,
-  projects,
-  events,
+  members: initialMembers,
+  projects: initialProjects,
+  events: initialEvents,
   team,
 }: {
   members: Member[];
@@ -48,17 +49,29 @@ export function AdminTabs({
   events: AriesEvent[];
   team: TeamData;
 }) {
+  const router = useRouter();
   const { session, signOut, role } = useAuth();
   const showApprovals = canApprove(session?.level); // OC / Co-OC / Research Lead only
   const TABS = showApprovals
     ? BASE_TABS
     : BASE_TABS.filter((t) => t.id !== "approvals");
   const [tab, setTab] = useState<TabId>("projects");
+  const [members, setMembers] = useState(initialMembers);
+  const [projects, setProjects] = useState(initialProjects);
+  const [events, setEvents] = useState(initialEvents);
   const [editMember, setEditMember] = useState<string>("");
   const [editProject, setEditProject] = useState<string>("");
   const [editEvent, setEditEvent] = useState<string>("");
+  const [projectFormKey, setProjectFormKey] = useState(0);
+  const [eventFormKey, setEventFormKey] = useState(0);
   const [teamPhoto, setTeamPhoto] = useState(team.years[0]?.photo ?? "");
   const [teamStatus, setTeamStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
+
+  useEffect(() => {
+    setMembers(initialMembers);
+    setProjects(initialProjects);
+    setEvents(initialEvents);
+  }, [initialMembers, initialProjects, initialEvents]);
 
   const member = useMemo(
     () => members.find((m) => m.slug === (session?.memberSlug || members[0]?.slug)) ?? members[0],
@@ -178,7 +191,10 @@ export function AdminTabs({
               Edit existing project
               <select
                 value={editProject}
-                onChange={(e) => setEditProject(e.target.value)}
+                onChange={(e) => {
+                  setEditProject(e.target.value);
+                  setProjectFormKey((k) => k + 1);
+                }}
                 className="mt-1.5 w-full rounded-lg bg-white px-3 py-2.5 text-sm shadow-card-sm"
               >
                 <option value="">— create new —</option>
@@ -189,7 +205,26 @@ export function AdminTabs({
                 ))}
               </select>
             </label>
-            <ProjectForm key={editProject || "new-project"} initial={selectedProject} />
+            <ProjectForm
+              key={`${editProject || "new-project"}-${projectFormKey}`}
+              initial={selectedProject}
+              onSaved={(project, mode) => {
+                if (mode === "direct") {
+                  setProjects((prev) => {
+                    const i = prev.findIndex((p) => p.slug === project.slug);
+                    if (i >= 0) {
+                      const next = [...prev];
+                      next[i] = { ...prev[i], ...project };
+                      return next;
+                    }
+                    return [...prev, project];
+                  });
+                  setEditProject(project.slug);
+                }
+                setProjectFormKey((k) => k + 1);
+                router.refresh();
+              }}
+            />
           </>
         )}
 
@@ -199,7 +234,10 @@ export function AdminTabs({
               Edit existing event
               <select
                 value={editEvent}
-                onChange={(e) => setEditEvent(e.target.value)}
+                onChange={(e) => {
+                  setEditEvent(e.target.value);
+                  setEventFormKey((k) => k + 1);
+                }}
                 className="mt-1.5 w-full rounded-lg bg-white px-3 py-2.5 text-sm shadow-card-sm"
               >
                 <option value="">— create new —</option>
@@ -211,7 +249,7 @@ export function AdminTabs({
               </select>
             </label>
             <EventForm
-              key={editEvent || "new-event"}
+              key={`${editEvent || "new-event"}-${eventFormKey}`}
               initial={
                 selectedEvent
                   ? {
@@ -220,6 +258,22 @@ export function AdminTabs({
                     }
                   : undefined
               }
+              onSaved={(event, mode) => {
+                if (mode === "direct") {
+                  setEvents((prev) => {
+                    const i = prev.findIndex((e) => e.slug === event.slug);
+                    if (i >= 0) {
+                      const next = [...prev];
+                      next[i] = { ...prev[i], ...event };
+                      return next;
+                    }
+                    return [...prev, event];
+                  });
+                  setEditEvent(event.slug);
+                }
+                setEventFormKey((k) => k + 1);
+                router.refresh();
+              }}
             />
           </>
         )}
@@ -246,7 +300,15 @@ export function AdminTabs({
           </div>
         )}
 
-        {tab === "profile" && member && <ProfileEditor member={member} />}
+        {tab === "profile" && member && (
+          <ProfileEditor
+            member={member}
+            onSaved={(updated) => {
+              setMembers((prev) => prev.map((m) => (m.slug === updated.slug ? updated : m)));
+              router.refresh();
+            }}
+          />
+        )}
         {tab === "profile" && !member && (
           <p className="text-sm text-ink/60">No personal profile linked to this login.</p>
         )}

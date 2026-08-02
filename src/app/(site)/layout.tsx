@@ -1,7 +1,7 @@
 import { Sidebar } from "@/components/layout/Sidebar";
 
-/** Revalidate content from Supabase periodically after admin edits. */
-export const revalidate = 60;
+/** Short ISR window; CMS writes also call revalidatePath for immediate updates. */
+export const revalidate = 30;
 
 /**
  * Shared chrome for all inner pages: collapsible left sidebar + content.

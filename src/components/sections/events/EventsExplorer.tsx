@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { CalendarPlus, ChevronDown, Pencil, Plus } from "lucide-react";
 import type { AriesEvent } from "@/lib/types";
 import { EventCard } from "@/components/cards/EventCard";
@@ -27,20 +28,37 @@ const tabMatches = (tab: (typeof TABS)[number], e: AriesEvent) => {
   }
 };
 
+const isUpcoming = (e: AriesEvent) => {
+  if (!e.date) return false;
+  const d = new Date(e.date);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return d >= today;
+};
+
 /** Filterable upcoming/past event grids + logged-in create/edit. */
 export function EventsExplorer({
-  upcoming,
-  past,
+  upcoming: initialUpcoming,
+  past: initialPast,
 }: {
   upcoming: AriesEvent[];
   past: AriesEvent[];
 }) {
+  const router = useRouter();
   const { session } = useAuth();
   const canEdit =
     !!session && (canDirectCreate(session.level) || canSubmitForApproval(session.level));
   const [tab, setTab] = useState<(typeof TABS)[number]>("All Events");
   const [sortAsc, setSortAsc] = useState(true);
+  const [upcoming, setUpcoming] = useState(initialUpcoming);
+  const [past, setPast] = useState(initialPast);
   const [editing, setEditing] = useState<string | null>(null);
+  const [formKey, setFormKey] = useState(0);
+
+  useEffect(() => {
+    setUpcoming(initialUpcoming);
+    setPast(initialPast);
+  }, [initialUpcoming, initialPast]);
 
   const all = useMemo(() => [...upcoming, ...past], [upcoming, past]);
   const selected = editing ? all.find((e) => e.slug === editing) : undefined;
@@ -54,13 +72,35 @@ export function EventsExplorer({
     [past, tab],
   );
 
+  const openNew = () => {
+    setEditing("");
+    setFormKey((k) => k + 1);
+  };
+
+  const openEdit = (slug: string) => {
+    setEditing(slug);
+    setFormKey((k) => k + 1);
+  };
+
+  const upsertLocal = (event: AriesEvent) => {
+    const nextUp = upcoming.filter((e) => e.slug !== event.slug);
+    const nextPast = past.filter((e) => e.slug !== event.slug);
+    if (isUpcoming(event)) {
+      setUpcoming([...nextUp, event]);
+      setPast(nextPast);
+    } else {
+      setPast([...nextPast, event]);
+      setUpcoming(nextUp);
+    }
+  };
+
   return (
     <div>
       <div className="mt-6 flex flex-wrap items-center gap-3">
         {canEdit && (
           <button
             type="button"
-            onClick={() => setEditing("")}
+            onClick={openNew}
             className="flex items-center gap-1.5 rounded-full bg-navy px-4 py-2.5 text-xs font-bold text-white"
           >
             <Plus size={14} /> New event
@@ -88,12 +128,18 @@ export function EventsExplorer({
             </button>
           </div>
           <EventForm
-            key={editing || "new"}
+            key={`${editing || "new"}-${formKey}`}
             initial={
               selected
                 ? { ...selected, calendar: selected.links?.[0]?.url, video: selected.video }
                 : undefined
             }
+            onSaved={(event, mode) => {
+              if (mode === "direct") upsertLocal(event);
+              setEditing(null);
+              setFormKey((k) => k + 1);
+              router.refresh();
+            }}
           />
         </div>
       )}
@@ -140,7 +186,7 @@ export function EventsExplorer({
                 {canEdit && (
                   <button
                     type="button"
-                    onClick={() => setEditing(e.slug)}
+                    onClick={() => openEdit(e.slug)}
                     className="absolute right-2 top-2 z-10 flex items-center gap-1 rounded-full bg-white/95 px-2.5 py-1 text-[11px] font-bold text-ink shadow"
                   >
                     <Pencil size={11} /> Edit
@@ -177,7 +223,7 @@ export function EventsExplorer({
                 {canEdit && (
                   <button
                     type="button"
-                    onClick={() => setEditing(e.slug)}
+                    onClick={() => openEdit(e.slug)}
                     className="absolute right-2 top-2 z-10 flex items-center gap-1 rounded-full bg-white/95 px-2.5 py-1 text-[11px] font-bold text-ink shadow"
                   >
                     <Pencil size={11} /> Edit

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Save } from "lucide-react";
+import type { Project } from "@/lib/types";
 import { MediaField } from "./ImageField";
 
 /**
@@ -9,22 +10,11 @@ import { MediaField } from "./ImageField";
  */
 export function ProjectForm({
   initial,
+  onSaved,
 }: {
-  initial?: {
-    slug?: string;
-    name?: string;
-    tagline?: string;
-    description?: string;
-    about?: string;
-    category?: string;
-    tags?: string[];
-    techStack?: string[];
-    contributors?: string[];
-    image?: string;
-    video?: string;
-    featured?: boolean;
-    links?: { label: string; url: string }[];
-  };
+  initial?: Partial<Project> & { slug?: string };
+  /** Called after a successful direct publish (not pending approval). */
+  onSaved?: (project: Project, mode: "direct" | "pending") => void;
 }) {
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -34,7 +24,8 @@ export function ProjectForm({
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const f = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const f = new FormData(form);
     const name = String(f.get("name") ?? "").trim();
     const slug =
       String(f.get("slug") ?? "").trim() ||
@@ -48,7 +39,7 @@ export function ProjectForm({
     const github = String(f.get("github") ?? "").trim();
     const demo = String(f.get("demo") ?? "").trim();
 
-    const data = {
+    const data: Project = {
       slug,
       name,
       tagline: String(f.get("tagline") ?? ""),
@@ -64,7 +55,7 @@ export function ProjectForm({
       links: [
         github && { label: "GitHub", url: github },
         demo && { label: "Live Demo", url: demo },
-      ].filter(Boolean),
+      ].filter(Boolean) as { label: string; url: string }[],
     };
 
     setStatus("saving");
@@ -76,13 +67,27 @@ export function ProjectForm({
       body: JSON.stringify({ kind: "projects", slug, data }),
     });
     const body = await res.json().catch(() => ({}));
-    if (res.ok && body.mode === "pending") setStatus("saved");
-    else setStatus(res.ok ? "saved" : "error");
-    if (!res.ok) setErrorMsg(body.error ?? `Save failed (${res.status})`);
-    if (res.ok && body.mode === "pending") {
+    if (!res.ok) {
+      setStatus("error");
+      setErrorMsg(body.error ?? `Save failed (${res.status})`);
+      setTimeout(() => setStatus("idle"), 2500);
+      return;
+    }
+
+    const mode = body.mode === "pending" ? "pending" : "direct";
+    setStatus("saved");
+    if (mode === "pending") {
       alert("Submitted for approval (OC / Co-Overall Coordinator / Research Lead).");
     }
-    if (res.ok && !initial?.slug && body.mode !== "pending") (e.target as HTMLFormElement).reset();
+    onSaved?.(data, mode);
+
+    // Reset blank create form so another project can be added without refresh
+    if (!initial?.slug && mode === "direct") {
+      form.reset();
+      setImage("");
+      setVideo("");
+      setFeatured(false);
+    }
     setTimeout(() => setStatus("idle"), 2500);
   };
 

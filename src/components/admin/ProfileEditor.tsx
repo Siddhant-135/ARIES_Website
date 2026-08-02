@@ -24,12 +24,19 @@ import { cn } from "@/lib/utils";
 /**
  * Profile editor: avatar, identity, socials, drag-reorder sections.
  */
-export function ProfileEditor({ member }: { member: Member }) {
+export function ProfileEditor({
+  member,
+  onSaved,
+}: {
+  member: Member;
+  onSaved?: (member: Member) => void;
+}) {
   const [draft, setDraft] = useState<Member>({
     ...member,
     socials: member.socials?.length ? member.socials : [],
   });
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
   );
@@ -55,13 +62,17 @@ export function ProfileEditor({ member }: { member: Member }) {
 
   const save = async () => {
     setStatus("saving");
+    setErrorMsg(null);
     const res = await fetch("/api/admin/save", {
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ kind: "members", slug: draft.slug, data: draft }),
     });
+    const body = await res.json().catch(() => ({}));
     setStatus(res.ok ? "saved" : "error");
+    if (!res.ok) setErrorMsg(body.error ?? `Save failed (${res.status})`);
+    else onSaved?.(draft);
     setTimeout(() => setStatus("idle"), 2500);
   };
 
@@ -87,6 +98,7 @@ export function ProfileEditor({ member }: { member: Member }) {
                 : "Save profile"}
         </button>
       </div>
+      {errorMsg && <p className="text-xs font-semibold text-red-600">{errorMsg}</p>}
 
       <div className="grid gap-6 lg:grid-cols-2">
         <section className="space-y-4 rounded-2xl bg-white p-6 shadow-card-sm">

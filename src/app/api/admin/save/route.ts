@@ -5,6 +5,7 @@ import {
   canSubmitForApproval,
   isLeadership,
 } from "@/lib/roles";
+import { revalidateContent } from "@/lib/revalidate";
 
 async function sessionInfo(supabase: Awaited<ReturnType<typeof createSupabaseServerClient>>) {
   const {
@@ -124,15 +125,33 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    const { data: before } = await supabase.from("members").select("data").eq("slug", slug!).maybeSingle();
-    const { error } = await supabase.from("members").upsert({
-      slug: slug!,
-      data: payload,
-      updated_at: new Date().toISOString(),
-    });
-    if (error) return NextResponse.json({ error: error.message }, { status: 400 });
+    const { data: before } = await supabase
+      .from("members")
+      .select("data")
+      .eq("slug", slug!)
+      .maybeSingle();
 
-    await supabase.from("change_log").insert({
+    // Prefer UPDATE — upsert triggers INSERT RLS which blocks executives/members
+    // who may only edit their own existing row.
+    if (before) {
+      const { error } = await supabase
+        .from("members")
+        .update({ data: payload, updated_at: new Date().toISOString() })
+        .eq("slug", slug!);
+      if (error) return NextResponse.json({ error: error.message }, { status: 400 });
+    } else if (isLeadership(level) || level === "coordinator") {
+      const { error } = await supabase.from("members").insert({
+        slug: slug!,
+        data: payload,
+        level: level === "coordinator" ? "member" : level,
+        updated_at: new Date().toISOString(),
+      });
+      if (error) return NextResponse.json({ error: error.message }, { status: 400 });
+    } else {
+      return NextResponse.json({ error: "Profile not found" }, { status: 404 });
+    }
+
+    const { error: logErr } = await supabase.from("change_log").insert({
       entity_type: "member",
       entity_slug: slug!,
       actor_slug: memberSlug || "unknown",
@@ -142,7 +161,9 @@ export async function POST(req: Request) {
       before_data: before?.data ?? null,
       after_data: payload,
     });
+    if (logErr) console.warn("[admin/save] change_log:", logErr.message);
 
+    revalidateContent("members", slug!);
     return NextResponse.json({ ok: true, mode: "direct" });
   }
 
@@ -152,6 +173,7 @@ export async function POST(req: Request) {
       if ("error" in result && result.error) {
         return NextResponse.json({ error: result.error }, { status: 400 });
       }
+      revalidateContent(kind, slug);
       return NextResponse.json({ ok: true, mode: "direct" });
     }
 

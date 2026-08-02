@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Check, ClipboardList, History, X } from "lucide-react";
 
 type ChangeRequest = {
@@ -25,6 +26,7 @@ type ChangeLogRow = {
 };
 
 export function ApprovalsPanel() {
+  const router = useRouter();
   const [requests, setRequests] = useState<ChangeRequest[]>([]);
   const [log, setLog] = useState<ChangeLogRow[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -59,6 +61,8 @@ export function ApprovalsPanel() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Review failed");
       await load();
+      // Refresh RSC caches so /projects and /events show the approved item
+      router.refresh();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Review failed");
     } finally {

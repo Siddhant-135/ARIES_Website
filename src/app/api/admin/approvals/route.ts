@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { canApprove } from "@/lib/roles";
+import { canApprove, isLeadership } from "@/lib/roles";
+import { revalidateContent } from "@/lib/revalidate";
 
 async function requireApprover() {
   const supabase = await createSupabaseServerClient();
@@ -8,8 +9,15 @@ async function requireApprover() {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return { error: NextResponse.json({ error: "Unauthorized" }, { status: 401 }) };
-  const level = String(user.app_metadata?.level ?? "");
-  if (!canApprove(level)) {
+
+  const { data: member } = await supabase
+    .from("members")
+    .select("slug, level")
+    .eq("auth_user_id", user.id)
+    .maybeSingle();
+
+  const level = String(member?.level || user.app_metadata?.level || "");
+  if (!canApprove(level) && !isLeadership(level)) {
     return { error: NextResponse.json({ error: "Forbidden" }, { status: 403 }) };
   }
   return { supabase, user, level };
@@ -54,11 +62,22 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid body" }, { status: 400 });
   }
 
+  const { data: pending } = await supabase
+    .from("change_requests")
+    .select("entity_type, entity_slug")
+    .eq("id", body.requestId)
+    .maybeSingle();
+
   const { data, error } = await supabase.rpc("review_change_request", {
     request_id: body.requestId,
     approve: body.approve,
     note: body.note ?? null,
   });
   if (error) return NextResponse.json({ error: error.message }, { status: 400 });
+
+  if (body.approve && pending) {
+    revalidateContent(pending.entity_type, pending.entity_slug);
+  }
+
   return NextResponse.json({ ok: true, request: data });
 }

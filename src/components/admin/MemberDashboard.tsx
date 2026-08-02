@@ -1,8 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import {
   CalendarPlus,
   ClipboardList,
@@ -29,9 +30,9 @@ type DashTab = "profile" | "approvals" | "projects" | "events";
  * Create project/event: coordinators+leadership; executives submit for approval.
  */
 export function MemberDashboard({
-  members,
-  projects,
-  events,
+  members: initialMembers,
+  projects: initialProjects,
+  events: initialEvents,
   team: _team,
 }: {
   members: Member[];
@@ -39,10 +40,21 @@ export function MemberDashboard({
   events: AriesEvent[];
   team: TeamData;
 }) {
+  const router = useRouter();
   const { session, signOut } = useAuth();
   const level = session?.level ?? "";
   const showApprovals = canApprove(level);
   const showCreate = canDirectCreate(level) || level === "executive";
+
+  const [members, setMembers] = useState(initialMembers);
+  const [projects, setProjects] = useState(initialProjects);
+  const [events, setEvents] = useState(initialEvents);
+
+  useEffect(() => {
+    setMembers(initialMembers);
+    setProjects(initialProjects);
+    setEvents(initialEvents);
+  }, [initialMembers, initialProjects, initialEvents]);
 
   const member = useMemo(
     () => members.find((m) => m.slug === session?.memberSlug) ?? null,
@@ -52,6 +64,8 @@ export function MemberDashboard({
   const [tab, setTab] = useState<DashTab>(showApprovals ? "approvals" : "profile");
   const [editProject, setEditProject] = useState("");
   const [editEvent, setEditEvent] = useState("");
+  const [projectFormKey, setProjectFormKey] = useState(0);
+  const [eventFormKey, setEventFormKey] = useState(0);
 
   const tabs: { id: DashTab; label: string; icon: typeof UserRound; show: boolean }[] = [
     { id: "profile", label: "My profile", icon: UserRound, show: true },
@@ -149,7 +163,15 @@ export function MemberDashboard({
         <div className="mt-8">
           {tab === "profile" && member && (
             <div className="rounded-3xl bg-white/80 p-2 shadow-[0_18px_40px_rgba(35,24,100,0.12)] backdrop-blur md:p-4">
-              <ProfileEditor member={member} />
+              <ProfileEditor
+                member={member}
+                onSaved={(updated) => {
+                  setMembers((prev) =>
+                    prev.map((m) => (m.slug === updated.slug ? updated : m)),
+                  );
+                  router.refresh();
+                }}
+              />
             </div>
           )}
           {tab === "profile" && !member && (
@@ -179,7 +201,10 @@ export function MemberDashboard({
                 Edit existing project
                 <select
                   value={editProject}
-                  onChange={(e) => setEditProject(e.target.value)}
+                  onChange={(e) => {
+                    setEditProject(e.target.value);
+                    setProjectFormKey((k) => k + 1);
+                  }}
                   className="mt-1.5 w-full rounded-lg bg-white px-3 py-2.5 text-sm shadow-card-sm"
                 >
                   <option value="">— create new —</option>
@@ -190,7 +215,26 @@ export function MemberDashboard({
                   ))}
                 </select>
               </label>
-              <ProjectForm key={editProject || "new-project"} initial={selectedProject} />
+              <ProjectForm
+                key={`${editProject || "new-project"}-${projectFormKey}`}
+                initial={selectedProject}
+                onSaved={(project, mode) => {
+                  if (mode === "direct") {
+                    setProjects((prev) => {
+                      const i = prev.findIndex((p) => p.slug === project.slug);
+                      if (i >= 0) {
+                        const next = [...prev];
+                        next[i] = { ...prev[i], ...project };
+                        return next;
+                      }
+                      return [...prev, project];
+                    });
+                    setEditProject(project.slug);
+                  }
+                  setProjectFormKey((k) => k + 1);
+                  router.refresh();
+                }}
+              />
             </div>
           )}
 
@@ -205,7 +249,10 @@ export function MemberDashboard({
                 Edit existing event
                 <select
                   value={editEvent}
-                  onChange={(e) => setEditEvent(e.target.value)}
+                  onChange={(e) => {
+                    setEditEvent(e.target.value);
+                    setEventFormKey((k) => k + 1);
+                  }}
                   className="mt-1.5 w-full rounded-lg bg-white px-3 py-2.5 text-sm shadow-card-sm"
                 >
                   <option value="">— create new —</option>
@@ -217,12 +264,28 @@ export function MemberDashboard({
                 </select>
               </label>
               <EventForm
-                key={editEvent || "new-event"}
+                key={`${editEvent || "new-event"}-${eventFormKey}`}
                 initial={
                   selectedEvent
                     ? { ...selectedEvent, calendar: selectedEvent.links?.[0]?.url }
                     : undefined
                 }
+                onSaved={(event, mode) => {
+                  if (mode === "direct") {
+                    setEvents((prev) => {
+                      const i = prev.findIndex((e) => e.slug === event.slug);
+                      if (i >= 0) {
+                        const next = [...prev];
+                        next[i] = { ...prev[i], ...event };
+                        return next;
+                      }
+                      return [...prev, event];
+                    });
+                    setEditEvent(event.slug);
+                  }
+                  setEventFormKey((k) => k + 1);
+                  router.refresh();
+                }}
               />
             </div>
           )}

@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Pencil, Plus, Search } from "lucide-react";
 import type { Project } from "@/lib/types";
 import { ProjectCard } from "@/components/cards/ProjectCard";
@@ -10,12 +11,19 @@ import { useAuth } from "@/context/AuthContext";
 import { canDirectCreate, canSubmitForApproval } from "@/lib/roles";
 
 /** Search + grid; logged-in members can create/edit from this page. */
-export function ProjectsExplorer({ projects }: { projects: Project[] }) {
+export function ProjectsExplorer({ projects: initialProjects }: { projects: Project[] }) {
+  const router = useRouter();
   const { session } = useAuth();
   const canEdit =
     !!session && (canDirectCreate(session.level) || canSubmitForApproval(session.level));
   const [query, setQuery] = useState("");
+  const [projects, setProjects] = useState(initialProjects);
   const [editing, setEditing] = useState<string | null>(null); // slug or "" for new
+  const [formKey, setFormKey] = useState(0);
+
+  useEffect(() => {
+    setProjects(initialProjects);
+  }, [initialProjects]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -30,6 +38,28 @@ export function ProjectsExplorer({ projects }: { projects: Project[] }) {
   }, [projects, query]);
 
   const selected = editing ? projects.find((p) => p.slug === editing) : undefined;
+
+  const openNew = () => {
+    setEditing("");
+    setFormKey((k) => k + 1);
+  };
+
+  const openEdit = (slug: string) => {
+    setEditing(slug);
+    setFormKey((k) => k + 1);
+  };
+
+  const upsertLocal = (project: Project) => {
+    setProjects((prev) => {
+      const i = prev.findIndex((p) => p.slug === project.slug);
+      if (i >= 0) {
+        const next = [...prev];
+        next[i] = { ...prev[i], ...project };
+        return next;
+      }
+      return [...prev, project];
+    });
+  };
 
   return (
     <div className="pb-24">
@@ -46,7 +76,7 @@ export function ProjectsExplorer({ projects }: { projects: Project[] }) {
         {canEdit && (
           <button
             type="button"
-            onClick={() => setEditing("")}
+            onClick={openNew}
             className="flex items-center gap-1.5 rounded-full bg-navy px-4 py-2.5 text-xs font-bold text-white"
           >
             <Plus size={14} /> New project
@@ -73,7 +103,16 @@ export function ProjectsExplorer({ projects }: { projects: Project[] }) {
               Close
             </button>
           </div>
-          <ProjectForm key={editing || "new"} initial={selected} />
+          <ProjectForm
+            key={`${editing || "new"}-${formKey}`}
+            initial={selected}
+            onSaved={(project, mode) => {
+              if (mode === "direct") upsertLocal(project);
+              setEditing(null);
+              setFormKey((k) => k + 1);
+              router.refresh();
+            }}
+          />
         </div>
       )}
 
@@ -89,7 +128,7 @@ export function ProjectsExplorer({ projects }: { projects: Project[] }) {
               {canEdit && (
                 <button
                   type="button"
-                  onClick={() => setEditing(p.slug)}
+                  onClick={() => openEdit(p.slug)}
                   className="absolute right-3 top-3 z-10 flex items-center gap-1 rounded-full bg-white/95 px-2.5 py-1 text-[11px] font-bold text-ink shadow"
                 >
                   <Pencil size={11} /> Edit

@@ -23,6 +23,11 @@ function supabasePublic() {
   }
   return createClient(url, key, {
     auth: { persistSession: false, autoRefreshToken: false },
+    // Next.js may cache fetch(); always read live content from Supabase
+    global: {
+      fetch: (input, init) =>
+        fetch(input, { ...init, cache: "no-store" }),
+    },
   });
 }
 

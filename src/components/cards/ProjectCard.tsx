@@ -47,7 +47,7 @@ export function ProjectCard({ project }: { project: Project }) {
           {project.description}
         </p>
         <div className="mt-auto flex flex-wrap gap-1.5 pt-3">
-          {project.tags.map((t) => (
+          {(project.tags ?? []).map((t) => (
             <Tag key={t}>{t}</Tag>
           ))}
         </div>
