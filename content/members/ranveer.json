@@ -1,22 +1,22 @@
 {
-  "slug": "ranveer",
   "name": "Ranveer",
   "role": "Research Executive",
-  "tagline": "",
-  "location": "IIT Delhi",
+  "slug": "ranveer",
+  "blocks": [],
   "socials": [
     {
-      "label": "GitHub",
-      "url": "https://github.com/RanveerSV"
+      "url": "https://github.com/RanveerSV",
+      "label": "GitHub"
     },
     {
-      "label": "LinkedIn",
-      "url": "https://www.linkedin.com/in/ranveersvirdi/"
+      "url": "https://www.linkedin.com/in/ranveersvirdi/",
+      "label": "LinkedIn"
     },
     {
-      "label": "Email",
-      "url": "mailto:ranveervirdi.mails@gmail.com"
+      "url": "mailto:ranveervirdi.mails@gmail.com",
+      "label": "Email"
     }
   ],
-  "blocks": []
+  "tagline": "",
+  "location": "IIT Delhi"
 }

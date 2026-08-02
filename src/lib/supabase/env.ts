@@ -38,7 +38,9 @@ export type MemberLevel =
   | "coordinator"
   | "executive"
   | "member"
-  | "alumni";
+  | "blogger"
+  | "alumni"
+  | "visitor";
 
 export function canDirectPublish(level: string | null | undefined) {
   return PUBLISH_LEVELS.includes(level as (typeof PUBLISH_LEVELS)[number]);
@@ -54,4 +56,8 @@ export function isLeadership(level: string | null | undefined) {
     level === "co_overall_coordinator" ||
     level === "research_lead"
   );
+}
+
+export function isVisitor(level: string | null | undefined) {
+  return level === "visitor";
 }

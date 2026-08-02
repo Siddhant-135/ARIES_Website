@@ -26,12 +26,15 @@ export async function POST(req: Request) {
     identifier: id,
   });
 
+  const BLOGGER_USER = process.env.BLOGGER_USER || "blogger";
   const email =
     (typeof resolved === "string" && resolved) ||
     // Fallback for bootstrap before/during seed: admin → synthetic email
     (id.toLowerCase() === (process.env.ADMIN_USER || "admin").toLowerCase()
       ? syntheticLoginEmail(process.env.ADMIN_USER || "admin")
-      : null);
+      : id.toLowerCase() === BLOGGER_USER.toLowerCase()
+        ? syntheticLoginEmail(BLOGGER_USER)
+        : null);
 
   if (!email) {
     return NextResponse.json({ error: "You're not a member" }, { status: 401 });

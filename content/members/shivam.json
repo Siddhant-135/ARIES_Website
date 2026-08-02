@@ -1,23 +1,23 @@
 {
-  "slug": "shivam",
   "name": "Shivam",
   "role": "Research Executive",
-  "tagline": "",
-  "location": "IIT Delhi",
+  "slug": "shivam",
   "avatar": "/images/members/shivam.jpg",
+  "blocks": [],
   "socials": [
     {
-      "label": "GitHub",
-      "url": "https://github.com/shivxmgarg"
+      "url": "https://github.com/shivxmgarg",
+      "label": "GitHub"
     },
     {
-      "label": "LinkedIn",
-      "url": "www.linkedin.com/in/shivam-garg-683777378"
+      "url": "www.linkedin.com/in/shivam-garg-683777378",
+      "label": "LinkedIn"
     },
     {
-      "label": "Email",
-      "url": "mailto:shivam.iitd29@gmail.com"
+      "url": "mailto:shivam.iitd29@gmail.com",
+      "label": "Email"
     }
   ],
-  "blocks": []
+  "tagline": "",
+  "location": "IIT Delhi"
 }

@@ -1,23 +1,23 @@
 {
-  "slug": "siddhant",
   "name": "Siddhant",
   "role": "Coordinator",
-  "tagline": "",
-  "location": "IIT Delhi",
+  "slug": "siddhant",
   "avatar": "/images/members/siddhant.jpg",
+  "blocks": [],
   "socials": [
     {
-      "label": "GitHub",
-      "url": "Siddhant-135"
+      "url": "Siddhant-135",
+      "label": "GitHub"
     },
     {
-      "label": "LinkedIn",
-      "url": "https://www.linkedin.com/in/siddhantiitd"
+      "url": "https://www.linkedin.com/in/siddhantiitd",
+      "label": "LinkedIn"
     },
     {
-      "label": "Email",
-      "url": "mailto:agrawalsiddhant14@gmail.com"
+      "url": "mailto:agrawalsiddhant14@gmail.com",
+      "label": "Email"
     }
   ],
-  "blocks": []
+  "tagline": "",
+  "location": "IIT Delhi"
 }

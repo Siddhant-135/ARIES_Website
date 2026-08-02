@@ -1,23 +1,23 @@
 {
-  "slug": "dhairya",
   "name": "Dhairya",
   "role": "Research Coordinator",
-  "tagline": "",
-  "location": "IIT Delhi",
+  "slug": "dhairya",
   "avatar": "/images/members/dhairya.jpg",
+  "blocks": [],
   "socials": [
     {
-      "label": "GitHub",
-      "url": "Dhairyakuchhal"
+      "url": "Dhairyakuchhal",
+      "label": "GitHub"
     },
     {
-      "label": "LinkedIn",
-      "url": "https://www.linkedin.com/in/dhairya-kuchhal-a793361bb/"
+      "url": "https://www.linkedin.com/in/dhairya-kuchhal-a793361bb/",
+      "label": "LinkedIn"
     },
     {
-      "label": "Email",
-      "url": "mailto:kuchhaldhairya@gmail.com"
+      "url": "mailto:kuchhaldhairya@gmail.com",
+      "label": "Email"
     }
   ],
-  "blocks": []
+  "tagline": "",
+  "location": "IIT Delhi"
 }

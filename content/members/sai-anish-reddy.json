@@ -1,18 +1,18 @@
 {
-  "slug": "sai-anish-reddy",
   "name": "Sai Anish Reddy",
   "role": "Research Executive",
-  "tagline": "",
-  "location": "IIT Delhi",
+  "slug": "sai-anish-reddy",
+  "blocks": [],
   "socials": [
     {
-      "label": "LinkedIn",
-      "url": "https://www.linkedin.com/in/sai-anish-reddy-3994a0383/"
+      "url": "https://www.linkedin.com/in/sai-anish-reddy-3994a0383/",
+      "label": "LinkedIn"
     },
     {
-      "label": "Email",
-      "url": "mailto:saianishreddyvennapusa@gmail.com"
+      "url": "mailto:saianishreddyvennapusa@gmail.com",
+      "label": "Email"
     }
   ],
-  "blocks": []
+  "tagline": "",
+  "location": "IIT Delhi"
 }

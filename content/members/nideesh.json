@@ -1,9 +1,9 @@
 {
-  "slug": "nideesh",
   "name": "Nideesh",
   "role": "Research Coordinator",
-  "tagline": "",
-  "location": "IIT Delhi",
+  "slug": "nideesh",
+  "blocks": [],
   "socials": [],
-  "blocks": []
+  "tagline": "",
+  "location": "IIT Delhi"
 }

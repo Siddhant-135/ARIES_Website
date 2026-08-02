@@ -21,9 +21,11 @@ export default function AdminLoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
+  const afterLoginPath = session?.level === "blogger" ? "/admin/editor" : "/profile";
+
   useEffect(() => {
-    if (!loading && session) router.replace("/profile");
-  }, [loading, session, router]);
+    if (!loading && session) router.replace(afterLoginPath);
+  }, [loading, session, router, afterLoginPath]);
 
   return (
     <div className="relative grid min-h-screen place-items-center overflow-hidden bg-[#0b1035] px-6">
@@ -82,8 +84,8 @@ export default function AdminLoginPage() {
               setSubmitting(true);
               try {
                 if (mode === "login") {
-                  await signIn(entryNumber.trim(), password);
-                  router.push("/profile");
+                  const data = await signIn(entryNumber.trim(), password);
+                  router.push(data.level === "blogger" ? "/admin/editor" : "/profile");
                 } else {
                   const res = await fetch("/api/auth/signup", {
                     method: "POST",

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Mail, MapPin, ExternalLink } from "lucide-react";
 import { clubSocials, clubEmail, clubLocation } from "@/config/socials";
-import { ContactForm } from "@/components/sections/contact/ContactForm";
+import { ContactForm } from "frontend/pages/contact/ContactForm";
 
 export const metadata: Metadata = { title: "Contact" };
 

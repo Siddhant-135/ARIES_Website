@@ -1,15 +1,15 @@
 {
-  "slug": "shreyash",
   "name": "Shreyash",
   "role": "Research Executive",
-  "tagline": "",
-  "location": "IIT Delhi",
+  "slug": "shreyash",
   "avatar": "/images/members/shreyash.png",
+  "blocks": [],
   "socials": [
     {
-      "label": "Email",
-      "url": "mailto:shreyashasati998@gmail.com"
+      "url": "mailto:shreyashasati998@gmail.com",
+      "label": "Email"
     }
   ],
-  "blocks": []
+  "tagline": "",
+  "location": "IIT Delhi"
 }

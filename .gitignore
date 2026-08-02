@@ -44,16 +44,9 @@ next-env.d.ts
 # imported sheet exports (re-fetch via import script)
 /data/
 
-# SQLite runtime DB (regenerate with npm run db:seed)
-/database/aries.db
-/database/*.db-journal
-
 # Generated Supabase seed SQL (recreate with node scripts/generate-seed-sql.mjs)
 /scripts/generated-seed.sql
 /scripts/seed-chunks/
 /scripts/excel-mail-name.json
 /scripts/excel-kerberos.json
 /scripts/kerberos-updates.sql
-
-# backend deps
-/aries-website/node_modules

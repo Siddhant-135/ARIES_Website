@@ -1,22 +1,22 @@
 {
-  "slug": "debesh-biswas",
   "name": "Debesh Biswas",
   "role": "Research Executive",
-  "tagline": "",
-  "location": "IIT Delhi",
+  "slug": "debesh-biswas",
+  "blocks": [],
   "socials": [
     {
-      "label": "GitHub",
-      "url": "https://github.com/DebStar17"
+      "url": "https://github.com/DebStar17",
+      "label": "GitHub"
     },
     {
-      "label": "LinkedIn",
-      "url": "NA"
+      "url": "NA",
+      "label": "LinkedIn"
     },
     {
-      "label": "Email",
-      "url": "mailto:drik0the0gen@gmail.com"
+      "url": "mailto:drik0the0gen@gmail.com",
+      "label": "Email"
     }
   ],
-  "blocks": []
+  "tagline": "",
+  "location": "IIT Delhi"
 }

@@ -1,23 +1,23 @@
 {
-  "slug": "izma-khan",
   "name": "Izma Khan",
   "role": "Executive",
-  "tagline": "",
-  "location": "IIT Delhi",
+  "slug": "izma-khan",
   "avatar": "/images/members/izma-khan.png",
+  "blocks": [],
   "socials": [
     {
-      "label": "GitHub",
-      "url": "https://github.com/Izma810"
+      "url": "https://github.com/Izma810",
+      "label": "GitHub"
     },
     {
-      "label": "LinkedIn",
-      "url": "https://www.linkedin.com/in/khan-izma/"
+      "url": "https://www.linkedin.com/in/khan-izma/",
+      "label": "LinkedIn"
     },
     {
-      "label": "Email",
-      "url": "mailto:izmahilalkhan08@gmail.com"
+      "url": "mailto:izmahilalkhan08@gmail.com",
+      "label": "Email"
     }
   ],
-  "blocks": []
+  "tagline": "",
+  "location": "IIT Delhi"
 }

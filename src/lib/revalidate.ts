@@ -20,4 +20,8 @@ export function revalidateContent(kind?: string, slug?: string) {
   if (!kind || kind === "team") {
     revalidatePath("/team");
   }
+  if (!kind || kind === "resources" || kind === "resource") {
+    revalidatePath("/resources");
+    if (slug) revalidatePath(`/resources/${slug}`);
+  }
 }

@@ -1,23 +1,23 @@
 {
-  "slug": "manas-wagh",
   "name": "Manas Wagh",
   "role": "Research Executive",
-  "tagline": "",
-  "location": "IIT Delhi",
+  "slug": "manas-wagh",
   "avatar": "/images/members/manas-wagh.jpg",
+  "blocks": [],
   "socials": [
     {
-      "label": "GitHub",
-      "url": "https://huggingface.co/spaces/Manas2307/ my documentation of git is in shambles currently"
+      "url": "https://huggingface.co/spaces/Manas2307/ my documentation of git is in shambles currently",
+      "label": "GitHub"
     },
     {
-      "label": "LinkedIn",
-      "url": "Manas Wagh | LinkedIn"
+      "url": "Manas Wagh | LinkedIn",
+      "label": "LinkedIn"
     },
     {
-      "label": "Email",
-      "url": "mailto:maverickmc7128@gmail.com"
+      "url": "mailto:maverickmc7128@gmail.com",
+      "label": "Email"
     }
   ],
-  "blocks": []
+  "tagline": "",
+  "location": "IIT Delhi"
 }

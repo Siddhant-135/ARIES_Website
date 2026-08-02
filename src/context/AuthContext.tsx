@@ -16,7 +16,7 @@ interface AuthState {
   session: AuthSession | null;
   role: UiRole;
   loading: boolean;
-  signIn: (entryNumber: string, password: string) => Promise<void>;
+  signIn: (entryNumber: string, password: string) => Promise<AuthSession>;
   signOut: () => Promise<void>;
 }
 
@@ -24,7 +24,9 @@ const AuthContext = createContext<AuthState>({
   session: null,
   role: "viewer",
   loading: true,
-  signIn: async () => {},
+  signIn: async () => {
+    throw new Error("AuthProvider not mounted");
+  },
   signOut: async () => {},
 });
 
@@ -46,8 +48,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const stored = localStorage.getItem(SESSION_KEY);
-    me(stored ? (JSON.parse(stored) as AuthSession).token : "")
+    me()
       .then((data) => {
         const next = data as AuthSession;
         localStorage.setItem(SESSION_KEY, JSON.stringify(next));
@@ -67,10 +68,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem(SESSION_KEY, JSON.stringify(data));
     setCookie(SESSION_KEY, JSON.stringify(data));
     setSession(data);
+    return data;
   };
 
   const signOut = async () => {
-    await apiLogout(session?.token ?? "").catch(() => {});
+    await apiLogout().catch(() => {});
     localStorage.removeItem(SESSION_KEY);
     deleteCookie(SESSION_KEY);
     setSession(null);

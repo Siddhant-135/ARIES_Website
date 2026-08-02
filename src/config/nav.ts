@@ -2,13 +2,14 @@
  * Single source of truth for site navigation.
  * Agents: add/remove/reorder links here — every navbar/sidebar/footer reads this file.
  *
- * Resources stays in code (`/resources`) but is hidden from public nav for now.
+ * Resources is now public in the nav.
  */
 import {
   Home,
   CalendarDays,
   FolderKanban,
   Users,
+  Library,
   Mail,
   type LucideIcon,
 } from "lucide-react";
@@ -19,12 +20,13 @@ export type NavLink = {
   icon: LucideIcon;
 };
 
-/** Links shown in the left sidebar (inner pages). Resources intentionally omitted. Auth is UserMenu. */
+/** Links shown in the left sidebar (inner pages). Auth is UserMenu. */
 export const sidebarLinks: NavLink[] = [
   { label: "Home", href: "/", icon: Home },
   { label: "Events", href: "/events", icon: CalendarDays },
   { label: "Projects", href: "/projects", icon: FolderKanban },
   { label: "Team", href: "/team", icon: Users },
+  { label: "Resources", href: "/resources", icon: Library },
   { label: "Contact", href: "/contact", icon: Mail },
 ];
 
@@ -37,6 +39,7 @@ export const footerNav = {
     { label: "Events", href: "/events" },
     { label: "Projects", href: "/projects" },
     { label: "Team", href: "/team" },
+    { label: "Resources", href: "/resources" },
     { label: "Contact Us", href: "/contact" },
   ],
   connect: [

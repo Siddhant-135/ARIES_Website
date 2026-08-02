@@ -1,9 +1,9 @@
 {
-  "slug": "preesha",
   "name": "Preesha",
   "role": "Research Coordinator",
-  "tagline": "",
-  "location": "IIT Delhi",
+  "slug": "preesha",
+  "blocks": [],
   "socials": [],
-  "blocks": []
+  "tagline": "",
+  "location": "IIT Delhi"
 }

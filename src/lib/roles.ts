@@ -1,12 +1,13 @@
 import type { MemberLevel } from "@/lib/supabase/env";
 
-export type UiRole = "admin" | "coordinator" | "member" | "viewer";
+export type UiRole = "admin" | "coordinator" | "member" | "blogger" | "viewer";
 
 export function levelToUiRole(level: string | null | undefined): UiRole {
   if (level === "oc" || level === "co_overall_coordinator" || level === "research_lead") {
     return "admin";
   }
   if (level === "coordinator") return "coordinator";
+  if (level === "blogger") return "blogger";
   if (level === "executive" || level === "member") return "member";
   return "viewer";
 }
@@ -45,6 +46,11 @@ export function canManageTeamContent(level: string | null | undefined) {
 /** May submit project/event/team changes into the approval queue. */
 export function canSubmitForApproval(level: string | null | undefined) {
   return level === "executive";
+}
+
+/** Can publish/edit resources (blogs, tutorials, courses, featured links). */
+export function canPublishResource(level: string | null | undefined) {
+  return canDirectPublish(level) || level === "blogger";
 }
 
 export function mapTeamRoleToLevel(role: string): MemberLevel | null {

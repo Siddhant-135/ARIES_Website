@@ -1,22 +1,22 @@
 {
-  "slug": "harshita-prasad",
   "name": "Harshita Prasad",
   "role": "Executive",
-  "tagline": "",
-  "location": "IIT Delhi",
+  "slug": "harshita-prasad",
+  "blocks": [],
   "socials": [
     {
-      "label": "GitHub",
-      "url": "https://github.com/hp3047"
+      "url": "https://github.com/hp3047",
+      "label": "GitHub"
     },
     {
-      "label": "LinkedIn",
-      "url": "https://www.linkedin.com/in/harshita-prasad-30b04b260/"
+      "url": "https://www.linkedin.com/in/harshita-prasad-30b04b260/",
+      "label": "LinkedIn"
     },
     {
-      "label": "Email",
-      "url": "mailto:harshitaprasad.p@gmail.com"
+      "url": "mailto:harshitaprasad.p@gmail.com",
+      "label": "Email"
     }
   ],
-  "blocks": []
+  "tagline": "",
+  "location": "IIT Delhi"
 }

@@ -1,14 +1,14 @@
 {
-  "slug": "drona",
   "name": "Drona",
   "role": "Coordinator",
-  "tagline": "",
-  "location": "IIT Delhi",
+  "slug": "drona",
+  "blocks": [],
   "socials": [
     {
-      "label": "Email",
-      "url": "mailto:dronabajajofficial@gmail.com"
+      "url": "mailto:dronabajajofficial@gmail.com",
+      "label": "Email"
     }
   ],
-  "blocks": []
+  "tagline": "",
+  "location": "IIT Delhi"
 }

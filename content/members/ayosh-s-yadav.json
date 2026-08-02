@@ -1,22 +1,22 @@
 {
-  "slug": "ayosh-s-yadav",
   "name": "Ayosh S. yadav",
   "role": "Executive",
-  "tagline": "",
-  "location": "IIT Delhi",
+  "slug": "ayosh-s-yadav",
+  "blocks": [],
   "socials": [
     {
-      "label": "GitHub",
-      "url": "https://github.com/syntrax-wolf"
+      "url": "https://github.com/syntrax-wolf",
+      "label": "GitHub"
     },
     {
-      "label": "LinkedIn",
-      "url": "www.linkedin.com/in/ayosh-singh-yadav"
+      "url": "www.linkedin.com/in/ayosh-singh-yadav",
+      "label": "LinkedIn"
     },
     {
-      "label": "Email",
-      "url": "mailto:ayoshyadav0001@gmail.com"
+      "url": "mailto:ayoshyadav0001@gmail.com",
+      "label": "Email"
     }
   ],
-  "blocks": []
+  "tagline": "",
+  "location": "IIT Delhi"
 }

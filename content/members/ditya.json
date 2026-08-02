@@ -1,22 +1,22 @@
 {
-  "slug": "ditya",
   "name": "Ditya",
   "role": "Coordinator",
-  "tagline": "",
-  "location": "IIT Delhi",
+  "slug": "ditya",
+  "blocks": [],
   "socials": [
     {
-      "label": "GitHub",
-      "url": "dityagoel"
+      "url": "dityagoel",
+      "label": "GitHub"
     },
     {
-      "label": "LinkedIn",
-      "url": "https://www.linkedin.com/in/ditya-goel-1b480b318/"
+      "url": "https://www.linkedin.com/in/ditya-goel-1b480b318/",
+      "label": "LinkedIn"
     },
     {
-      "label": "Email",
-      "url": "mailto:dityaagoel@gmail.com"
+      "url": "mailto:dityaagoel@gmail.com",
+      "label": "Email"
     }
   ],
-  "blocks": []
+  "tagline": "",
+  "location": "IIT Delhi"
 }

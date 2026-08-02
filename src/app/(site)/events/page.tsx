@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { splitEvents } from "@/lib/content";
-import { PageHero } from "@/components/ui/PageHero";
-import { EventsExplorer } from "@/components/sections/events/EventsExplorer";
+import { PageHero } from "frontend/shared/ui/PageHero";
+import { EventsExplorer } from "frontend/pages/events/EventsExplorer";
 
 export const metadata: Metadata = { title: "Events" };
 

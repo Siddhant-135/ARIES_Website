@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getResources } from "@/lib/content";
-import { ResourcesExplorer } from "@/components/sections/resources/ResourcesExplorer";
+import { ResourcesExplorer } from "frontend/pages/resources/ResourcesExplorer";
 
 export const metadata: Metadata = { title: "Resources" };
 

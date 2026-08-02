@@ -1,23 +1,23 @@
 {
-  "slug": "rachit-goyal",
   "name": "Rachit Goyal",
   "role": "Executive",
-  "tagline": "",
-  "location": "IIT Delhi",
+  "slug": "rachit-goyal",
   "avatar": "/images/members/rachit-goyal.jpg",
+  "blocks": [],
   "socials": [
     {
-      "label": "GitHub",
-      "url": "https://github.com/Rachit218?tab=overview&from=2026-05-01&to=2026-05-20"
+      "url": "https://github.com/Rachit218?tab=overview&from=2026-05-01&to=2026-05-20",
+      "label": "GitHub"
     },
     {
-      "label": "LinkedIn",
-      "url": "https://www.linkedin.com/in/rachit-goyal-902226398/"
+      "url": "https://www.linkedin.com/in/rachit-goyal-902226398/",
+      "label": "LinkedIn"
     },
     {
-      "label": "Email",
-      "url": "mailto:rachitgoyal218@gmail.com"
+      "url": "mailto:rachitgoyal218@gmail.com",
+      "label": "Email"
     }
   ],
-  "blocks": []
+  "tagline": "",
+  "location": "IIT Delhi"
 }

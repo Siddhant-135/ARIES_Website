@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Download, GraduationCap, MapPin } from "lucide-react";
+import { Download, GraduationCap, MapPin, ShieldAlert } from "lucide-react";
 import { getMember, getMembers, getProjects } from "@/lib/content";
-import { BlockGrid } from "@/components/profile/BlockGrid";
-import { BackToSource } from "@/components/profile/BackToSource";
-import { initialsOf } from "@/components/cards/PersonCard";
+import { isVisitor } from "@/lib/supabase/env";
+import { BlockGrid } from "frontend/shared/profile/BlockGrid";
+import { BackToSource } from "frontend/shared/profile/BackToSource";
+import { initialsOf } from "frontend/shared/cards/PersonCard";
 
 export const revalidate = 60;
 
@@ -74,7 +75,13 @@ export default async function MemberProfilePage({
             <h1 className="mt-2 text-4xl font-black text-[#140b3c] md:text-5xl">
               {member.name}
             </h1>
-            <p className="mt-3 text-lg font-bold text-purple-2">{member.role}</p>
+            {isVisitor(member.level) ? (
+              <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-white/60 bg-white/70 px-3.5 py-1.5 text-sm font-bold text-[#140b3c] shadow-sm backdrop-blur">
+                <ShieldAlert size={15} className="text-purple" /> Not an ARIES member
+              </div>
+            ) : (
+              <p className="mt-3 text-lg font-bold text-purple-2">{member.role}</p>
+            )}
             <p className="mt-4 max-w-md text-[15px] leading-7 text-[#2c2359]">
               {member.tagline}
             </p>

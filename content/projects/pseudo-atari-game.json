@@ -1,20 +1,27 @@
 {
-  "slug": "pseudo-atari-game",
   "name": "Pseudo Atari Game",
-  "tagline": "Reinforcement learning on a custom Atari-style environment.",
-  "description": "Fresher project — taught an RL agent to play an Atari-style game.",
-  "category": "AI / ML",
-  "tags": ["Reinforcement Learning", "Fresher Project"],
-  "techStack": ["RL"],
-  "highlights": [],
-  "features": [],
-  "screenshots": [],
+  "slug": "pseudo-atari-game",
+  "tags": [
+    "Reinforcement Learning",
+    "Fresher Project"
+  ],
+  "about": "Fresher project: taught an RL agent to play an Atari game.",
   "links": [
     {
-      "label": "GitHub",
-      "url": "https://github.com/shivxmgarg/Pseudo-Atari-Game"
+      "url": "https://github.com/shivxmgarg/Pseudo-Atari-Game",
+      "label": "GitHub"
     }
   ],
-  "contributors": ["shivam"],
-  "about": "Fresher project: taught an RL agent to play an Atari game."
+  "tagline": "Reinforcement learning on a custom Atari-style environment.",
+  "category": "AI / ML",
+  "features": [],
+  "techStack": [
+    "RL"
+  ],
+  "highlights": [],
+  "description": "Fresher project — taught an RL agent to play an Atari-style game.",
+  "screenshots": [],
+  "contributors": [
+    "shivam"
+  ]
 }

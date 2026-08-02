@@ -1,9 +1,9 @@
 {
-  "slug": "shaurya",
   "name": "Shaurya",
   "role": "Research Coordinator",
-  "tagline": "",
-  "location": "IIT Delhi",
+  "slug": "shaurya",
+  "blocks": [],
   "socials": [],
-  "blocks": []
+  "tagline": "",
+  "location": "IIT Delhi"
 }

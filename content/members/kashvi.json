@@ -1,23 +1,23 @@
 {
-  "slug": "kashvi",
   "name": "Kashvi",
   "role": "Coordinator",
-  "tagline": "",
-  "location": "IIT Delhi",
+  "slug": "kashvi",
   "avatar": "/images/members/kashvi.jpg",
+  "blocks": [],
   "socials": [
     {
-      "label": "GitHub",
-      "url": "kashvi786"
+      "url": "kashvi786",
+      "label": "GitHub"
     },
     {
-      "label": "LinkedIn",
-      "url": "https://www.linkedin.com/in/kashvi-khurana-05499a322/"
+      "url": "https://www.linkedin.com/in/kashvi-khurana-05499a322/",
+      "label": "LinkedIn"
     },
     {
-      "label": "Email",
-      "url": "mailto:kashvikhurana7@gmail.com"
+      "url": "mailto:kashvikhurana7@gmail.com",
+      "label": "Email"
     }
   ],
-  "blocks": []
+  "tagline": "",
+  "location": "IIT Delhi"
 }

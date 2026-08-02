@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getTeam } from "@/lib/content";
-import { TeamExplorer } from "@/components/sections/team/TeamExplorer";
-import { AlumniSection } from "@/components/sections/team/AlumniSection";
+import { TeamExplorer } from "frontend/pages/team/TeamExplorer";
+import { AlumniSection } from "frontend/pages/team/AlumniSection";
 
 export const metadata: Metadata = { title: "Team" };
 

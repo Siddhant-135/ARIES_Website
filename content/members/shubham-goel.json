@@ -1,22 +1,22 @@
 {
-  "slug": "shubham-goel",
   "name": "Shubham Goel",
   "role": "Research Executive",
-  "tagline": "",
-  "location": "IIT Delhi",
+  "slug": "shubham-goel",
+  "blocks": [],
   "socials": [
     {
-      "label": "GitHub",
-      "url": "https://github.com/Shubzz-MasterPrix"
+      "url": "https://github.com/Shubzz-MasterPrix",
+      "label": "GitHub"
     },
     {
-      "label": "LinkedIn",
-      "url": "https://www.linkedin.com/in/shubham--goel"
+      "url": "https://www.linkedin.com/in/shubham--goel",
+      "label": "LinkedIn"
     },
     {
-      "label": "Email",
-      "url": "mailto:shubhamgoelblr@gmail.com"
+      "url": "mailto:shubhamgoelblr@gmail.com",
+      "label": "Email"
     }
   ],
-  "blocks": []
+  "tagline": "",
+  "location": "IIT Delhi"
 }

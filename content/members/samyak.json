@@ -1,22 +1,22 @@
 {
-  "slug": "samyak",
   "name": "Samyak",
   "role": "Research Lead",
-  "tagline": "",
-  "location": "IIT Delhi",
+  "slug": "samyak",
+  "blocks": [],
   "socials": [
     {
-      "label": "GitHub",
-      "url": "https://github.com/SamyakSS83"
+      "url": "https://github.com/SamyakSS83",
+      "label": "GitHub"
     },
     {
-      "label": "LinkedIn",
-      "url": "https://www.linkedin.com/in/samyak-sanghvi-519221282/"
+      "url": "https://www.linkedin.com/in/samyak-sanghvi-519221282/",
+      "label": "LinkedIn"
     },
     {
-      "label": "Email",
-      "url": "mailto:samyakssanghvi@gmail.com"
+      "url": "mailto:samyakssanghvi@gmail.com",
+      "label": "Email"
     }
   ],
-  "blocks": []
+  "tagline": "",
+  "location": "IIT Delhi"
 }

@@ -1,35 +1,11 @@
 {
-  "slug": "harsheet-kaur",
   "name": "Harsheet Kaur",
   "role": "Executive, ARIES",
-  "tagline": "Passionate about design, technology and creating meaningful experiences through innovation.",
+  "slug": "harsheet-kaur",
   "year": "3rd Year, MAE",
-  "location": "IIT Delhi",
-  "resumeUrl": "#",
-  "socials": [
-    {
-      "label": "GitHub",
-      "url": "https://github.com"
-    },
-    {
-      "label": "LinkedIn",
-      "url": "https://linkedin.com"
-    },
-    {
-      "label": "Twitter",
-      "url": "https://x.com"
-    },
-    {
-      "label": "Email",
-      "url": "mailto:someone@iitd.ac.in"
-    }
-  ],
   "blocks": [
     {
       "id": "tools",
-      "type": "tools",
-      "span": "full",
-      "title": "Tools",
       "data": [
         "Python",
         "C++",
@@ -39,61 +15,60 @@
         "Docker",
         "Figma",
         "SQL"
-      ]
+      ],
+      "span": "full",
+      "type": "tools",
+      "title": "Tools"
     },
     {
       "id": "achievements",
-      "type": "achievements",
-      "span": "full",
-      "title": "Achievements",
       "data": [
         {
+          "org": "ACM India Hackathon 2025",
           "year": "2025",
           "title": "Gold Medal",
-          "org": "ACM India Hackathon 2025",
           "description": "Awarded Gold Medal for developing an AI-powered solution that enhances accessibility in education using computer vision and NLP technologies."
         },
         {
+          "org": "Smart India Hackathon 2024",
           "year": "2024",
           "title": "Winner",
-          "org": "Smart India Hackathon 2024",
           "description": "Led the team to victory by building an intelligent waste management system integrated with IoT sensors and real-time analytics."
         },
         {
+          "org": "IIT JAM (Mechanical)",
           "year": "2023",
           "title": "AIR 73",
-          "org": "IIT JAM (Mechanical)",
           "description": "Secured All India Rank 73 among thousands of candidates in the IIT JAM examination for Mechanical Engineering."
         },
         {
+          "org": "Google Solution Challenge 2023",
           "year": "2023",
           "title": "Finalist",
-          "org": "Google Solution Challenge 2023",
           "description": "Selected as a finalist among top teams for our sustainable urban mobility solution using ML and data-driven insights."
         },
         {
+          "org": "National Talent Search Examination",
           "year": "2021",
           "title": "NTSE Scholar",
-          "org": "National Talent Search Examination",
           "description": "Awarded scholarship for exceptional performance in the National Talent Search Examination conducted by NCERT."
         },
         {
+          "org": "Indian National Olympiad",
           "year": "2021",
           "title": "IMO Qualifier",
-          "org": "Indian National Olympiad",
           "description": "Qualified for the Indian National Olympiad in Mathematics with a top percentile ranking at the national level."
         }
-      ]
+      ],
+      "span": "full",
+      "type": "achievements",
+      "title": "Achievements"
     },
     {
       "id": "projects",
-      "type": "projects",
-      "span": "full",
-      "title": "Projects",
       "data": [
         {
           "name": "AURA – Anomaly Detection System",
-          "description": "Unsupervised anomaly detection pipeline for real-world industrial IoT sensor streams.",
           "tags": [
             "Python",
             "PyTorch",
@@ -102,22 +77,22 @@
           ],
           "links": [
             {
-              "label": "GitHub",
-              "url": "#"
+              "url": "#",
+              "label": "GitHub"
             },
             {
-              "label": "Demo",
-              "url": "#"
+              "url": "#",
+              "label": "Demo"
             },
             {
-              "label": "Report",
-              "url": "#"
+              "url": "#",
+              "label": "Report"
             }
-          ]
+          ],
+          "description": "Unsupervised anomaly detection pipeline for real-world industrial IoT sensor streams."
         },
         {
           "name": "Muse – Mindful Journal App",
-          "description": "A mobile journaling app that helps users track mood, reflect and build mindfulness.",
           "tags": [
             "Figma",
             "UI/UX",
@@ -126,22 +101,22 @@
           ],
           "links": [
             {
-              "label": "GitHub",
-              "url": "#"
+              "url": "#",
+              "label": "GitHub"
             },
             {
-              "label": "Prototype",
-              "url": "#"
+              "url": "#",
+              "label": "Prototype"
             },
             {
-              "label": "Case Study",
-              "url": "#"
+              "url": "#",
+              "label": "Case Study"
             }
-          ]
+          ],
+          "description": "A mobile journaling app that helps users track mood, reflect and build mindfulness."
         },
         {
           "name": "Navix – Autonomous Rover",
-          "description": "A ROS-based autonomous navigation rover using LiDAR, SLAM and path-planning algorithms.",
           "tags": [
             "ROS",
             "C++",
@@ -150,26 +125,27 @@
           ],
           "links": [
             {
-              "label": "GitHub",
-              "url": "#"
+              "url": "#",
+              "label": "GitHub"
             },
             {
-              "label": "Video",
-              "url": "#"
+              "url": "#",
+              "label": "Video"
             },
             {
-              "label": "Docs",
-              "url": "#"
+              "url": "#",
+              "label": "Docs"
             }
-          ]
+          ],
+          "description": "A ROS-based autonomous navigation rover using LiDAR, SLAM and path-planning algorithms."
         }
-      ]
+      ],
+      "span": "full",
+      "type": "projects",
+      "title": "Projects"
     },
     {
       "id": "coursework",
-      "type": "coursework",
-      "span": "full",
-      "title": "Coursework",
       "data": [
         {
           "name": "Machine Learning",
@@ -195,13 +171,13 @@
           "name": "Operating Systems",
           "topics": "Processes, threads, synchronization, memory management, scheduling."
         }
-      ]
+      ],
+      "span": "full",
+      "type": "coursework",
+      "title": "Coursework"
     },
     {
       "id": "hobbies",
-      "type": "hobbies",
-      "span": "full",
-      "title": "Hobbies & Interests",
       "data": [
         "Sketching",
         "Photography",
@@ -209,13 +185,13 @@
         "Travel",
         "Badminton",
         "Music"
-      ]
+      ],
+      "span": "full",
+      "type": "hobbies",
+      "title": "Hobbies & Interests"
     },
     {
       "id": "internships",
-      "type": "internships",
-      "span": "full",
-      "title": "Internships and Professional work",
       "data": [
         {
           "role": "Machine Learning",
@@ -229,14 +205,38 @@
           "role": "Computer Vision",
           "description": "Image processing, object detection, segmentation, OpenCV, filters."
         }
-      ]
+      ],
+      "span": "full",
+      "type": "internships",
+      "title": "Internships and Professional work"
     },
     {
       "id": "research",
-      "type": "research",
+      "data": "Working at the intersection of machine learning and design — how intelligent systems can be made more interpretable, accessible and human-centred. Currently exploring anomaly detection in time-series data and multimodal learning.\n\nOpen to collaborations on applied ML research, especially in sustainability and education.",
       "span": "full",
-      "title": "Research Interests",
-      "data": "Working at the intersection of machine learning and design — how intelligent systems can be made more interpretable, accessible and human-centred. Currently exploring anomaly detection in time-series data and multimodal learning.\n\nOpen to collaborations on applied ML research, especially in sustainability and education."
+      "type": "research",
+      "title": "Research Interests"
     }
-  ]
+  ],
+  "socials": [
+    {
+      "url": "https://github.com",
+      "label": "GitHub"
+    },
+    {
+      "url": "https://linkedin.com",
+      "label": "LinkedIn"
+    },
+    {
+      "url": "https://x.com",
+      "label": "Twitter"
+    },
+    {
+      "url": "mailto:someone@iitd.ac.in",
+      "label": "Email"
+    }
+  ],
+  "tagline": "Passionate about design, technology and creating meaningful experiences through innovation.",
+  "location": "IIT Delhi",
+  "resumeUrl": "#"
 }

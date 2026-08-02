@@ -18,30 +18,28 @@ single-purpose components. Find the file, make the change, done.
 | Resources list | Supabase `resources` (backup: `content/resources.json`) |
 | Team rosters / years / alumni | Supabase `team` (backup: `content/team.json`) |
 | Content schemas (add a field) | `src/lib/types.ts`, readers in `src/lib/content.ts` |
-| Left sidebar (collapse, mobile drawer, art) | `src/components/layout/Sidebar.tsx` |
-| Landing top navbar | `src/components/layout/TopNav.tsx` |
-| Landing footer (mountain + copyright) | `src/components/sections/landing/FaqAndFooter.tsx` (also `SiteFooter.tsx`) |
-| Sticky landing header | `src/components/layout/TopNav.tsx` |
-| Landing sections | `src/components/sections/landing/*` |
-| Events page UI / filters | `src/components/sections/events/EventsExplorer.tsx`, card: `src/components/cards/EventCard.tsx` |
-| Projects page UI / search | `src/components/sections/projects/ProjectsExplorer.tsx`, card: `src/components/cards/ProjectCard.tsx` |
-| Team page UI | `src/components/sections/team/*`, card: `src/components/cards/PersonCard.tsx` |
-| Resources page UI | `src/components/sections/resources/ResourcesExplorer.tsx` |
-| Contact page | `src/app/(site)/contact/page.tsx`, form: `src/components/sections/contact/ContactForm.tsx` |
+| Left sidebar (collapse, mobile drawer, art) | `frontend/shared/layout/Sidebar.tsx` |
+| Landing top navbar | `frontend/pages/landing/TopNav.tsx` |
+| Landing footer (mountain + copyright) | `frontend/pages/landing/FaqAndFooter.tsx` (also `SiteFooter.tsx`) |
+| Sticky landing header | `frontend/pages/landing/TopNav.tsx` |
+| Landing sections | `frontend/pages/landing/*` |
+| Events page UI / filters | `frontend/pages/events/EventsExplorer.tsx`, card: `frontend/shared/cards/EventCard.tsx` |
+| Projects page UI / search | `frontend/pages/projects/ProjectsExplorer.tsx`, card: `frontend/shared/cards/ProjectCard.tsx` |
+| Team page UI | `frontend/pages/team/*`, card: `frontend/shared/cards/PersonCard.tsx` |
+| Resources page UI | `frontend/pages/resources/ResourcesExplorer.tsx` |
+| Contact page | `src/app/(site)/contact/page.tsx`, form: `frontend/pages/contact/ContactForm.tsx` |
 | Club email / LinkedIn | `src/config/socials.ts` |
 | Member login | `/admin` — username/entry number + password (Supabase Auth); temp bootstrap `admin` / `password` |
 | Profile page layout / hero / back-button logic | `src/app/[slug]/page.tsx` |
-| How a profile section renders | `src/components/profile/blocks.tsx` (one renderer per block type) |
-| Profile 2-column packing | `src/components/profile/BlockGrid.tsx` |
+| How a profile section renders | `frontend/shared/profile/blocks.tsx` (one renderer per block type) |
+| Profile 2-column packing | `frontend/shared/profile/BlockGrid.tsx` |
 | Admin login | `src/app/admin/page.tsx` |
-| Admin editor (drag-drop blocks, project/event forms, approvals) | `src/components/admin/*` |
+| Admin editor (drag-drop blocks, project/event forms, approvals) | `frontend/pages/admin/*` |
 | Content write API | `src/app/api/admin/save/route.ts` → Supabase (+ approval queue for executives) |
 | Image uploads | `src/app/api/admin/upload/route.ts` → Supabase Storage `media` |
 | Seed / re-import JSON → Supabase | `npm run db:seed:supabase` (needs `SUPABASE_SERVICE_ROLE_KEY`) |
 | Export Supabase → JSON backup | `npm run content:export` |
 | Import member passwords from Form CSV | `npm run auth:import-credentials -- file.csv` |
-| Express backend (legacy CRUD) | `aries-website/` → `http://localhost:4000` |
-| SQLite schema / seed (legacy) | `database/` (`npm run db:seed`) |
 | Import members from Excel + Drive photos | `npm run import:excel -- <file.xlsx>` → `scripts/import-from-excel.mjs` |
 
 ## Routing
@@ -58,7 +56,7 @@ single-purpose components. Find the file, make the change, done.
 - Executives: own profile free; project/event/team edits need approval. Coordinators + leadership direct-publish.
 - Env: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, server `SUPABASE_SERVICE_ROLE_KEY` (scripts only).
 - Images: existing `/images/...` in `public/`; new uploads → Storage bucket `media`.
-- Category chip colors: `src/components/ui/CategoryBadge.tsx`.
+- Category chip colors: `frontend/shared/ui/CategoryBadge.tsx`.
 - Icons: `lucide-react` (no brand icons — use monogram tiles like Contact page).
 - Run: `npm run dev`.
 

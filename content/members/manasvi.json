@@ -1,22 +1,22 @@
 {
-  "slug": "manasvi",
   "name": "Manasvi",
   "role": "Coordinator",
-  "tagline": "",
-  "location": "IIT Delhi",
+  "slug": "manasvi",
+  "blocks": [],
   "socials": [
     {
-      "label": "GitHub",
-      "url": "https://github.com/manasviim"
+      "url": "https://github.com/manasviim",
+      "label": "GitHub"
     },
     {
-      "label": "LinkedIn",
-      "url": "https://www.linkedin.com/in/manasvi-mandal-5a028b336/"
+      "url": "https://www.linkedin.com/in/manasvi-mandal-5a028b336/",
+      "label": "LinkedIn"
     },
     {
-      "label": "Email",
-      "url": "mailto:manasvimandal0676@gmail.com"
+      "url": "mailto:manasvimandal0676@gmail.com",
+      "label": "Email"
     }
   ],
-  "blocks": []
+  "tagline": "",
+  "location": "IIT Delhi"
 }

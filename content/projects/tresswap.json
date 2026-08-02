@@ -1,16 +1,23 @@
 {
-  "slug": "tresswap",
   "name": "Tresswap",
-  "tagline": "GAN-based AR virtual hairstyle try-ons.",
-  "description": "Try hairstyles in augmented reality using facial landmark detection.",
-  "category": "Computer Vision",
-  "tags": ["AR", "GAN", "Computer Vision"],
-  "techStack": ["GAN", "Facial Landmark Detection"],
-  "highlights": [],
-  "features": [],
-  "screenshots": [],
+  "slug": "tresswap",
+  "tags": [
+    "AR",
+    "GAN",
+    "Computer Vision"
+  ],
+  "about": "GAN-based AR app for virtual hairstyle try-ons using face landmark detection.",
   "links": [],
-  "contributors": [],
+  "tagline": "GAN-based AR virtual hairstyle try-ons.",
+  "category": "Computer Vision",
   "featured": true,
-  "about": "GAN-based AR app for virtual hairstyle try-ons using face landmark detection."
+  "features": [],
+  "techStack": [
+    "GAN",
+    "Facial Landmark Detection"
+  ],
+  "highlights": [],
+  "description": "Try hairstyles in augmented reality using facial landmark detection.",
+  "screenshots": [],
+  "contributors": []
 }

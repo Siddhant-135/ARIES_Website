@@ -1,9 +1,9 @@
 {
-  "slug": "geetansh",
   "name": "Geetansh",
   "role": "Research Coordinator",
-  "tagline": "",
-  "location": "IIT Delhi",
+  "slug": "geetansh",
+  "blocks": [],
   "socials": [],
-  "blocks": []
+  "tagline": "",
+  "location": "IIT Delhi"
 }

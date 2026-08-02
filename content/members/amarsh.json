@@ -1,22 +1,22 @@
 {
-  "slug": "amarsh",
   "name": "Amarsh",
   "role": "Research Executive",
-  "tagline": "",
-  "location": "IIT Delhi",
+  "slug": "amarsh",
+  "blocks": [],
   "socials": [
     {
-      "label": "GitHub",
-      "url": "https://github.com/Zcodeod-OG"
+      "url": "https://github.com/Zcodeod-OG",
+      "label": "GitHub"
     },
     {
-      "label": "LinkedIn",
-      "url": "https://www.linkedin.com/in/amarsh-choudhary-0181b8223"
+      "url": "https://www.linkedin.com/in/amarsh-choudhary-0181b8223",
+      "label": "LinkedIn"
     },
     {
-      "label": "Email",
-      "url": "mailto:amarshchoudhary5@gmail.com"
+      "url": "mailto:amarshchoudhary5@gmail.com",
+      "label": "Email"
     }
   ],
-  "blocks": []
+  "tagline": "",
+  "location": "IIT Delhi"
 }

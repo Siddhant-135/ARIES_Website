@@ -1,18 +1,18 @@
 {
-  "slug": "kiran",
   "name": "Kiran",
   "role": "Executive",
-  "tagline": "",
-  "location": "IIT Delhi",
+  "slug": "kiran",
+  "blocks": [],
   "socials": [
     {
-      "label": "LinkedIn",
-      "url": "https://www.linkedin.com/in/kiran-960236378"
+      "url": "https://www.linkedin.com/in/kiran-960236378",
+      "label": "LinkedIn"
     },
     {
-      "label": "Email",
-      "url": "mailto:kiranbishnoi765@gmail.com"
+      "url": "mailto:kiranbishnoi765@gmail.com",
+      "label": "Email"
     }
   ],
-  "blocks": []
+  "tagline": "",
+  "location": "IIT Delhi"
 }

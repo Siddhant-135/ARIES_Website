@@ -1,22 +1,22 @@
 {
-  "slug": "sameeksha-b",
   "name": "Sameeksha B",
   "role": "Executive",
-  "tagline": "",
-  "location": "IIT Delhi",
+  "slug": "sameeksha-b",
+  "blocks": [],
   "socials": [
     {
-      "label": "GitHub",
-      "url": "https://www.instagram.com/sameeksha20128?igsh=ZDY3c2dvZXdwcjVy"
+      "url": "https://www.instagram.com/sameeksha20128?igsh=ZDY3c2dvZXdwcjVy",
+      "label": "GitHub"
     },
     {
-      "label": "LinkedIn",
-      "url": "Sameeksha B | LinkedIn"
+      "url": "Sameeksha B | LinkedIn",
+      "label": "LinkedIn"
     },
     {
-      "label": "Email",
-      "url": "mailto:sameekshab683@gmail.com"
+      "url": "mailto:sameekshab683@gmail.com",
+      "label": "Email"
     }
   ],
-  "blocks": []
+  "tagline": "",
+  "location": "IIT Delhi"
 }

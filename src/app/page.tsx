@@ -1,7 +1,7 @@
-import { TopNav } from "@/components/layout/TopNav";
-import { Hero } from "@/components/sections/landing/Hero";
-import { WhatWeDo } from "@/components/sections/landing/WhatWeDo";
-import { FaqAndFooter } from "@/components/sections/landing/FaqAndFooter";
+import { TopNav } from "frontend/pages/landing/TopNav";
+import { Hero } from "frontend/pages/landing/Hero";
+import { WhatWeDo } from "frontend/pages/landing/WhatWeDo";
+import { FaqAndFooter } from "frontend/pages/landing/FaqAndFooter";
 
 /**
  * Landing — three full-viewport frames:

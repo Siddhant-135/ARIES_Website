@@ -1,22 +1,22 @@
 {
-  "slug": "devansh",
   "name": "Devansh",
   "role": "Coordinator",
-  "tagline": "",
-  "location": "IIT Delhi",
+  "slug": "devansh",
+  "blocks": [],
   "socials": [
     {
-      "label": "GitHub",
-      "url": "0xDevansh"
+      "url": "0xDevansh",
+      "label": "GitHub"
     },
     {
-      "label": "LinkedIn",
-      "url": "https://www.linkedin.com/in/devanshkd"
+      "url": "https://www.linkedin.com/in/devanshkd",
+      "label": "LinkedIn"
     },
     {
-      "label": "Email",
-      "url": "mailto:devanshkandpal54@gmail.com"
+      "url": "mailto:devanshkandpal54@gmail.com",
+      "label": "Email"
     }
   ],
-  "blocks": []
+  "tagline": "",
+  "location": "IIT Delhi"
 }

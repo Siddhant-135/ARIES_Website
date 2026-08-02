@@ -9,16 +9,18 @@ import fs from "node:fs";
 import path from "node:path";
 import { createClient } from "@supabase/supabase-js";
 
-function loadEnvLocal() {
-  const p = path.join(process.cwd(), ".env.local");
-  if (!fs.existsSync(p)) return;
-  for (const line of fs.readFileSync(p, "utf8").split(/\r?\n/)) {
-    const m = line.match(/^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)$/);
-    if (!m || m[1].startsWith("#")) continue;
-    if (!process.env[m[1]]) process.env[m[1]] = m[2].replace(/^["']|["']$/g, "");
+function loadEnvFiles() {
+  for (const file of [".env.local", ".env"]) {
+    const p = path.join(process.cwd(), file);
+    if (!fs.existsSync(p)) continue;
+    for (const line of fs.readFileSync(p, "utf8").split(/\r?\n/)) {
+      const m = line.match(/^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)$/);
+      if (!m || m[1].startsWith("#")) continue;
+      if (!process.env[m[1]]) process.env[m[1]] = m[2].replace(/^["']|["']$/g, "");
+    }
   }
 }
-loadEnvLocal();
+loadEnvFiles();
 
 const ROOT = process.cwd();
 const CONTENT = path.join(ROOT, "content");
@@ -26,6 +28,8 @@ const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const adminUser = (process.env.ADMIN_USER || "admin").toLowerCase();
 const adminPass = process.env.ADMIN_PASSWORD || "password";
+const bloggerUser = (process.env.BLOGGER_USER || "blogger").toLowerCase();
+const bloggerPass = process.env.BLOGGER_PASSWORD || "blog1234";
 
 if (!url || !serviceKey) {
   console.error("Need NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in .env.local");
@@ -132,6 +136,53 @@ async function ensureAdmin() {
   if (error) throw error;
 }
 
+async function ensureBlogger() {
+  const email = `${bloggerUser}@ariesiitd.com`;
+  const { data: listed } = await sb.auth.admin.listUsers({ perPage: 200 });
+  let user = listed?.users?.find((u) => u.email === email);
+
+  if (!user) {
+    const { data, error } = await sb.auth.admin.createUser({
+      email,
+      password: bloggerPass,
+      email_confirm: true,
+      app_metadata: { level: "blogger", member_slug: bloggerUser },
+      user_metadata: { name: "ARIES Blogger" },
+    });
+    if (error) throw error;
+    user = data.user;
+    console.log("Created auth user", email);
+  } else {
+    const { error } = await sb.auth.admin.updateUserById(user.id, {
+      password: bloggerPass,
+      app_metadata: { level: "blogger", member_slug: bloggerUser },
+      email_confirm: true,
+    });
+    if (error) throw error;
+    console.log("Updated auth user", email);
+  }
+
+  // Store the blogger row as "member" so it passes the members_level_check constraint.
+  // The API still treats this login as level "blogger" because it reads app_metadata first.
+  const { error } = await sb.from("members").upsert({
+    slug: bloggerUser,
+    data: {
+      slug: bloggerUser,
+      name: "ARIES Blogger",
+      role: "Blogger",
+      tagline: "Blog author",
+      socials: [],
+      blocks: [],
+    },
+    username: bloggerUser,
+    entry_number: null,
+    email,
+    level: "member",
+    auth_user_id: user.id,
+  });
+  if (error) throw error;
+}
+
 async function main() {
   const team = readJson(path.join(CONTENT, "team.json"));
   const levels = buildLevelMap(team);
@@ -185,6 +236,7 @@ async function main() {
   }
 
   await ensureAdmin();
+  await ensureBlogger();
   console.log("Seed complete.");
 }
 

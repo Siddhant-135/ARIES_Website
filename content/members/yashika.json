@@ -1,23 +1,23 @@
 {
-  "slug": "yashika",
   "name": "Yashika",
   "role": "Research Executive",
-  "tagline": "",
-  "location": "IIT Delhi",
+  "slug": "yashika",
   "avatar": "/images/members/yashika.jpg",
+  "blocks": [],
   "socials": [
     {
-      "label": "GitHub",
-      "url": "https://github.com/yashikaagg3"
+      "url": "https://github.com/yashikaagg3",
+      "label": "GitHub"
     },
     {
-      "label": "LinkedIn",
-      "url": "linkedin.com/in/yashika-aggarwal-046193343"
+      "url": "linkedin.com/in/yashika-aggarwal-046193343",
+      "label": "LinkedIn"
     },
     {
-      "label": "Email",
-      "url": "mailto:yashikaagg6@gmail.com"
+      "url": "mailto:yashikaagg6@gmail.com",
+      "label": "Email"
     }
   ],
-  "blocks": []
+  "tagline": "",
+  "location": "IIT Delhi"
 }

@@ -1,38 +1,38 @@
 {
-  "slug": "vansh-ramani",
   "name": "Vansh Ramani",
   "role": "Alumni, ARIES · Coordinator",
-  "tagline": "Graph learning and dataset compression at CMU.",
-  "location": "Carnegie Mellon University",
+  "slug": "vansh-ramani",
   "avatar": "/images/members/vansh-ramani.png",
-  "socials": [],
   "blocks": [
     {
       "id": "about",
-      "type": "text",
+      "data": "Former Coordinator at ARIES. Works on ML training efficiency, dataset compression, graph learning, and neurosymbolic AI.",
       "span": "full",
-      "title": "About",
-      "data": "Former Coordinator at ARIES. Works on ML training efficiency, dataset compression, graph learning, and neurosymbolic AI."
+      "type": "text",
+      "title": "About"
     },
     {
       "id": "research",
-      "type": "research",
+      "data": "Bonsai: Gradient-free Graph Distillation\nAn efficient algorithm to compress training datasets for graph neural networks, reducing training time without a significant drop in performance.",
       "span": "full",
-      "title": "Publications",
-      "data": "Bonsai: Gradient-free Graph Distillation\nAn efficient algorithm to compress training datasets for graph neural networks, reducing training time without a significant drop in performance."
+      "type": "research",
+      "title": "Publications"
     },
     {
       "id": "internships",
-      "type": "internships",
-      "span": "full",
-      "title": "Experience",
       "data": [
         {
-          "role": "Researcher",
           "org": "Carnegie Mellon University",
+          "role": "Researcher",
           "description": "ML training efficiency, dataset compression, graph learning, neurosymbolic AI."
         }
-      ]
+      ],
+      "span": "full",
+      "type": "internships",
+      "title": "Experience"
     }
-  ]
+  ],
+  "socials": [],
+  "tagline": "Graph learning and dataset compression at CMU.",
+  "location": "Carnegie Mellon University"
 }

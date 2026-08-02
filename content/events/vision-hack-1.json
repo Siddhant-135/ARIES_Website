@@ -1,9 +1,9 @@
 {
-  "slug": "vision-hack-1",
-  "title": "Vision Hack 1.0",
-  "type": "Hackathon",
+  "body": "Where it all started — 40 teams, 48 hours, and a winning project that became a full ARIES research effort.",
   "date": "2025-11-22",
-  "description": "The first edition of our 48-hour computer vision hackathon.",
-  "body": "Where it all started \u2014 40 teams, 48 hours, and a winning project that became a full ARIES research effort.",
-  "links": []
+  "slug": "vision-hack-1",
+  "type": "Hackathon",
+  "links": [],
+  "title": "Vision Hack 1.0",
+  "description": "The first edition of our 48-hour computer vision hackathon."
 }

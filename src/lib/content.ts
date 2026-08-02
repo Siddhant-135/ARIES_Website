@@ -39,21 +39,22 @@ function supabasePublic() {
 export async function getMembers(): Promise<Member[]> {
   const { data, error } = await supabasePublic()
     .from("members")
-    .select("data")
+    .select("slug, data, level")
     .neq("slug", "admin")
     .order("slug");
   if (error) throw error;
-  return (data ?? []).map((row) => row.data as Member);
+  return (data ?? []).map((row) => ({ ...(row.data as Member), level: row.level as Member["level"] }));
 }
 
 export async function getMember(slug: string): Promise<Member | undefined> {
   const { data, error } = await supabasePublic()
     .from("members")
-    .select("data")
+    .select("data, level")
     .eq("slug", slug)
     .maybeSingle();
   if (error) throw error;
-  return data?.data as Member | undefined;
+  if (!data) return undefined;
+  return { ...(data.data as Member), level: data.level as Member["level"] };
 }
 
 /* Projects */
@@ -111,6 +112,11 @@ export async function getResources(): Promise<Resource[]> {
     .maybeSingle();
   if (error) throw error;
   return (data?.data as Resource[]) ?? [];
+}
+
+export async function getResource(slug: string): Promise<Resource | undefined> {
+  const all = await getResources();
+  return all.find((r) => r.slug === slug);
 }
 
 /* Team */

@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { getMembers, getProjects } from "@/lib/content";
-import { Eyebrow } from "@/components/ui/Eyebrow";
-import { ProjectsExplorer } from "@/components/sections/projects/ProjectsExplorer";
+import { Eyebrow } from "frontend/shared/ui/Eyebrow";
+import { ProjectsExplorer } from "frontend/pages/projects/ProjectsExplorer";
 
 export const metadata: Metadata = { title: "Projects" };
 

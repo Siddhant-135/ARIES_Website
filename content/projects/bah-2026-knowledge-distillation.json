@@ -1,15 +1,27 @@
 {
-  "slug": "bah-2026-knowledge-distillation",
   "name": "BAH 2026: Student–Teacher Knowledge Distillation for GAN-Based Cloud Removal",
-  "tagline": "LUPI knowledge distillation for indigenous satellite cloud removal.",
-  "description": "Finalist at BAH — student model on indigenous satellite data replicates a privileged teacher using MAE-based ViT pretraining.",
-  "category": "Hackathon",
-  "tags": ["BAH", "Computer Vision", "Knowledge Distillation", "Satellite"],
-  "techStack": ["ViT", "GAN", "LUPI", "MAE"],
-  "highlights": [],
-  "features": [],
-  "screenshots": [],
+  "slug": "bah-2026-knowledge-distillation",
+  "tags": [
+    "BAH",
+    "Computer Vision",
+    "Knowledge Distillation",
+    "Satellite"
+  ],
+  "about": "Entry to finals at BAH hackathon. Performs knowledge distillation from teacher model with LUPI (learning using privileged information); student trained on indigenous satellite data lacking an independent channel to replicate teacher results. MAE-based ViT pretrained backbone (on Indian data) for student model.",
   "links": [],
-  "contributors": ["preesha"],
-  "about": "Entry to finals at BAH hackathon. Performs knowledge distillation from teacher model with LUPI (learning using privileged information); student trained on indigenous satellite data lacking an independent channel to replicate teacher results. MAE-based ViT pretrained backbone (on Indian data) for student model."
+  "tagline": "LUPI knowledge distillation for indigenous satellite cloud removal.",
+  "category": "Hackathon",
+  "features": [],
+  "techStack": [
+    "ViT",
+    "GAN",
+    "LUPI",
+    "MAE"
+  ],
+  "highlights": [],
+  "description": "Finalist at BAH — student model on indigenous satellite data replicates a privileged teacher using MAE-based ViT pretraining.",
+  "screenshots": [],
+  "contributors": [
+    "preesha"
+  ]
 }

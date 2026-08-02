@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { getMembers } from "@/lib/content";
-import { ProfileSection } from "@/components/sections/profile/ProfileSection";
+import { ProfileSection } from "frontend/pages/profile/ProfileSection";
 
 export const metadata: Metadata = { title: "Profile" };
 export const dynamic = "force-dynamic";

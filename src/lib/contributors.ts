@@ -1,9 +1,10 @@
-import type { Member, ProjectContributor } from "@/lib/types";
+import type { Member, ProjectContributor, ResourceAuthor } from "@/lib/types";
+import { isVisitor } from "@/lib/supabase/env";
 
 /** Normalize legacy string slugs and rich objects into ProjectContributor. */
 export function normalizeContributor(
   c: string | ProjectContributor,
-  members?: Pick<Member, "slug" | "name">[],
+  members?: Pick<Member, "slug" | "name" | "level">[],
 ): ProjectContributor {
   if (typeof c !== "string") {
     if (c.kind === "member" && c.slug && !c.name) {
@@ -35,11 +36,23 @@ export function normalizeContributor(
 
 export function normalizeContributors(
   list: Array<string | ProjectContributor> | undefined,
-  members?: Pick<Member, "slug" | "name">[],
+  members?: Pick<Member, "slug" | "name" | "level">[],
 ): ProjectContributor[] {
   return (list ?? [])
     .map((c) => normalizeContributor(c, members))
     .filter((c) => c.name.trim().length > 0 || (c.slug && c.slug.length > 0));
+}
+
+export function isVisitorMember(member?: Pick<Member, "level"> | null): boolean {
+  return !!member && isVisitor(member.level);
+}
+
+export function memberLevelForSlug(
+  slug: string | undefined,
+  members?: Pick<Member, "slug" | "level">[],
+): string | undefined {
+  if (!slug) return undefined;
+  return members?.find((m) => m.slug === slug)?.level;
 }
 
 export function contributorLabel(c: ProjectContributor): string {
@@ -52,4 +65,8 @@ export function contributorSearchText(c: ProjectContributor): string {
 
 export function isProfileLinked(c: ProjectContributor): boolean {
   return c.kind === "member" && !!c.slug;
+}
+
+export function authorLabel(a: ResourceAuthor): string {
+  return a.name?.trim() || a.slug || "Unknown";
 }

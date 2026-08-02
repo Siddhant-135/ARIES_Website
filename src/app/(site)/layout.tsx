@@ -1,4 +1,4 @@
-import { Sidebar } from "@/components/layout/Sidebar";
+import { Sidebar } from "frontend/shared/layout/Sidebar";
 
 /** Short ISR window; CMS writes also call revalidatePath for immediate updates. */
 export const revalidate = 30;

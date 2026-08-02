@@ -1,19 +1,19 @@
 {
-  "slug": "navya",
   "name": "Navya",
   "role": "Executive",
-  "tagline": "",
-  "location": "IIT Delhi",
+  "slug": "navya",
   "avatar": "/images/members/navya.jpg",
+  "blocks": [],
   "socials": [
     {
-      "label": "GitHub",
-      "url": "https://github.com/navyagoyal10"
+      "url": "https://github.com/navyagoyal10",
+      "label": "GitHub"
     },
     {
-      "label": "Email",
-      "url": "mailto:navya.ng.goyal@gmail.com"
+      "url": "mailto:navya.ng.goyal@gmail.com",
+      "label": "Email"
     }
   ],
-  "blocks": []
+  "tagline": "",
+  "location": "IIT Delhi"
 }

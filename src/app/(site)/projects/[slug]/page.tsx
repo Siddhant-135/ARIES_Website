@@ -15,9 +15,9 @@ import {
 } from "lucide-react";
 import { getProject, getProjects, getMembers } from "@/lib/content";
 import { normalizeContributors } from "@/lib/contributors";
-import { CategoryBadge } from "@/components/ui/CategoryBadge";
-import { Tag } from "@/components/ui/Tag";
-import { ContributorList } from "@/components/projects/ContributorList";
+import { CategoryBadge } from "frontend/shared/ui/CategoryBadge";
+import { Tag } from "frontend/shared/ui/Tag";
+import { ContributorList } from "frontend/shared/projects/ContributorList";
 
 export async function generateStaticParams() {
   const projects = await getProjects();
@@ -169,7 +169,7 @@ export default async function ProjectDetailPage({
             {contributors.length > 0 && (
               <>
                 <SectionTitle className="mt-10">Team</SectionTitle>
-                <ContributorList contributors={contributors} projectSlug={project.slug} />
+                <ContributorList contributors={contributors} projectSlug={project.slug} members={members} />
               </>
             )}
           </div>

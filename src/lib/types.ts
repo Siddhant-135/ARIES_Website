@@ -3,6 +3,8 @@
  * Agents: update here first if adding fields, then the JSON, then the UI.
  */
 
+import type { MemberLevel } from "./supabase/env";
+
 /* ---------- Members / profiles ---------- */
 
 export type ProfileBlockType =
@@ -53,6 +55,8 @@ export type Member = {
   resumeUrl?: string;
   socials: { label: string; url: string }[];
   blocks: ProfileBlock[];
+  /** Club tier from the members table (e.g. visitor, executive). Backup JSON omits this. */
+  level?: MemberLevel;
 };
 
 /* ---------- Projects ---------- */
@@ -105,14 +109,23 @@ export type AriesEvent = {
 
 /* ---------- Resources ---------- */
 
+export type ResourceAuthor = {
+  name: string;
+  slug?: string;
+  kind?: "member" | "external";
+};
+
 export type Resource = {
+  slug: string;
   title: string;
   description: string;
-  type: "Tool" | "Book" | "Course" | "Tutorial" | "Dataset";
-  url: string;
+  type: "Blog" | "Tutorial" | "Course" | "Featured";
+  url?: string;
   addedOn: string; // ISO date
+  authors?: ResourceAuthor[];
+  body?: string; // long-form markdown content
   featured?: boolean;
-  image?: string;
+  coverImage?: string;
 };
 
 /* ---------- Team ---------- */

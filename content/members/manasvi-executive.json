@@ -1,19 +1,19 @@
 {
-  "slug": "manasvi-executive",
   "name": "Manasvi",
   "role": "Executive",
-  "tagline": "",
-  "location": "IIT Delhi",
+  "slug": "manasvi-executive",
   "avatar": "/images/members/manasvi-executive.jpg",
+  "blocks": [],
   "socials": [
     {
-      "label": "LinkedIn",
-      "url": "https://www.linkedin.com/in/manasvi-gupta-70a32738b?utm_source=share_via&utm_content=profile&utm_medium=member_android"
+      "url": "https://www.linkedin.com/in/manasvi-gupta-70a32738b?utm_source=share_via&utm_content=profile&utm_medium=member_android",
+      "label": "LinkedIn"
     },
     {
-      "label": "Email",
-      "url": "mailto:manasvigupta8686@gmail.com"
+      "url": "mailto:manasvigupta8686@gmail.com",
+      "label": "Email"
     }
   ],
-  "blocks": []
+  "tagline": "",
+  "location": "IIT Delhi"
 }

@@ -1,15 +1,26 @@
 {
-  "slug": "vision-hack-2",
   "name": "Vision Hack 2.0",
+  "slug": "vision-hack-2",
+  "tags": [
+    "Computer vision"
+  ],
+  "about": "Our flagship computer-vision hackathon. Teams of up to four build working CV products in 48 hours — from medical imaging to sports analytics.",
+  "links": [
+    {
+      "url": "#",
+      "label": "GitHub"
+    }
+  ],
   "tagline": "48 hours of computer vision.",
-  "description": "48 hours to build AI-powered computer vision solutions. Innovate. Collaborate. Impact.",
   "category": "Hackathon",
-  "tags": ["Computer vision"],
-  "techStack": ["PyTorch", "OpenCV", "YOLO"],
-  "highlights": [],
   "features": [],
+  "techStack": [
+    "PyTorch",
+    "OpenCV",
+    "YOLO"
+  ],
+  "highlights": [],
+  "description": "48 hours to build AI-powered computer vision solutions. Innovate. Collaborate. Impact.",
   "screenshots": [],
-  "links": [{ "label": "GitHub", "url": "#" }],
-  "contributors": [],
-  "about": "Our flagship computer-vision hackathon. Teams of up to four build working CV products in 48 hours — from medical imaging to sports analytics."
+  "contributors": []
 }

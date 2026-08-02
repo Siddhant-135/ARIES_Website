@@ -1,31 +1,31 @@
 {
-  "slug": "manas-jain",
   "name": "Manas Jain",
   "role": "Alumni, ARIES · Founder & ex-OC",
-  "tagline": "SDE at Graviton Research Capital.",
-  "location": "Graviton Research Capital LLP",
+  "slug": "manas-jain",
   "avatar": "/images/members/manas-jain.png",
-  "socials": [],
   "blocks": [
     {
       "id": "about",
-      "type": "text",
+      "data": "Founder and former Overall Coordinator at ARIES. Now a software development engineer at Graviton Research Capital LLP.",
       "span": "full",
-      "title": "About",
-      "data": "Founder and former Overall Coordinator at ARIES. Now a software development engineer at Graviton Research Capital LLP."
+      "type": "text",
+      "title": "About"
     },
     {
       "id": "internships",
-      "type": "internships",
-      "span": "full",
-      "title": "Experience",
       "data": [
         {
-          "role": "SDE",
           "org": "Graviton Research Capital LLP",
+          "role": "SDE",
           "description": "Software development in quantitative finance."
         }
-      ]
+      ],
+      "span": "full",
+      "type": "internships",
+      "title": "Experience"
     }
-  ]
+  ],
+  "socials": [],
+  "tagline": "SDE at Graviton Research Capital.",
+  "location": "Graviton Research Capital LLP"
 }

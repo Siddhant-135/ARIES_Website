@@ -1,23 +1,23 @@
 {
-  "slug": "anuvesha",
   "name": "Anuvesha",
   "role": "Executive",
-  "tagline": "",
-  "location": "IIT Delhi",
+  "slug": "anuvesha",
   "avatar": "/images/members/anuvesha.jpg",
+  "blocks": [],
   "socials": [
     {
-      "label": "GitHub",
-      "url": "https://github.com/anuveshasingh"
+      "url": "https://github.com/anuveshasingh",
+      "label": "GitHub"
     },
     {
-      "label": "LinkedIn",
-      "url": "www.linkedin.com/in/anuvesha07"
+      "url": "www.linkedin.com/in/anuvesha07",
+      "label": "LinkedIn"
     },
     {
-      "label": "Email",
-      "url": "mailto:anuvesha07@gmail.com"
+      "url": "mailto:anuvesha07@gmail.com",
+      "label": "Email"
     }
   ],
-  "blocks": []
+  "tagline": "",
+  "location": "IIT Delhi"
 }

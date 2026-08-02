@@ -1,31 +1,31 @@
 {
-  "slug": "maithili-joshi",
   "name": "Maithili Joshi",
   "role": "Alumni, ARIES · ex-Panel Member",
-  "tagline": "Software engineer at Samsung Korea.",
-  "location": "Samsung Korea",
+  "slug": "maithili-joshi",
   "avatar": "/images/members/maithili-joshi.png",
-  "socials": [],
   "blocks": [
     {
       "id": "about",
-      "type": "text",
+      "data": "Former Panel Member at ARIES. Now a software engineer at Samsung Korea.",
       "span": "full",
-      "title": "About",
-      "data": "Former Panel Member at ARIES. Now a software engineer at Samsung Korea."
+      "type": "text",
+      "title": "About"
     },
     {
       "id": "internships",
-      "type": "internships",
-      "span": "full",
-      "title": "Experience",
       "data": [
         {
-          "role": "Software Engineer",
           "org": "Samsung Korea",
+          "role": "Software Engineer",
           "description": "Software engineering at Samsung's Korea office."
         }
-      ]
+      ],
+      "span": "full",
+      "type": "internships",
+      "title": "Experience"
     }
-  ]
+  ],
+  "socials": [],
+  "tagline": "Software engineer at Samsung Korea.",
+  "location": "Samsung Korea"
 }

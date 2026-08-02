@@ -3,6 +3,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import {
   canDirectPublish,
   canManageTeamContent,
+  canPublishResource,
   canSubmitForApproval,
   isLeadership,
 } from "@/lib/roles";
@@ -21,7 +22,9 @@ async function sessionInfo(supabase: Awaited<ReturnType<typeof createSupabaseSer
     .eq("auth_user_id", user.id)
     .maybeSingle();
 
-  const level = String(member?.level || user.app_metadata?.level || "");
+  // Prefer app_metadata level so the special "blogger" account (which cannot be stored in the
+  // members table due to the members_level_check constraint) is still recognised.
+  const level = String(user.app_metadata?.level || member?.level || "");
   const memberSlug = String(member?.slug || user.app_metadata?.member_slug || "");
   const name = String(
     (member?.data as { name?: string } | null)?.name ||
@@ -91,6 +94,39 @@ async function publishDirect(
   return { ok: true as const };
 }
 
+async function publishResourceDirect(
+  supabase: Awaited<ReturnType<typeof createSupabaseServerClient>>,
+  slug: string,
+  payload: Record<string, unknown>,
+  memberSlug: string,
+  level: string,
+) {
+  const { data: row } = await supabase.from("resources").select("data").eq("id", 1).maybeSingle();
+  const before = row?.data ?? [];
+  const list = Array.isArray(before) ? before : [];
+  const index = list.findIndex((r: Record<string, unknown>) => r.slug === slug);
+  const next = [...list];
+  if (index >= 0) next[index] = payload;
+  else next.push(payload);
+
+  const { error } = await supabase.from("resources").upsert({ id: 1, data: next });
+  if (error) return { error: error.message };
+
+  const { error: logErr } = await supabase.from("change_log").insert({
+    entity_type: "resource",
+    entity_slug: slug,
+    actor_slug: memberSlug || "unknown",
+    actor_level: level,
+    source: "direct",
+    summary: `Direct publish resource ${slug}`,
+    before_data: index >= 0 ? list[index] : null,
+    after_data: payload,
+  });
+  if (logErr) console.warn("[admin/save] change_log:", logErr.message);
+
+  return { ok: true as const };
+}
+
 export async function POST(req: Request) {
   const supabase = await createSupabaseServerClient();
   const session = await sessionInfo(supabase);
@@ -105,7 +141,7 @@ export async function POST(req: Request) {
     action?: string;
   };
 
-  const ALLOWED = new Set(["members", "projects", "events", "team"]);
+  const ALLOWED = new Set(["members", "projects", "events", "team", "resources"]);
   const SLUG_RE = /^[a-z0-9][a-z0-9-]*$/;
 
   if (!kind || !ALLOWED.has(kind)) {
@@ -117,8 +153,34 @@ export async function POST(req: Request) {
 
   const { level, memberSlug } = session;
 
-  // Delete project / event
-  if (action === "delete" && (kind === "projects" || kind === "events")) {
+  // Delete project / event / resource
+  if (action === "delete" && (kind === "projects" || kind === "events" || kind === "resources")) {
+    if (kind === "resources" && !canPublishResource(level)) {
+      return NextResponse.json({ error: "Forbidden — cannot delete resources" }, { status: 403 });
+    }
+    if (kind !== "resources" && !canDirectPublish(level)) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+    if (kind === "resources") {
+      const { data: row } = await supabase.from("resources").select("data").eq("id", 1).maybeSingle();
+      const before = row?.data ?? [];
+      const list = Array.isArray(before) ? before : [];
+      const next = list.filter((r: Record<string, unknown>) => r.slug !== slug);
+      const { error } = await supabase.from("resources").upsert({ id: 1, data: next });
+      if (error) return NextResponse.json({ error: error.message }, { status: 400 });
+      await supabase.from("change_log").insert({
+        entity_type: "resource",
+        entity_slug: slug!,
+        actor_slug: memberSlug || "unknown",
+        actor_level: level,
+        source: "direct",
+        summary: `Deleted resource ${slug}`,
+        before_data: list.find((r: Record<string, unknown>) => r.slug === slug) ?? null,
+        after_data: null,
+      });
+      revalidateContent("resources", slug);
+      return NextResponse.json({ ok: true, mode: "direct", deleted: true });
+    }
     if (canDirectPublish(level)) {
       const table = kind === "projects" ? "projects" : "events";
       const { error } = await supabase.from(table).delete().eq("slug", slug!);
@@ -226,6 +288,21 @@ export async function POST(req: Request) {
       { error: `Forbidden — your role (${level || "none"}) cannot edit ${kind}` },
       { status: 403 },
     );
+  }
+
+  if (kind === "resources") {
+    if (!canPublishResource(level)) {
+      return NextResponse.json(
+        { error: "Forbidden — your role cannot publish resources" },
+        { status: 403 },
+      );
+    }
+    const result = await publishResourceDirect(supabase, slug!, payload, memberSlug, level);
+    if ("error" in result && result.error) {
+      return NextResponse.json({ error: result.error }, { status: 400 });
+    }
+    revalidateContent("resources", slug);
+    return NextResponse.json({ ok: true, mode: "direct" });
   }
 
   return NextResponse.json({ error: "Unhandled" }, { status: 400 });

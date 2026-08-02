@@ -1,18 +1,18 @@
 {
-  "slug": "panini",
   "name": "Panini",
   "role": "Research Executive",
-  "tagline": "",
-  "location": "IIT Delhi",
+  "slug": "panini",
+  "blocks": [],
   "socials": [
     {
-      "label": "LinkedIn",
-      "url": "https://www.linkedin.com/in/panini1/"
+      "url": "https://www.linkedin.com/in/panini1/",
+      "label": "LinkedIn"
     },
     {
-      "label": "Email",
-      "url": "mailto:panini1314@gmail.com"
+      "url": "mailto:panini1314@gmail.com",
+      "label": "Email"
     }
   ],
-  "blocks": []
+  "tagline": "",
+  "location": "IIT Delhi"
 }

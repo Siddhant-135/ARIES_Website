@@ -1,18 +1,18 @@
 {
-  "slug": "ujjwal",
   "name": "Ujjwal",
   "role": "Executive",
-  "tagline": "",
-  "location": "IIT Delhi",
+  "slug": "ujjwal",
+  "blocks": [],
   "socials": [
     {
-      "label": "LinkedIn",
-      "url": "https://www.linkedin.com/in/ujjwal-aditya-530993404/"
+      "url": "https://www.linkedin.com/in/ujjwal-aditya-530993404/",
+      "label": "LinkedIn"
     },
     {
-      "label": "Email",
-      "url": "mailto:ujjwaladitya01@gmail.com"
+      "url": "mailto:ujjwaladitya01@gmail.com",
+      "label": "Email"
     }
   ],
-  "blocks": []
+  "tagline": "",
+  "location": "IIT Delhi"
 }

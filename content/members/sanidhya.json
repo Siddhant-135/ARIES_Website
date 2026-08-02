@@ -1,24 +1,24 @@
 {
-  "slug": "sanidhya",
   "name": "Sanidhya Sharma",
   "role": "OC",
-  "tagline": "Sanidhya runs ARIES and pretends it's effortless. Research interests sit at the intersection of 3D human pose estimation",
-  "location": "IIT Delhi",
-  "socials": [],
+  "slug": "sanidhya",
   "blocks": [
     {
       "id": "about",
-      "type": "text",
+      "data": "Sanidhya runs ARIES and pretends it's effortless. Research interests sit at the intersection of 3D human pose estimation and generative priors — and he will defend diffusion models in any argument, on any hill.",
       "span": "full",
-      "title": "About",
-      "data": "Sanidhya runs ARIES and pretends it's effortless. Research interests sit at the intersection of 3D human pose estimation and generative priors — and he will defend diffusion models in any argument, on any hill."
+      "type": "text",
+      "title": "About"
     },
     {
       "id": "research",
-      "type": "research",
+      "data": "Sequential Mining Rule Sets from Event Sequences for 3D Pose Prediction\nInternational Conference on Learning Representations (ICLR) (2026)",
       "span": "full",
-      "title": "Publications",
-      "data": "Sequential Mining Rule Sets from Event Sequences for 3D Pose Prediction\nInternational Conference on Learning Representations (ICLR) (2026)"
+      "type": "research",
+      "title": "Publications"
     }
-  ]
+  ],
+  "socials": [],
+  "tagline": "Sanidhya runs ARIES and pretends it's effortless. Research interests sit at the intersection of 3D human pose estimation",
+  "location": "IIT Delhi"
 }

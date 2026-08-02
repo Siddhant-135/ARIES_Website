@@ -1,22 +1,22 @@
 {
-  "slug": "shaarav",
   "name": "Shaarav",
   "role": "Coordinator",
-  "tagline": "",
-  "location": "IIT Delhi",
+  "slug": "shaarav",
+  "blocks": [],
   "socials": [
     {
-      "label": "GitHub",
-      "url": "sh44rg"
+      "url": "sh44rg",
+      "label": "GitHub"
     },
     {
-      "label": "LinkedIn",
-      "url": "https://www.linkedin.com/in/shaarav-gunsi/"
+      "url": "https://www.linkedin.com/in/shaarav-gunsi/",
+      "label": "LinkedIn"
     },
     {
-      "label": "Email",
-      "url": "mailto:shaaravgunsi@gmail.com"
+      "url": "mailto:shaaravgunsi@gmail.com",
+      "label": "Email"
     }
   ],
-  "blocks": []
+  "tagline": "",
+  "location": "IIT Delhi"
 }

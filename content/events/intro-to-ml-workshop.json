@@ -1,9 +1,9 @@
 {
-  "slug": "intro-to-ml-workshop",
-  "title": "Intro to ML Workshop",
-  "type": "Workshop",
-  "date": "2026-02-14",
-  "description": "First steps into machine learning \u2014 from linear regression to your first neural net.",
   "body": "Our semester opener for first-years: a from-zero workshop that ends with everyone training a small neural network.",
-  "links": []
+  "date": "2026-02-14",
+  "slug": "intro-to-ml-workshop",
+  "type": "Workshop",
+  "links": [],
+  "title": "Intro to ML Workshop",
+  "description": "First steps into machine learning — from linear regression to your first neural net."
 }
