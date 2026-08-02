@@ -72,6 +72,7 @@ export type Project = {
   links?: { label: string; url: string }[];
   contributors?: string[]; // member slugs
   image?: string;
+  video?: string; // short clip URL (mp4/webm)
   featured?: boolean;
   about?: string; // long-form "About the Project" text
 };
@@ -89,6 +90,7 @@ export type AriesEvent = {
   description: string;
   body?: string; // long description for the detail page
   image?: string;
+  video?: string; // short clip URL (mp4/webm)
   links: { label: string; url: string }[];
 };
 

@@ -10,6 +10,7 @@ import {
   LogOut,
   ExternalLink,
   Image as ImageIcon,
+  ClipboardList,
 } from "lucide-react";
 import type { AriesEvent, Member, Project, TeamData } from "@/lib/types";
 import { ProfileEditor } from "./ProfileEditor";
@@ -17,18 +18,21 @@ import { ProjectForm } from "./ProjectForm";
 import { EventForm } from "./EventForm";
 import { MemberForm } from "./MemberForm";
 import { ImageField } from "./ImageField";
+import { ApprovalsPanel } from "./ApprovalsPanel";
 import { useAuth } from "@/context/AuthContext";
+import { canApprove } from "@/lib/roles";
 import { cn } from "@/lib/utils";
 
-const TABS = [
+const BASE_TABS = [
   { id: "members", label: "Members", icon: Users },
   { id: "projects", label: "Projects", icon: FolderPlus },
   { id: "events", label: "Events", icon: CalendarPlus },
   { id: "team-photo", label: "Team photo", icon: ImageIcon },
   { id: "profile", label: "My profile", icon: UserRound },
+  { id: "approvals", label: "Approvals", icon: ClipboardList },
 ] as const;
 
-type TabId = (typeof TABS)[number]["id"];
+type TabId = (typeof BASE_TABS)[number]["id"];
 
 /**
  * Full CMS shell — create/edit members, projects, events, team photos.
@@ -45,6 +49,10 @@ export function AdminTabs({
   team: TeamData;
 }) {
   const { session, signOut, role } = useAuth();
+  const showApprovals = canApprove(session?.level); // OC / Co-OC / Research Lead only
+  const TABS = showApprovals
+    ? BASE_TABS
+    : BASE_TABS.filter((t) => t.id !== "approvals");
   const [tab, setTab] = useState<TabId>("projects");
   const [editMember, setEditMember] = useState<string>("");
   const [editProject, setEditProject] = useState<string>("");
@@ -70,6 +78,7 @@ export function AdminTabs({
     };
     const res = await fetch("/api/admin/save", {
       method: "POST",
+      credentials: "include",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ kind: "team", slug: "team", data: next }),
     });
@@ -241,6 +250,8 @@ export function AdminTabs({
         {tab === "profile" && !member && (
           <p className="text-sm text-ink/60">No personal profile linked to this login.</p>
         )}
+
+        {tab === "approvals" && showApprovals && <ApprovalsPanel />}
       </div>
     </div>
   );

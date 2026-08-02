@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export async function POST() {
-  // Tokens are self-contained; client clears localStorage/cookie.
+  const supabase = await createSupabaseServerClient();
+  await supabase.auth.signOut();
   return NextResponse.json({ ok: true });
 }

@@ -5,8 +5,8 @@ import { AlumniSection } from "@/components/sections/team/AlumniSection";
 
 export const metadata: Metadata = { title: "Team" };
 
-export default function TeamPage() {
-  const team = getTeam();
+export default async function TeamPage() {
+  const team = await getTeam();
 
   return (
     <div className="min-h-screen bg-[linear-gradient(180deg,#efe9f7_0%,#e6ddf5_45%,#f8f1e7_46%,#fbf4ec_100%)]">

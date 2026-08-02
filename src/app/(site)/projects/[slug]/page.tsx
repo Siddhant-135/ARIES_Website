@@ -18,8 +18,9 @@ import { getProject, getProjects, getMembers } from "@/lib/content";
 import { CategoryBadge } from "@/components/ui/CategoryBadge";
 import { Tag } from "@/components/ui/Tag";
 
-export function generateStaticParams() {
-  return getProjects().map((p) => ({ slug: p.slug }));
+export async function generateStaticParams() {
+  const projects = await getProjects();
+  return projects.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({
@@ -28,7 +29,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const p = getProject(slug);
+  const p = await getProject(slug);
   return { title: p ? `${p.name}${p.accent ? ` ${p.accent}` : ""}` : "Project" };
 }
 
@@ -41,10 +42,10 @@ export default async function ProjectDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const project = getProject(slug);
+  const project = await getProject(slug);
   if (!project) notFound();
 
-  const members = getMembers();
+  const members = await getMembers();
   const contributors = (project.contributors ?? [])
     .map((c) => members.find((m) => m.slug === c))
     .filter(Boolean);
@@ -104,15 +105,25 @@ export default async function ProjectDetailPage({
             </div>
           </div>
 
-          <div className="relative aspect-[3/2] overflow-hidden rounded-3xl bg-[radial-gradient(circle_at_50%_45%,#2c2069_0%,#161042_55%,#0d0a30_100%)] shadow-[0px_30px_60px_rgba(21,14,65,0.35)]">
-            {project.image ? (
-              <Image src={project.image} alt="" fill className="object-cover" sizes="560px" />
-            ) : (
-              <div className="grid h-full place-items-center">
-                <span className="grid size-24 place-items-center rounded-full bg-white/10">
-                  <Mic size={44} className="text-white" />
-                </span>
-              </div>
+          <div className="space-y-4">
+            <div className="relative aspect-[3/2] overflow-hidden rounded-3xl bg-[radial-gradient(circle_at_50%_45%,#2c2069_0%,#161042_55%,#0d0a30_100%)] shadow-[0px_30px_60px_rgba(21,14,65,0.35)]">
+              {project.image ? (
+                <Image src={project.image} alt="" fill className="object-cover" sizes="560px" />
+              ) : (
+                <div className="grid h-full place-items-center">
+                  <span className="grid size-24 place-items-center rounded-full bg-white/10">
+                    <Mic size={44} className="text-white" />
+                  </span>
+                </div>
+              )}
+            </div>
+            {project.video && (
+              <video
+                src={project.video}
+                controls
+                playsInline
+                className="aspect-video w-full overflow-hidden rounded-3xl bg-black shadow-[0px_30px_60px_rgba(21,14,65,0.25)]"
+              />
             )}
           </div>
         </div>

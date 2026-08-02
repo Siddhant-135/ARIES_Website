@@ -5,8 +5,8 @@ import { EventsExplorer } from "@/components/sections/events/EventsExplorer";
 
 export const metadata: Metadata = { title: "Events" };
 
-export default function EventsPage() {
-  const { upcoming, past } = splitEvents();
+export default async function EventsPage() {
+  const { upcoming, past } = await splitEvents();
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-[linear-gradient(178deg,#fffaf3_1%,#fbf5ec_64%,#8378ff_140%)]">

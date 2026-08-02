@@ -1,16 +1,23 @@
 import { NextResponse } from "next/server";
-import fs from "node:fs";
-import path from "node:path";
 import { randomBytes } from "node:crypto";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 const KINDS = new Set(["members", "projects", "events", "team", "misc"]);
-const MAX_BYTES = 8 * 1024 * 1024;
+const IMAGE_MAX = 8 * 1024 * 1024;
+const VIDEO_MAX = 40 * 1024 * 1024;
 
-/**
- * Upload an image into public/images/<kind>/.
- * multipart form: file, kind?
- */
+const IMAGE_EXT = new Set(["jpg", "jpeg", "png", "webp", "gif"]);
+const VIDEO_EXT = new Set(["mp4", "webm", "mov"]);
+
 export async function POST(req: Request) {
+  const supabase = await createSupabaseServerClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const form = await req.formData();
   const file = form.get("file");
   const kind = String(form.get("kind") ?? "misc");
@@ -21,22 +28,46 @@ export async function POST(req: Request) {
   if (!KINDS.has(kind)) {
     return NextResponse.json({ error: "invalid kind" }, { status: 400 });
   }
-  if (file.size > MAX_BYTES) {
-    return NextResponse.json({ error: "file too large (max 8MB)" }, { status: 400 });
+
+  const ext = (file.name.split(".").pop() || "").toLowerCase();
+  const isImage = IMAGE_EXT.has(ext);
+  const isVideo = VIDEO_EXT.has(ext);
+  if (!isImage && !isVideo) {
+    return NextResponse.json(
+      { error: "unsupported type (images: jpg/png/webp/gif; video: mp4/webm/mov)" },
+      { status: 400 },
+    );
+  }
+  if (isImage && file.size > IMAGE_MAX) {
+    return NextResponse.json({ error: "image too large (max 8MB)" }, { status: 400 });
+  }
+  if (isVideo && file.size > VIDEO_MAX) {
+    return NextResponse.json({ error: "video too large (max 40MB — keep clips short)" }, { status: 400 });
   }
 
-  const ext = path.extname(file.name || "").toLowerCase() || ".jpg";
-  const allowed = new Set([".jpg", ".jpeg", ".png", ".webp", ".gif"]);
-  if (!allowed.has(ext)) {
-    return NextResponse.json({ error: "unsupported image type" }, { status: 400 });
-  }
-
-  const dir = path.join(process.cwd(), "public", "images", kind);
-  fs.mkdirSync(dir, { recursive: true });
-  const filename = `${Date.now()}-${randomBytes(4).toString("hex")}${ext}`;
+  const filename = `${Date.now()}-${randomBytes(4).toString("hex")}.${ext}`;
+  const path = `${kind}/${isVideo ? "video/" : ""}${filename}`;
   const buf = Buffer.from(await file.arrayBuffer());
-  fs.writeFileSync(path.join(dir, filename), buf);
 
-  const url = `/images/${kind}/${filename}`;
-  return NextResponse.json({ ok: true, url });
+  const contentType =
+    file.type ||
+    (isVideo
+      ? ext === "mov"
+        ? "video/quicktime"
+        : `video/${ext}`
+      : `image/${ext === "jpg" ? "jpeg" : ext}`);
+
+  const { error } = await supabase.storage.from("media").upload(path, buf, {
+    contentType,
+    upsert: false,
+  });
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 400 });
+  }
+
+  const {
+    data: { publicUrl },
+  } = supabase.storage.from("media").getPublicUrl(path);
+
+  return NextResponse.json({ ok: true, url: publicUrl, type: isVideo ? "video" : "image" });
 }

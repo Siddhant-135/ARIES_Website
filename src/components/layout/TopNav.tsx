@@ -6,6 +6,7 @@ import { Menu, X } from "lucide-react";
 import { topNavLinks } from "@/config/nav";
 import { colors } from "@/config/colors";
 import { AriesLogo } from "./AriesLogo";
+import { UserMenu } from "./UserMenu";
 import { cn } from "@/lib/utils";
 
 /**
@@ -62,6 +63,7 @@ export function TopNav() {
           >
             Contact Us →
           </Link>
+          <UserMenu tone="light" />
         </nav>
 
         <button
@@ -93,6 +95,9 @@ export function TopNav() {
           >
             Contact Us →
           </Link>
+          <div className="mt-3 px-2">
+            <UserMenu tone="light" />
+          </div>
         </nav>
       )}
     </header>

@@ -7,8 +7,8 @@ import { ProjectsExplorer } from "@/components/sections/projects/ProjectsExplore
 
 export const metadata: Metadata = { title: "Projects" };
 
-export default function ProjectsPage() {
-  const projects = getProjects();
+export default async function ProjectsPage() {
+  const projects = await getProjects();
 
   return (
     <div className="min-h-screen bg-[linear-gradient(180deg,#fbf7f0_35%,#b5a0ea_130%)]">

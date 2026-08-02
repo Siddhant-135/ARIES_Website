@@ -1,12 +1,22 @@
 import { NextResponse } from "next/server";
-import { verifyAdminToken } from "@/lib/admin-session";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-export async function GET(req: Request) {
-  const header = req.headers.get("authorization") || "";
-  const token = header.match(/^Bearer\s+(.+)$/i)?.[1] ?? null;
-  const session = verifyAdminToken(token);
-  if (!session) {
+export async function GET() {
+  const supabase = await createSupabaseServerClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  return NextResponse.json(session);
+  const level = String(user.app_metadata?.level ?? "");
+  const memberSlug = String(user.app_metadata?.member_slug ?? "");
+  return NextResponse.json({
+    token: "",
+    memberSlug,
+    level,
+    name: String(user.user_metadata?.name || memberSlug || "Member"),
+    email: user.email ?? "",
+    role: level,
+  });
 }

@@ -1,0 +1,85 @@
+"use client";
+
+import { useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import type { Member } from "@/lib/types";
+import { useAuth } from "@/context/AuthContext";
+import { canApprove } from "@/lib/roles";
+import { ProfileEditor } from "@/components/admin/ProfileEditor";
+import { ApprovalsPanel } from "@/components/admin/ApprovalsPanel";
+import { cn } from "@/lib/utils";
+
+export function ProfileSection({ members }: { members: Member[] }) {
+  const { session, loading } = useAuth();
+  const params = useSearchParams();
+  const showApprovals = canApprove(session?.level);
+  const initialTab =
+    params.get("tab") === "approvals" && showApprovals ? "approvals" : "profile";
+  const [tab, setTab] = useState<"profile" | "approvals">(initialTab);
+
+  const member = useMemo(
+    () => members.find((m) => m.slug === session?.memberSlug) ?? null,
+    [members, session?.memberSlug],
+  );
+
+  if (loading) {
+    return <p className="text-sm text-[#31217a]/70">Loading…</p>;
+  }
+  if (!session) {
+    return (
+      <p className="rounded-2xl bg-white/70 px-5 py-4 text-sm text-[#31217a]">
+        Please <a className="font-bold text-purple underline" href="/admin">sign in</a> to edit your
+        profile.
+      </p>
+    );
+  }
+
+  return (
+    <div>
+      <div className="mb-6 flex flex-wrap gap-2">
+        <button
+          type="button"
+          onClick={() => setTab("profile")}
+          className={cn(
+            "rounded-full px-5 py-2.5 text-sm font-bold",
+            tab === "profile" ? "bg-[#140b3c] text-white" : "bg-white/70 text-[#140b3c]",
+          )}
+        >
+          My profile
+        </button>
+        {showApprovals && (
+          <button
+            type="button"
+            onClick={() => setTab("approvals")}
+            className={cn(
+              "rounded-full px-5 py-2.5 text-sm font-bold",
+              tab === "approvals" ? "bg-[#140b3c] text-white" : "bg-white/70 text-[#140b3c]",
+            )}
+          >
+            Approvals
+          </button>
+        )}
+      </div>
+
+      {tab === "profile" && member && (
+        <div className="rounded-3xl bg-white/85 p-4 shadow-[0_18px_40px_rgba(35,24,100,0.12)] backdrop-blur md:p-6">
+          <ProfileEditor member={member} />
+        </div>
+      )}
+      {tab === "profile" && !member && (
+        <p className="rounded-2xl bg-white/70 px-5 py-4 text-sm text-[#31217a]">
+          No profile is linked to this login yet. Sign up with your Kerberos ID after your IITD mail
+          is on the roster.
+        </p>
+      )}
+      {tab === "approvals" && showApprovals && (
+        <div className="rounded-3xl bg-white/85 p-4 shadow-[0_18px_40px_rgba(35,24,100,0.12)] backdrop-blur md:p-6">
+          <p className="mb-4 text-sm text-[#31217a]/75">
+            Review executive submissions. Approving applies the change immediately.
+          </p>
+          <ApprovalsPanel />
+        </div>
+      )}
+    </div>
+  );
+}

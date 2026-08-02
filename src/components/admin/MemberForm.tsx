@@ -49,6 +49,7 @@ export function MemberForm({
     setStatus("saving");
     const res = await fetch("/api/admin/save", {
       method: "POST",
+      credentials: "include",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ kind: "members", slug, data }),
     });

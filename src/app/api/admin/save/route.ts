@@ -1,46 +1,100 @@
 import { NextResponse } from "next/server";
-import fs from "node:fs";
-import path from "node:path";
-import Database from "better-sqlite3";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
+import {
+  canDirectPublish,
+  canSubmitForApproval,
+  isLeadership,
+} from "@/lib/roles";
 
-const ALLOWED = new Set(["members", "projects", "events", "team"]);
-const SLUG_RE = /^[a-z0-9][a-z0-9-]*$/;
+async function sessionInfo(supabase: Awaited<ReturnType<typeof createSupabaseServerClient>>) {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return null;
+  const level = String(user.app_metadata?.level ?? "");
+  const memberSlug = String(user.app_metadata?.member_slug ?? "");
+  return {
+    user,
+    level,
+    memberSlug,
+    name: String(user.user_metadata?.name || memberSlug || "Member"),
+    email: user.email ?? "",
+  };
+}
 
-function mirrorToDb(kind: string, slug: string, data: Record<string, unknown>) {
-  const dbPath = path.join(process.cwd(), "database", "aries.db");
-  if (!fs.existsSync(dbPath)) return;
-  const db = new Database(dbPath);
-  try {
-    const payload = JSON.stringify({ ...data, slug: kind === "team" ? undefined : slug });
-    if (kind === "members") {
-      db.prepare(
-        `INSERT INTO members (slug, data, email, level) VALUES (?, ?, ?, ?)
-         ON CONFLICT(slug) DO UPDATE SET data = excluded.data, updated_at = datetime('now')`,
-      ).run(slug, JSON.stringify({ ...data, slug }), `${slug}@aries-iitd.in`, "member");
-    } else if (kind === "projects") {
-      db.prepare(
-        `INSERT INTO projects (slug, data, section, featured) VALUES (?, ?, ?, ?)
-         ON CONFLICT(slug) DO UPDATE SET data = excluded.data, featured = excluded.featured, updated_at = datetime('now')`,
-      ).run(slug, JSON.stringify({ ...data, slug }), (data.category as string) ?? null, data.featured ? 1 : 0);
-    } else if (kind === "events") {
-      db.prepare(
-        `INSERT INTO events (slug, data, date) VALUES (?, ?, ?)
-         ON CONFLICT(slug) DO UPDATE SET data = excluded.data, date = excluded.date, updated_at = datetime('now')`,
-      ).run(slug, JSON.stringify({ ...data, slug }), (data.date as string) ?? null);
-    } else if (kind === "team") {
-      db.prepare(
-        `INSERT INTO team (id, data) VALUES (1, ?) ON CONFLICT(id) DO UPDATE SET data = excluded.data`,
-      ).run(JSON.stringify(data));
-    }
-  } finally {
-    db.close();
+async function publishDirect(
+  supabase: Awaited<ReturnType<typeof createSupabaseServerClient>>,
+  kind: "projects" | "events" | "team",
+  slug: string | undefined,
+  payload: Record<string, unknown>,
+  memberSlug: string,
+  level: string,
+) {
+  const entitySlug = kind === "team" ? "team" : slug!;
+  let before: unknown = null;
+
+  if (kind === "projects") {
+    const { data: row } = await supabase.from("projects").select("data").eq("slug", slug!).maybeSingle();
+    before = row?.data ?? null;
+    const { error } = await supabase.from("projects").upsert({
+      slug: slug!,
+      data: payload,
+      featured: !!payload.featured,
+      updated_at: new Date().toISOString(),
+    });
+    if (error) return { error: error.message };
+  } else if (kind === "events") {
+    const { data: row } = await supabase.from("events").select("data").eq("slug", slug!).maybeSingle();
+    before = row?.data ?? null;
+    const { error } = await supabase.from("events").upsert({
+      slug: slug!,
+      data: payload,
+      date: (payload.date as string) || null,
+      updated_at: new Date().toISOString(),
+    });
+    if (error) return { error: error.message };
+  } else {
+    const { data: row } = await supabase.from("team").select("data").eq("id", 1).maybeSingle();
+    before = row?.data ?? null;
+    const { error } = await supabase.from("team").upsert({
+      id: 1,
+      data: payload,
+      updated_at: new Date().toISOString(),
+    });
+    if (error) return { error: error.message };
   }
+
+  await supabase.from("change_log").insert({
+    entity_type: kind === "team" ? "team" : kind.slice(0, -1),
+    entity_slug: entitySlug,
+    actor_slug: memberSlug,
+    actor_level: level,
+    source: "direct",
+    summary: `Direct publish ${kind}`,
+    before_data: before,
+    after_data: payload,
+  });
+
+  return { ok: true as const };
 }
 
 export async function POST(req: Request) {
-  const { kind, slug, data } = await req.json();
+  const supabase = await createSupabaseServerClient();
+  const session = await sessionInfo(supabase);
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
-  if (!ALLOWED.has(kind)) {
+  const { kind, slug, data } = (await req.json()) as {
+    kind?: string;
+    slug?: string;
+    data?: Record<string, unknown>;
+  };
+
+  const ALLOWED = new Set(["members", "projects", "events", "team"]);
+  const SLUG_RE = /^[a-z0-9][a-z0-9-]*$/;
+
+  if (!kind || !ALLOWED.has(kind)) {
     return NextResponse.json({ error: "Invalid kind" }, { status: 400 });
   }
   if (kind !== "team" && (typeof slug !== "string" || !SLUG_RE.test(slug))) {
@@ -50,23 +104,68 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid data" }, { status: 400 });
   }
 
-  if (kind === "team") {
-    fs.writeFileSync(
-      path.join(process.cwd(), "content", "team.json"),
-      JSON.stringify(data, null, 2) + "\n",
-    );
-  } else {
-    const dir = path.join(process.cwd(), "content", kind);
-    fs.mkdirSync(dir, { recursive: true });
-    const payload = { ...data, slug };
-    fs.writeFileSync(path.join(dir, `${slug}.json`), JSON.stringify(payload, null, 2) + "\n");
+  const { level, memberSlug } = session;
+  const payload = kind === "team" ? data : { ...data, slug };
+
+  if (kind === "members") {
+    const isOwn = memberSlug === slug;
+    if (!isOwn && !isLeadership(level) && level !== "coordinator") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
+    const { data: before } = await supabase.from("members").select("data").eq("slug", slug!).maybeSingle();
+    const { error } = await supabase.from("members").upsert({
+      slug: slug!,
+      data: payload,
+      updated_at: new Date().toISOString(),
+    });
+    if (error) return NextResponse.json({ error: error.message }, { status: 400 });
+
+    await supabase.from("change_log").insert({
+      entity_type: "member",
+      entity_slug: slug!,
+      actor_slug: memberSlug,
+      actor_level: level,
+      source: "direct",
+      summary: isOwn ? "Updated own profile" : `Updated member ${slug}`,
+      before_data: before?.data ?? null,
+      after_data: payload,
+    });
+
+    return NextResponse.json({ ok: true, mode: "direct" });
   }
 
-  try {
-    mirrorToDb(kind, slug ?? "team", data as Record<string, unknown>);
-  } catch (err) {
-    console.warn("[admin/save] DB mirror failed:", err);
+  if (kind === "projects" || kind === "events" || kind === "team") {
+    // Coordinators + leadership: always live
+    if (canDirectPublish(level)) {
+      const result = await publishDirect(supabase, kind, slug, payload, memberSlug, level);
+      if ("error" in result && result.error) {
+        return NextResponse.json({ error: result.error }, { status: 400 });
+      }
+      return NextResponse.json({ ok: true, mode: "direct" });
+    }
+
+    // Executives: queue for leadership approval
+    if (canSubmitForApproval(level)) {
+      const entityType = kind === "projects" ? "project" : kind === "events" ? "event" : "team";
+      const entitySlug = kind === "team" ? "team" : slug!;
+      const { error } = await supabase.from("change_requests").insert({
+        entity_type: entityType,
+        entity_slug: entitySlug,
+        payload,
+        submitted_by: memberSlug,
+        status: "pending",
+      });
+      if (error) return NextResponse.json({ error: error.message }, { status: 400 });
+      return NextResponse.json({
+        ok: true,
+        mode: "pending",
+        message: "Submitted for approval by OC / Co-Overall Coordinator / Research Lead",
+      });
+    }
+
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  return NextResponse.json({ ok: true });
+  return NextResponse.json({ error: "Unhandled" }, { status: 400 });
 }

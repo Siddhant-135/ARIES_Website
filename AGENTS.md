@@ -1,6 +1,7 @@
 # ARIES Website — agent map
 
-Next.js (App Router) + TypeScript + Tailwind v4. Content is JSON; UI is small
+Next.js (App Router) + TypeScript + Tailwind v4. Live content is Supabase
+(ARIES_Website project); `content/*.json` is a backup. UI is small
 single-purpose components. Find the file, make the change, done.
 
 ## To change X, edit Y
@@ -11,11 +12,11 @@ single-purpose components. Find the file, make the change, done.
 | Shadows, radii, glow/ring utility classes | `src/app/globals.css` |
 | Nav links (sidebar, top navbar, footer columns) | `src/config/nav.ts` |
 | Club socials / email / address | `src/config/socials.ts` |
-| A member's profile content | `content/members/<slug>.json` (blocks array = section order; `span: full\|half`) |
-| A project | `content/projects/<slug>.json` |
-| An event | `content/events/<slug>.json` (date decides upcoming vs past) |
-| Resources list | `content/resources.json` |
-| Team rosters / years / alumni | `content/team.json` |
+| A member's profile content | Supabase `members` (backup: `content/members/<slug>.json`) |
+| A project | Supabase `projects` (backup: `content/projects/<slug>.json`) |
+| An event | Supabase `events` (backup: `content/events/<slug>.json`) |
+| Resources list | Supabase `resources` (backup: `content/resources.json`) |
+| Team rosters / years / alumni | Supabase `team` (backup: `content/team.json`) |
 | Content schemas (add a field) | `src/lib/types.ts`, readers in `src/lib/content.ts` |
 | Left sidebar (collapse, mobile drawer, art) | `src/components/layout/Sidebar.tsx` |
 | Landing top navbar | `src/components/layout/TopNav.tsx` |
@@ -28,15 +29,19 @@ single-purpose components. Find the file, make the change, done.
 | Resources page UI | `src/components/sections/resources/ResourcesExplorer.tsx` |
 | Contact page | `src/app/(site)/contact/page.tsx`, form: `src/components/sections/contact/ContactForm.tsx` |
 | Club email / LinkedIn | `src/config/socials.ts` |
-| Member login | `/admin` (nav link); temporary creds `admin` / `testpwd` via API |
+| Member login | `/admin` — username/entry number + password (Supabase Auth); temp bootstrap `admin` / `password` |
 | Profile page layout / hero / back-button logic | `src/app/[slug]/page.tsx` |
 | How a profile section renders | `src/components/profile/blocks.tsx` (one renderer per block type) |
 | Profile 2-column packing | `src/components/profile/BlockGrid.tsx` |
-| Admin login (stub) | `src/app/admin/page.tsx` |
-| Admin editor (drag-drop blocks, project/event forms) | `src/components/admin/*` |
-| Content write API | `src/app/api/admin/save/route.ts` (also mirrors into SQLite) |
-| Express backend (CRUD + auth) | `aries-website/` → `http://localhost:4000` |
-| SQLite schema / seed | `database/` (`npm run db:seed`) |
+| Admin login | `src/app/admin/page.tsx` |
+| Admin editor (drag-drop blocks, project/event forms, approvals) | `src/components/admin/*` |
+| Content write API | `src/app/api/admin/save/route.ts` → Supabase (+ approval queue for executives) |
+| Image uploads | `src/app/api/admin/upload/route.ts` → Supabase Storage `media` |
+| Seed / re-import JSON → Supabase | `npm run db:seed:supabase` (needs `SUPABASE_SERVICE_ROLE_KEY`) |
+| Export Supabase → JSON backup | `npm run content:export` |
+| Import member passwords from Form CSV | `npm run auth:import-credentials -- file.csv` |
+| Express backend (legacy CRUD) | `aries-website/` → `http://localhost:4000` |
+| SQLite schema / seed (legacy) | `database/` (`npm run db:seed`) |
 | Import members from Excel + Drive photos | `npm run import:excel -- <file.xlsx>` → `scripts/import-from-excel.mjs` |
 
 ## Routing
@@ -44,18 +49,18 @@ single-purpose components. Find the file, make the change, done.
 - `/` landing (own top navbar, no sidebar)
 - `/(site)/...` = events, projects, team, resources, contact + detail pages — all share the collapsible sidebar via `src/app/(site)/layout.tsx`
 - `/<member-slug>` member profile at the root (short URLs). Static routes win over the dynamic slug. `?from=team` or `?from=project:<slug>` renders the "Back to X" button.
-- `/admin` stub login → `/admin/editor`
+- `/admin` login → `/admin/editor`
 
 ## Conventions
 
-- Public pages read via `src/lib/content.ts` (JSON under `content/`).
-- Live CRUD/auth: Express API in `aries-website/` backed by `database/aries.db`.
-- After content changes offline: `npm run db:seed`. Run API with `npm run dev:api`.
-- Images live in `public/images/{brand,landing,sidebar,projects}`.
+- Public pages read via `src/lib/content.ts` (Supabase). Keep `content/` as backup.
+- Roles (`app_metadata.level`): `oc` | `co_overall_coordinator` | `research_lead` | `coordinator` | `executive` | `member` | `alumni`.
+- Executives: own profile free; project/event/team edits need approval. Coordinators + leadership direct-publish.
+- Env: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, server `SUPABASE_SERVICE_ROLE_KEY` (scripts only).
+- Images: existing `/images/...` in `public/`; new uploads → Storage bucket `media`.
 - Category chip colors: `src/components/ui/CategoryBadge.tsx`.
 - Icons: `lucide-react` (no brand icons — use monogram tiles like Contact page).
-- Run: `npm run dev`. Content saves from the admin editor only persist in dev.
+- Run: `npm run dev`.
 
 ## Contributors
 * @dv-sh - Developer / Collaborator Request
-

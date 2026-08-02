@@ -1,5 +1,8 @@
 import { Sidebar } from "@/components/layout/Sidebar";
 
+/** Revalidate content from Supabase periodically after admin edits. */
+export const revalidate = 60;
+
 /**
  * Shared chrome for all inner pages: collapsible left sidebar + content.
  * The landing page (app/page.tsx) and member profiles (app/[slug]) do NOT

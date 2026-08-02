@@ -2,8 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { login as apiLogin, logout as apiLogout, me } from "@/lib/api";
-
-type Role = "admin" | "coordinator" | "member" | "viewer";
+import { levelToUiRole, type UiRole } from "@/lib/roles";
 
 interface AuthSession {
   token: string;
@@ -15,7 +14,7 @@ interface AuthSession {
 
 interface AuthState {
   session: AuthSession | null;
-  role: Role;
+  role: UiRole;
   loading: boolean;
   signIn: (entryNumber: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
@@ -42,41 +41,25 @@ function deleteCookie(name: string) {
   document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; SameSite=Lax`;
 }
 
-function levelToRole(level: string): Role {
-  if (level === "oc") return "admin";
-  if (level === "coordinator") return "coordinator";
-  if (["executive", "member"].includes(level)) return "member";
-  return "viewer";
-}
-
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<AuthSession | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const stored = localStorage.getItem(SESSION_KEY);
-    if (!stored) {
-      deleteCookie(SESSION_KEY);
-      setLoading(false);
-      return;
-    }
-    try {
-      const parsed = JSON.parse(stored) as AuthSession;
-      me(parsed.token)
-        .then(() => {
-          setSession(parsed);
-          setCookie(SESSION_KEY, JSON.stringify(parsed));
-        })
-        .catch(() => {
-          localStorage.removeItem(SESSION_KEY);
-          deleteCookie(SESSION_KEY);
-        })
-        .finally(() => setLoading(false));
-    } catch {
-      localStorage.removeItem(SESSION_KEY);
-      deleteCookie(SESSION_KEY);
-      setLoading(false);
-    }
+    me(stored ? (JSON.parse(stored) as AuthSession).token : "")
+      .then((data) => {
+        const next = data as AuthSession;
+        localStorage.setItem(SESSION_KEY, JSON.stringify(next));
+        setCookie(SESSION_KEY, JSON.stringify(next));
+        setSession(next);
+      })
+      .catch(() => {
+        localStorage.removeItem(SESSION_KEY);
+        deleteCookie(SESSION_KEY);
+        setSession(null);
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   const signIn = async (entryNumber: string, password: string) => {
@@ -87,9 +70,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signOut = async () => {
-    if (session) {
-      apiLogout(session.token).catch(() => {});
-    }
+    await apiLogout(session?.token ?? "").catch(() => {});
     localStorage.removeItem(SESSION_KEY);
     deleteCookie(SESSION_KEY);
     setSession(null);
@@ -99,7 +80,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     <AuthContext.Provider
       value={{
         session,
-        role: session ? levelToRole(session.level) : "viewer",
+        role: session ? levelToUiRole(session.level) : "viewer",
         loading,
         signIn,
         signOut,

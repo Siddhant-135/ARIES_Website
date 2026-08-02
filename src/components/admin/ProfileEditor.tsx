@@ -16,19 +16,19 @@ import {
   useSortable,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { GripVertical, Columns2, RectangleHorizontal, Save } from "lucide-react";
+import { GripVertical, Columns2, RectangleHorizontal, Save, Plus, Trash2 } from "lucide-react";
 import type { Member, ProfileBlock } from "@/lib/types";
+import { MediaField } from "./ImageField";
 import { cn } from "@/lib/utils";
 
 /**
- * Drag-and-drop profile editor:
- * - reorder blocks vertically (drag the grip)
- * - toggle each block full-width / half-width (halves pack 2-up)
- * - edit identity fields
- * Saves the whole member JSON via /api/admin/save.
+ * Profile editor: avatar, identity, socials, drag-reorder sections.
  */
 export function ProfileEditor({ member }: { member: Member }) {
-  const [draft, setDraft] = useState<Member>(member);
+  const [draft, setDraft] = useState<Member>({
+    ...member,
+    socials: member.socials?.length ? member.socials : [],
+  });
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
@@ -57,6 +57,7 @@ export function ProfileEditor({ member }: { member: Member }) {
     setStatus("saving");
     const res = await fetch("/api/admin/save", {
       method: "POST",
+      credentials: "include",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ kind: "members", slug: draft.slug, data: draft }),
     });
@@ -68,45 +69,118 @@ export function ProfileEditor({ member }: { member: Member }) {
     setDraft((d) => ({ ...d, [key]: e.target.value }));
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[1fr_1.2fr]">
-      {/* Identity */}
-      <section className="space-y-4 rounded-2xl bg-white p-6 shadow-card-sm">
-        <h2 className="text-base font-bold text-ink">Profile details</h2>
-        <Field label="Name" value={draft.name} onChange={setField("name")} />
-        <Field label="Role" value={draft.role} onChange={setField("role")} />
-        <Field label="Year" value={draft.year ?? ""} onChange={setField("year")} />
-        <Field label="Location" value={draft.location ?? ""} onChange={setField("location")} />
-        <label className="block">
-          <span className="text-xs font-semibold text-ink">Tagline</span>
-          <textarea
-            value={draft.tagline}
-            onChange={setField("tagline")}
-            rows={3}
-            className="mt-1.5 w-full rounded-lg bg-[#f3eef8] px-3.5 py-2.5 text-sm outline-none focus:ring-2 focus:ring-purple/40"
+    <div className="space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h2 className="text-base font-bold text-ink">Edit profile</h2>
+        <button
+          onClick={save}
+          disabled={status === "saving"}
+          className="flex items-center gap-2 rounded-lg bg-purple px-5 py-2.5 text-sm font-bold text-white disabled:opacity-50"
+        >
+          <Save size={15} />
+          {status === "saving"
+            ? "Saving…"
+            : status === "saved"
+              ? "Saved ✓"
+              : status === "error"
+                ? "Failed — retry"
+                : "Save profile"}
+        </button>
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        <section className="space-y-4 rounded-2xl bg-white p-6 shadow-card-sm">
+          <h3 className="text-sm font-bold text-ink">Photo & identity</h3>
+          <MediaField
+            label="Profile photo"
+            kind="members"
+            value={draft.avatar}
+            onChange={(url) => setDraft((d) => ({ ...d, avatar: url }))}
+            accept="image"
           />
-        </label>
-        <Field label="Resume URL" value={draft.resumeUrl ?? ""} onChange={setField("resumeUrl")} />
-      </section>
+          <Field label="Name" value={draft.name} onChange={setField("name")} />
+          <Field label="Role" value={draft.role} onChange={setField("role")} />
+          <Field label="Year" value={draft.year ?? ""} onChange={setField("year")} />
+          <Field label="Location" value={draft.location ?? ""} onChange={setField("location")} />
+          <label className="block">
+            <span className="text-xs font-semibold text-ink">Tagline</span>
+            <textarea
+              value={draft.tagline}
+              onChange={setField("tagline")}
+              rows={3}
+              className="mt-1.5 w-full rounded-lg bg-[#f3eef8] px-3.5 py-2.5 text-sm outline-none focus:ring-2 focus:ring-purple/40"
+            />
+          </label>
+          <Field label="Resume URL" value={draft.resumeUrl ?? ""} onChange={setField("resumeUrl")} />
+        </section>
 
-      {/* Blocks */}
-      <section className="rounded-2xl bg-white p-6 shadow-card-sm">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-base font-bold text-ink">Sections</h2>
-            <p className="mt-1 text-xs text-ink/60">
-              Drag to reorder. Toggle width — two half-width sections sit side by side.
-            </p>
+        <section className="space-y-4 rounded-2xl bg-white p-6 shadow-card-sm">
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-bold text-ink">Social links</h3>
+            <button
+              type="button"
+              onClick={() =>
+                setDraft((d) => ({
+                  ...d,
+                  socials: [...(d.socials ?? []), { label: "Link", url: "" }],
+                }))
+              }
+              className="flex items-center gap-1 text-xs font-bold text-purple"
+            >
+              <Plus size={14} /> Add
+            </button>
           </div>
-          <button
-            onClick={save}
-            disabled={status === "saving"}
-            className="flex items-center gap-2 rounded-lg bg-purple px-5 py-2.5 text-sm font-bold text-white disabled:opacity-50"
-          >
-            <Save size={15} />
-            {status === "saving" ? "Saving..." : status === "saved" ? "Saved ✓" : status === "error" ? "Failed — retry" : "Save"}
-          </button>
-        </div>
+          {(draft.socials ?? []).length === 0 && (
+            <p className="text-xs text-ink/50">No social links yet.</p>
+          )}
+          {(draft.socials ?? []).map((s, i) => (
+            <div key={i} className="flex gap-2">
+              <input
+                value={s.label}
+                onChange={(e) =>
+                  setDraft((d) => {
+                    const socials = [...(d.socials ?? [])];
+                    socials[i] = { ...socials[i], label: e.target.value };
+                    return { ...d, socials };
+                  })
+                }
+                placeholder="Label"
+                className="w-28 rounded-lg bg-[#f3eef8] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-purple/40"
+              />
+              <input
+                value={s.url}
+                onChange={(e) =>
+                  setDraft((d) => {
+                    const socials = [...(d.socials ?? [])];
+                    socials[i] = { ...socials[i], url: e.target.value };
+                    return { ...d, socials };
+                  })
+                }
+                placeholder="https://…"
+                className="min-w-0 flex-1 rounded-lg bg-[#f3eef8] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-purple/40"
+              />
+              <button
+                type="button"
+                onClick={() =>
+                  setDraft((d) => ({
+                    ...d,
+                    socials: (d.socials ?? []).filter((_, j) => j !== i),
+                  }))
+                }
+                className="rounded-lg p-2 text-ink/40 hover:bg-red-50 hover:text-red-600"
+              >
+                <Trash2 size={15} />
+              </button>
+            </div>
+          ))}
+        </section>
+      </div>
 
+      <section className="rounded-2xl bg-white p-6 shadow-card-sm">
+        <h3 className="text-sm font-bold text-ink">Sections</h3>
+        <p className="mt-1 text-xs text-ink/60">
+          Drag to reorder. Toggle width — two half-width sections sit side by side.
+        </p>
         <DndContext
           id="profile-blocks-dnd"
           sensors={sensors}
@@ -121,6 +195,9 @@ export function ProfileEditor({ member }: { member: Member }) {
             </ul>
           </SortableContext>
         </DndContext>
+        {draft.blocks.length === 0 && (
+          <p className="mt-4 text-xs text-ink/50">No content sections yet — save identity first.</p>
+        )}
       </section>
     </div>
   );
@@ -139,34 +216,29 @@ function SortableBlockRow({
   return (
     <li
       ref={setNodeRef}
-      style={{ transform: CSS.Transform.toString(transform), transition }}
+      style={{
+        transform: CSS.Transform.toString(transform),
+        transition,
+        gridColumn: block.span === "full" ? "1 / -1" : undefined,
+      }}
       className={cn(
-        "flex items-center gap-3 rounded-xl border border-[#e9e2f6] bg-[#faf8fd] px-3 py-3",
-        block.span === "full" ? "col-span-2" : "col-span-2 sm:col-span-1",
-        isDragging && "z-10 shadow-card",
+        "flex items-center gap-2 rounded-xl border border-ink/10 bg-[#f8f4fc] px-3 py-2.5",
+        isDragging && "z-10 shadow-lg",
       )}
     >
-      <button
-        {...attributes}
-        {...listeners}
-        aria-label="Drag to reorder"
-        className="cursor-grab text-ink/40 hover:text-ink active:cursor-grabbing"
-      >
-        <GripVertical size={17} />
+      <button type="button" className="cursor-grab text-ink/40" {...attributes} {...listeners}>
+        <GripVertical size={16} />
       </button>
-      <span className="flex-1 text-sm font-bold text-ink">
-        {block.title ?? block.type}
-        <span className="ml-2 rounded bg-lilac px-1.5 py-0.5 text-[10px] font-semibold text-purple">
-          {block.type}
-        </span>
+      <span className="min-w-0 flex-1 truncate text-xs font-semibold text-ink">
+        {block.title || block.type}
       </span>
       <button
+        type="button"
         onClick={onToggleSpan}
+        className="rounded-lg p-1.5 text-ink/50 hover:bg-white"
         title={block.span === "full" ? "Make half width" : "Make full width"}
-        className="flex items-center gap-1.5 rounded-lg border border-[#e0d6f2] bg-white px-2.5 py-1.5 text-[11px] font-semibold text-ink/70 hover:text-purple"
       >
-        {block.span === "full" ? <RectangleHorizontal size={13} /> : <Columns2 size={13} />}
-        {block.span}
+        {block.span === "full" ? <RectangleHorizontal size={14} /> : <Columns2 size={14} />}
       </button>
     </li>
   );

@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, Menu, X } from "lucide-react";
 import { sidebarLinks } from "@/config/nav";
+import { UserMenu } from "@/components/layout/UserMenu";
 import { cn } from "@/lib/utils";
 
 /**
@@ -100,6 +101,10 @@ export function Sidebar() {
             );
           })}
         </nav>
+
+        <div className="mt-4">
+          <UserMenu tone="dark" collapsed={collapsed} />
+        </div>
 
         {/* Collapse toggle */}
         <button

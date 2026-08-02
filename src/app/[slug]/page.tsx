@@ -8,6 +8,8 @@ import { BlockGrid } from "@/components/profile/BlockGrid";
 import { BackToSource } from "@/components/profile/BackToSource";
 import { initialsOf } from "@/components/cards/PersonCard";
 
+export const revalidate = 60;
+
 /**
  * Member profile at the ROOT url: aries.xyz/<member-slug>.
  * Static routes (events, projects, team, ...) always take precedence,
@@ -17,8 +19,9 @@ import { initialsOf } from "@/components/cards/PersonCard";
  * page itself stays fully static (SSG).
  */
 
-export function generateStaticParams() {
-  return getMembers().map((m) => ({ slug: m.slug }));
+export async function generateStaticParams() {
+  const members = await getMembers();
+  return members.map((m) => ({ slug: m.slug }));
 }
 
 export async function generateMetadata({
@@ -27,7 +30,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const m = getMember(slug);
+  const m = await getMember(slug);
   return { title: m ? m.name : "Profile" };
 }
 
@@ -37,12 +40,11 @@ export default async function MemberProfilePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const member = getMember(slug);
+  const member = await getMember(slug);
   if (!member) notFound();
 
-  const projectNames = Object.fromEntries(
-    getProjects().map((p) => [p.slug, p.name]),
-  );
+  const projects = await getProjects();
+  const projectNames = Object.fromEntries(projects.map((p) => [p.slug, p.name]));
 
   return (
     <div className="min-h-screen bg-[linear-gradient(175deg,#c4b2ee_0%,#b5a0ea_35%,#cabcee_70%,#b9a6ea_100%)]">

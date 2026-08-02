@@ -1,7 +1,6 @@
 /**
  * Public pages don't need this. Auth uses same-origin Next routes (`/api/auth/*`)
- * so Vercel works without the Express API. Optional Express CRUD still targets
- * NEXT_PUBLIC_API_URL when set.
+ * with Supabase session cookies.
  */
 const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
 
@@ -16,7 +15,11 @@ async function apiFetch<T>(
     ...(options.headers as Record<string, string>),
   };
   if (token) headers.Authorization = `Bearer ${token}`;
-  const res = await fetch(`${base}${path}`, { ...options, headers });
+  const res = await fetch(`${base}${path}`, {
+    ...options,
+    headers,
+    credentials: "include",
+  });
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
     throw new Error((err as { error?: string })?.error ?? `API error ${res.status}`);
@@ -26,7 +29,6 @@ async function apiFetch<T>(
 
 export const apiBase = API;
 
-/** Same-origin Next.js auth — works on Vercel without Express. */
 const AUTH = "/api";
 
 export const login = (entryNumber: string, password: string) =>
@@ -38,8 +40,17 @@ export const login = (entryNumber: string, password: string) =>
     email: string;
   }>("/auth/login", { method: "POST", body: JSON.stringify({ entryNumber, password }) }, undefined, AUTH);
 
-export const me = (token: string) => apiFetch("/auth/me", {}, token, AUTH);
-export const logout = (token: string) => apiFetch("/auth/logout", { method: "POST" }, token, AUTH);
+export const me = (_token?: string) =>
+  apiFetch<{
+    token: string;
+    memberSlug: string;
+    level: string;
+    name: string;
+    email: string;
+  }>("/auth/me", {}, undefined, AUTH);
+
+export const logout = (_token?: string) =>
+  apiFetch("/auth/logout", { method: "POST" }, undefined, AUTH);
 
 export const getAdminStats = (token: string) =>
   apiFetch<{ members: number; projects: number; events: number; problems: number }>(

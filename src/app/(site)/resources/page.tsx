@@ -4,13 +4,14 @@ import { ResourcesExplorer } from "@/components/sections/resources/ResourcesExpl
 
 export const metadata: Metadata = { title: "Resources" };
 
-export default function ResourcesPage() {
+export default async function ResourcesPage() {
+  const resources = await getResources();
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#fbf4ec]">
       <div className="glow-circle absolute -left-24 top-4 size-72" />
       <div className="glow-circle absolute -right-28 top-60 size-96" />
       <div className="relative mx-auto max-w-[1240px] px-6 pt-14 md:px-12">
-        <ResourcesExplorer resources={getResources()} />
+        <ResourcesExplorer resources={resources} />
       </div>
     </div>
   );

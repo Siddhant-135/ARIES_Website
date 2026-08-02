@@ -2,11 +2,10 @@
 
 import { useState } from "react";
 import { Save } from "lucide-react";
-import { ImageField } from "./ImageField";
+import { MediaField } from "./ImageField";
 
 /**
- * Simplified project create/edit — essentials + cover image.
- * No empty highlight/feature scaffolding required.
+ * Simplified project create/edit — essentials + cover image + short video.
  */
 export function ProjectForm({
   initial,
@@ -22,12 +21,14 @@ export function ProjectForm({
     techStack?: string[];
     contributors?: string[];
     image?: string;
+    video?: string;
     featured?: boolean;
     links?: { label: string; url: string }[];
   };
 }) {
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const [image, setImage] = useState(initial?.image ?? "");
+  const [video, setVideo] = useState(initial?.video ?? "");
   const [featured, setFeatured] = useState(!!initial?.featured);
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -57,6 +58,7 @@ export function ProjectForm({
       techStack: csv("techStack"),
       contributors: csv("contributors"),
       image: image || undefined,
+      video: video || undefined,
       featured,
       links: [
         github && { label: "GitHub", url: github },
@@ -67,11 +69,17 @@ export function ProjectForm({
     setStatus("saving");
     const res = await fetch("/api/admin/save", {
       method: "POST",
+      credentials: "include",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ kind: "projects", slug, data }),
     });
-    setStatus(res.ok ? "saved" : "error");
-    if (res.ok && !initial?.slug) (e.target as HTMLFormElement).reset();
+    const body = await res.json().catch(() => ({}));
+    if (res.ok && body.mode === "pending") setStatus("saved");
+    else setStatus(res.ok ? "saved" : "error");
+    if (res.ok && body.mode === "pending") {
+      alert("Submitted for approval (OC / Co-Overall Coordinator / Research Lead).");
+    }
+    if (res.ok && !initial?.slug && body.mode !== "pending") (e.target as HTMLFormElement).reset();
     setTimeout(() => setStatus("idle"), 2500);
   };
 
@@ -109,7 +117,16 @@ export function ProjectForm({
         <Input name="github" label="GitHub URL" defaultValue={linkUrl("git")} />
         <Input name="demo" label="Demo / paper URL" defaultValue={linkUrl("demo") || linkUrl("arxiv")} />
       </div>
-      <ImageField label="Cover image" kind="projects" value={image} onChange={setImage} />
+      <div className="grid gap-4 sm:grid-cols-2">
+        <MediaField label="Cover image" kind="projects" value={image} onChange={setImage} accept="image" />
+        <MediaField
+          label="Short video (optional, max ~40MB)"
+          kind="projects"
+          value={video}
+          onChange={setVideo}
+          accept="video"
+        />
+      </div>
       <label className="flex items-center gap-2 text-sm font-semibold text-ink">
         <input type="checkbox" checked={featured} onChange={(e) => setFeatured(e.target.checked)} />
         Featured on projects page

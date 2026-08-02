@@ -10,7 +10,6 @@ import {
   FolderKanban,
   Users,
   Mail,
-  LogIn,
   type LucideIcon,
 } from "lucide-react";
 
@@ -20,14 +19,13 @@ export type NavLink = {
   icon: LucideIcon;
 };
 
-/** Links shown in the left sidebar (inner pages). Resources intentionally omitted. */
+/** Links shown in the left sidebar (inner pages). Resources intentionally omitted. Auth is UserMenu. */
 export const sidebarLinks: NavLink[] = [
   { label: "Home", href: "/", icon: Home },
   { label: "Events", href: "/events", icon: CalendarDays },
   { label: "Projects", href: "/projects", icon: FolderKanban },
   { label: "Team", href: "/team", icon: Users },
   { label: "Contact", href: "/contact", icon: Mail },
-  { label: "Member Login", href: "/admin", icon: LogIn },
 ];
 
 /** Links shown in the landing-page top navbar (no Home — logo does that). */
