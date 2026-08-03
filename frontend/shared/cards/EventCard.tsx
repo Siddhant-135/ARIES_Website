@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Clock, MapPin, ArrowRight } from "lucide-react";
 import type { AriesEvent } from "@/lib/types";
@@ -7,7 +8,7 @@ const DAYS = ["SUN","MON","TUE","WED","THU","FRI","SAT"];
 
 /**
  * Event card (upcoming + past variants share this component).
- * Dark image header w/ date chip, then type, title, description, time/venue.
+ * Cover image when set; otherwise dark gradient header with date chip.
  */
 export function EventCard({
   event,
@@ -23,24 +24,35 @@ export function EventCard({
       href={`/events/${event.slug}`}
       className="group flex flex-col overflow-hidden rounded-xl border border-[#ece1d7] bg-[#fffaf5] shadow-[0px_9px_19px_rgba(22,20,40,0.05)] transition-transform hover:-translate-y-1"
     >
-      {/* Image header */}
       <div
         className="relative h-40 shrink-0 p-4"
-        style={{
-          backgroundImage:
-            variant === "past"
-              ? "radial-gradient(220px 160px at 70% 80%, rgba(125,91,184,0.65), transparent 70%), linear-gradient(90deg, #080d24, #10172b)"
-              : "radial-gradient(260px 200px at 20% 85%, rgba(125,91,184,1), transparent 55%), linear-gradient(90deg, #080d24, #080d24)",
-        }}
+        style={
+          event.image
+            ? undefined
+            : {
+                backgroundImage:
+                  variant === "past"
+                    ? "radial-gradient(220px 160px at 70% 80%, rgba(125,91,184,0.65), transparent 70%), linear-gradient(90deg, #080d24, #10172b)"
+                    : "radial-gradient(260px 200px at 20% 85%, rgba(125,91,184,1), transparent 55%), linear-gradient(90deg, #080d24, #080d24)",
+              }
+        }
       >
-        <div className="flex w-12 flex-col items-center gap-1 rounded-md bg-[#fffaf4] py-1.5 shadow-lg">
+        {event.image && (
+          <Image
+            src={event.image}
+            alt=""
+            fill
+            sizes="(max-width: 768px) 100vw, 33vw"
+            className="object-cover"
+          />
+        )}
+        <div className="relative z-10 flex w-12 flex-col items-center gap-1 rounded-md bg-[#fffaf4] py-1.5 shadow-lg">
           <span className="text-[10px] text-[#344052]">{MONTHS[d.getMonth()]}</span>
           <span className="text-lg font-bold leading-none text-[#081634]">{d.getDate()}</span>
           <span className="text-[10px] text-[#344052]">{DAYS[d.getDay()]}</span>
         </div>
       </div>
 
-      {/* Body */}
       <div className="flex flex-1 flex-col px-5 py-5">
         <p className="text-[11px] font-bold uppercase tracking-[0.1em] text-[#5b4eb5]">
           {event.type}
@@ -52,7 +64,6 @@ export function EventCard({
           {event.description}
         </p>
 
-        {/* Time/venue only on upcoming cards — past events stay date + story */}
         {variant === "upcoming" && (event.startTime || event.venue) && (
           <div className="mt-4 space-y-2 border-t border-[#e8ddd2] pt-4 text-xs text-[#081634]">
             {event.startTime && (

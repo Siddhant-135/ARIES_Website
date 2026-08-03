@@ -5,8 +5,9 @@ import { Save, Trash2 } from "lucide-react";
 import type { AriesEvent } from "@/lib/types";
 import { Input, TextArea } from "./ProjectForm";
 import { MediaField } from "./ImageField";
+import { MultiImageField } from "./MultiImageField";
 
-/** Create/edit an event with optional cover image + short video. */
+/** Create/edit an event with cover image, gallery images, and optional video. */
 export function EventForm({
   initial,
   onSaved,
@@ -23,6 +24,7 @@ export function EventForm({
     description?: string;
     body?: string;
     image?: string;
+    images?: string[];
     video?: string;
     calendar?: string;
   };
@@ -32,6 +34,7 @@ export function EventForm({
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error" | "deleting">("idle");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [image, setImage] = useState(initial?.image ?? "");
+  const [images, setImages] = useState<string[]>(initial?.images ?? []);
   const [video, setVideo] = useState(initial?.video ?? "");
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -55,6 +58,7 @@ export function EventForm({
       description: String(f.get("description") ?? ""),
       body: String(f.get("body") ?? ""),
       image: image || undefined,
+      images: images.length ? images : undefined,
       video: video || undefined,
       links: calendar ? [{ label: "Save to Google Calendar", url: calendar }] : [],
     };
@@ -83,6 +87,7 @@ export function EventForm({
     if (!initial?.slug && mode === "direct") {
       form.reset();
       setImage("");
+      setImages([]);
       setVideo("");
     }
     setTimeout(() => setStatus("idle"), 2500);
@@ -142,16 +147,34 @@ export function EventForm({
       </div>
       <TextArea name="description" label="Short description (cards) *" rows={2} required defaultValue={initial?.description} />
       <TextArea name="body" label="Full description (detail page)" rows={5} defaultValue={initial?.body} />
-      <div className="grid gap-4 sm:grid-cols-2">
-        <MediaField label="Event image" kind="events" value={image} onChange={setImage} accept="image" />
-        <MediaField
-          label="Short video (optional, max ~40MB)"
+
+      <div className="space-y-4 rounded-xl border border-[#eee4d6] bg-[#fbf8ff] p-4">
+        <p className="text-xs font-bold uppercase tracking-wide text-ink/60">Media</p>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <MediaField
+            label="Cover image (1)"
+            kind="events"
+            value={image}
+            onChange={setImage}
+            accept="image"
+          />
+          <MediaField
+            label="Short video (optional, max ~40MB)"
+            kind="events"
+            value={video}
+            onChange={setVideo}
+            accept="video"
+          />
+        </div>
+        <MultiImageField
+          label="Gallery images"
           kind="events"
-          value={video}
-          onChange={setVideo}
-          accept="video"
+          value={images}
+          onChange={setImages}
+          hint="Multiple photos shown on the event page (separate from the cover)."
         />
       </div>
+
       <div className="flex flex-wrap items-center gap-3">
         <button
           disabled={status === "saving" || status === "deleting"}

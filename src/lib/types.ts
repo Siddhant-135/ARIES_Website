@@ -84,7 +84,10 @@ export type Project = {
   links?: { label: string; url: string }[];
   /** Member slugs (legacy) or rich contributor refs. */
   contributors?: Array<string | ProjectContributor>;
+  /** Cover / card image (single). */
   image?: string;
+  /** Extra photos shown in the project gallery. */
+  images?: string[];
   video?: string; // short clip URL (mp4/webm)
   featured?: boolean;
   about?: string; // long-form "About the Project" text
@@ -102,7 +105,10 @@ export type AriesEvent = {
   venue?: string;
   description: string;
   body?: string; // long description for the detail page
+  /** Cover / hero image (single). */
   image?: string;
+  /** Extra photos shown on the event detail page. */
+  images?: string[];
   video?: string; // short clip URL (mp4/webm)
   links: { label: string; url: string }[];
 };

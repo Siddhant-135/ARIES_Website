@@ -5,11 +5,12 @@ import { Save, Trash2 } from "lucide-react";
 import type { Member, Project, ProjectContributor } from "@/lib/types";
 import { normalizeContributors } from "@/lib/contributors";
 import { MediaField } from "./ImageField";
+import { MultiImageField } from "./MultiImageField";
 import { TagPicker } from "./TagPicker";
 import { PeoplePicker } from "./PeoplePicker";
 
 /**
- * Simplified project create/edit — essentials + cover image + short video.
+ * Simplified project create/edit — cover + gallery images + short video.
  */
 export function ProjectForm({
   initial,
@@ -28,6 +29,7 @@ export function ProjectForm({
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error" | "deleting">("idle");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [image, setImage] = useState(initial?.image ?? "");
+  const [images, setImages] = useState<string[]>(initial?.images ?? []);
   const [video, setVideo] = useState(initial?.video ?? "");
   const [featured, setFeatured] = useState(!!initial?.featured);
   const [tags, setTags] = useState<string[]>(initial?.tags ?? []);
@@ -66,6 +68,7 @@ export function ProjectForm({
     const data: Project = {
       slug,
       name,
+      accent: initial?.accent,
       tagline: String(f.get("tagline") ?? ""),
       description: String(f.get("description") ?? ""),
       about: String(f.get("about") ?? ""),
@@ -73,7 +76,11 @@ export function ProjectForm({
       tags,
       techStack: csv("techStack"),
       contributors,
+      features: initial?.features,
+      highlights: initial?.highlights,
+      screenshots: initial?.screenshots,
       image: image || undefined,
+      images: images.length ? images : undefined,
       video: video || undefined,
       featured,
       links: [
@@ -105,10 +112,10 @@ export function ProjectForm({
     }
     onSaved?.(data, mode);
 
-    // Reset blank create form so another project can be added without refresh
     if (!initial?.slug && mode === "direct") {
       form.reset();
       setImage("");
+      setImages([]);
       setVideo("");
       setFeatured(false);
       setTags([]);
@@ -184,16 +191,34 @@ export function ProjectForm({
         <Input name="github" label="GitHub URL" defaultValue={linkUrl("git")} />
         <Input name="demo" label="Demo / paper URL" defaultValue={linkUrl("demo") || linkUrl("arxiv")} />
       </div>
-      <div className="grid gap-4 sm:grid-cols-2">
-        <MediaField label="Cover image" kind="projects" value={image} onChange={setImage} accept="image" />
-        <MediaField
-          label="Short video (optional, max ~40MB)"
+
+      <div className="space-y-4 rounded-xl border border-[#eee4d6] bg-[#fbf8ff] p-4">
+        <p className="text-xs font-bold uppercase tracking-wide text-ink/60">Media</p>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <MediaField
+            label="Cover image (1)"
+            kind="projects"
+            value={image}
+            onChange={setImage}
+            accept="image"
+          />
+          <MediaField
+            label="Short video (optional, max ~40MB)"
+            kind="projects"
+            value={video}
+            onChange={setVideo}
+            accept="video"
+          />
+        </div>
+        <MultiImageField
+          label="Gallery images"
           kind="projects"
-          value={video}
-          onChange={setVideo}
-          accept="video"
+          value={images}
+          onChange={setImages}
+          hint="Multiple photos shown on the project page (separate from the cover)."
         />
       </div>
+
       <label className="flex items-center gap-2 text-sm font-semibold text-ink">
         <input type="checkbox" checked={featured} onChange={(e) => setFeatured(e.target.checked)} />
         Featured on projects page

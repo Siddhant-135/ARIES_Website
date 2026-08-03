@@ -18,6 +18,7 @@ import { normalizeContributors } from "@/lib/contributors";
 import { CategoryBadge } from "frontend/shared/ui/CategoryBadge";
 import { Tag } from "frontend/shared/ui/Tag";
 import { ContributorList } from "frontend/shared/projects/ContributorList";
+import { ImageGallery } from "frontend/shared/ui/ImageGallery";
 
 export async function generateStaticParams() {
   const projects = await getProjects();
@@ -53,6 +54,10 @@ export default async function ProjectDetailPage({
   const features = project.features ?? [];
   const screenshots = project.screenshots ?? [];
   const techStack = project.techStack ?? [];
+  const gallery = [
+    ...(project.images ?? []),
+    ...screenshots.map((s) => s.image).filter((src): src is string => !!src),
+  ].filter((src, i, arr) => arr.indexOf(src) === i);
 
   return (
     <div className="min-h-screen bg-[#fdf6ee]">
@@ -199,31 +204,43 @@ export default async function ProjectDetailPage({
           )}
         </div>
 
-        {screenshots.length > 0 && (
+        {gallery.length > 0 && <ImageGallery images={gallery} title="Gallery" />}
+
+        {screenshots.some((s) => s.title || s.description) && (
           <div className="mt-16">
             <SectionTitle>Screenshots</SectionTitle>
             <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {screenshots.map((s, i) => (
                 <figure
-                  key={s.title}
+                  key={s.title || `shot-${i}`}
                   className="overflow-hidden rounded-xl border border-[#eee4d6] bg-white shadow-card-sm"
                 >
-                  <div
-                    className={
-                      i === 0
-                        ? "grid h-32 place-items-center bg-[#161042]"
-                        : "grid h-32 place-items-center bg-[#efe9fb]"
-                    }
-                  >
-                    <ExternalLink
-                      size={22}
-                      className={i === 0 ? "text-white/70" : "text-purple/60"}
-                    />
-                  </div>
-                  <figcaption className="px-4 py-4">
-                    <p className="text-sm font-bold text-ink">{s.title}</p>
-                    <p className="mt-1 text-xs leading-5 text-ink/70">{s.description}</p>
-                  </figcaption>
+                  {s.image ? (
+                    <div className="relative h-32">
+                      <Image src={s.image} alt="" fill className="object-cover" sizes="280px" />
+                    </div>
+                  ) : (
+                    <div
+                      className={
+                        i === 0
+                          ? "grid h-32 place-items-center bg-[#161042]"
+                          : "grid h-32 place-items-center bg-[#efe9fb]"
+                      }
+                    >
+                      <ExternalLink
+                        size={22}
+                        className={i === 0 ? "text-white/70" : "text-purple/60"}
+                      />
+                    </div>
+                  )}
+                  {(s.title || s.description) && (
+                    <figcaption className="px-4 py-4">
+                      {s.title && <p className="text-sm font-bold text-ink">{s.title}</p>}
+                      {s.description && (
+                        <p className="mt-1 text-xs leading-5 text-ink/70">{s.description}</p>
+                      )}
+                    </figcaption>
+                  )}
                 </figure>
               ))}
             </div>

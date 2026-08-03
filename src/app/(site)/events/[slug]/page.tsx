@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CalendarDays, Clock, MapPin, CalendarPlus, ArrowLeft } from "lucide-react";
 import { getEvent, getEvents } from "@/lib/content";
+import { ImageGallery } from "frontend/shared/ui/ImageGallery";
 
 export async function generateStaticParams() {
   const events = await getEvents();
@@ -106,6 +107,10 @@ export default async function EventDetailPage({
             <p key={i}>{para}</p>
           ))}
         </div>
+
+        {(event.images?.length ?? 0) > 0 && (
+          <ImageGallery images={event.images!} title="Photos" />
+        )}
 
         {/* Calendar CTA */}
         {event.links.length > 0 && (
