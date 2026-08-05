@@ -5,6 +5,13 @@ import { Save } from "lucide-react";
 import { Input, TextArea } from "./ProjectForm";
 import { ImageField } from "./ImageField";
 
+const MEMBER_ROLES = [
+  "Research Coordinator",
+  "Coordinator",
+  "Executive",
+  "Research Executive",
+] as const;
+
 /** Create / update a member profile JSON (+ optional Kerberos for leadership). */
 export function MemberForm({
   initial,
@@ -91,7 +98,28 @@ export function MemberForm({
       <div className="grid gap-4 sm:grid-cols-2">
         <Input name="name" label="Name *" required defaultValue={initial?.name} />
         <Input name="slug" label="Slug" placeholder="auto from name" defaultValue={initial?.slug} />
-        <Input name="role" label="Role *" required defaultValue={initial?.role} placeholder="Coordinator" />
+        <label className="block">
+          <span className="text-xs font-semibold text-ink">Role *</span>
+          <select
+            name="role"
+            required
+            defaultValue={initial?.role ?? ""}
+            className="mt-1.5 w-full rounded-lg bg-[#f3eef8] px-3.5 py-2.5 text-sm outline-none focus:ring-2 focus:ring-purple/40"
+          >
+            <option value="" disabled>
+              Select role…
+            </option>
+            {initial?.role &&
+              !(MEMBER_ROLES as readonly string[]).includes(initial.role) && (
+                <option value={initial.role}>{initial.role}</option>
+              )}
+            {MEMBER_ROLES.map((r) => (
+              <option key={r} value={r}>
+                {r}
+              </option>
+            ))}
+          </select>
+        </label>
         <Input name="year" label="Year / branch" defaultValue={initial?.year} placeholder="3rd Year, CSE" />
         <Input name="location" label="Location" defaultValue={initial?.location ?? "IIT Delhi"} />
         <Input name="tagline" label="Tagline" defaultValue={initial?.tagline} />

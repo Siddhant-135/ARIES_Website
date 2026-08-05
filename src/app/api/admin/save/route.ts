@@ -289,6 +289,36 @@ export async function POST(req: Request) {
     if ("error" in result && result.error) {
       return NextResponse.json({ error: result.error }, { status: 400 });
     }
+
+    // Alumni grid photo lives on team.alumni; profile pages read members.data.avatar.
+    // Keep them in sync when an alumnus is linked by slug.
+    const alumni = Array.isArray((payload as { alumni?: unknown }).alumni)
+      ? ((payload as { alumni: Array<{ slug?: string; photo?: string }> }).alumni ?? [])
+      : [];
+    try {
+      const admin = createSupabaseServiceClient();
+      for (const a of alumni) {
+        const linked = String(a.slug ?? "").trim();
+        const photo = String(a.photo ?? "").trim();
+        if (!linked || !photo) continue;
+        const { data: row } = await admin
+          .from("members")
+          .select("data")
+          .eq("slug", linked)
+          .maybeSingle();
+        if (!row) continue;
+        const prev = (row.data as Record<string, unknown> | null) ?? {};
+        if (prev.avatar === photo) continue;
+        const { error: syncErr } = await admin
+          .from("members")
+          .update({ data: { ...prev, avatar: photo } })
+          .eq("slug", linked);
+        if (!syncErr) revalidateContent("members", linked);
+      }
+    } catch {
+      // Team save already succeeded; avatar sync is best-effort.
+    }
+
     revalidateContent("team", slug);
     return NextResponse.json({ ok: true, mode: "direct" });
   }

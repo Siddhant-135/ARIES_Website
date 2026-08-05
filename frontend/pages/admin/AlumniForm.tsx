@@ -66,15 +66,12 @@ export function AlumniForm({
     const name = String(f.get("name") ?? "").trim();
     if (!name) return;
 
-    const slugRaw = String(f.get("slug") ?? "").trim();
-    const slug =
-      slugRaw ||
-      name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") ||
-      undefined;
+    // Only link when an explicit slug is set — don't invent one from the name.
+    const slug = String(f.get("slug") ?? "").trim() || undefined;
 
     const entry: Alumnus = {
       name,
-      slug: slug || undefined,
+      slug,
       role: String(f.get("role") ?? "").trim(),
       org: String(f.get("org") ?? "").trim(),
       photo: photo || undefined,
