@@ -101,10 +101,12 @@ export function AdminTabs({
     if (!TABS.some((t) => t.id === tab)) setTab(TABS[0]?.id ?? "projects");
   }, [TABS, tab]);
 
-  const member = useMemo(
-    () => members.find((m) => m.slug === (session?.memberSlug || members[0]?.slug)) ?? members[0],
-    [members, session?.memberSlug],
-  );
+  // Only the signed-in person's own profile — never fall back to another member
+  const member = useMemo(() => {
+    const slug = session?.memberSlug;
+    if (!slug) return undefined;
+    return members.find((m) => m.slug === slug);
+  }, [members, session?.memberSlug]);
 
   const selectedMember = members.find((m) => m.slug === editMember);
   const selectedProject = projects.find((p) => p.slug === editProject);
@@ -403,7 +405,14 @@ export function AdminTabs({
           />
         )}
         {tab === "profile" && !member && (
-          <p className="text-sm text-ink/60">No personal profile linked to this login.</p>
+          <div className="max-w-2xl rounded-2xl bg-white p-6 shadow-card-sm">
+            <p className="text-sm font-bold text-ink">No public profile for this login</p>
+            <p className="mt-2 text-sm leading-6 text-ink/60">
+              The <code className="text-xs">admin</code> account is a CMS-only login, so it has no
+              member page to edit. Use the Members tab to edit someone&rsquo;s profile, or sign in
+              with a personal Kerberos account to edit your own.
+            </p>
+          </div>
         )}
 
         {tab === "approvals" && showApprovals && <ApprovalsPanel />}
