@@ -1,10 +1,12 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { ExternalLink } from "lucide-react";
 import type { Member } from "@/lib/types";
 import { useAuth } from "@/context/AuthContext";
-import { canApprove } from "@/lib/roles";
+import { canApprove, canManageTeamContent } from "@/lib/roles";
 import { ProfileEditor } from "frontend/pages/admin/ProfileEditor";
 import { ApprovalsPanel } from "frontend/pages/admin/ApprovalsPanel";
 import { cn } from "@/lib/utils";
@@ -13,6 +15,7 @@ export function ProfileSection({ members }: { members: Member[] }) {
   const { session, loading } = useAuth();
   const params = useSearchParams();
   const showApprovals = canApprove(session?.level);
+  const showTeamEditor = canManageTeamContent(session?.level);
   const initialTab =
     params.get("tab") === "approvals" && showApprovals ? "approvals" : "profile";
   const [tab, setTab] = useState<"profile" | "approvals">(initialTab);
@@ -36,6 +39,23 @@ export function ProfileSection({ members }: { members: Member[] }) {
 
   return (
     <div>
+      {showTeamEditor && (
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-white/80 px-5 py-4 shadow-[0_12px_28px_rgba(35,24,100,0.1)]">
+          <div>
+            <p className="text-sm font-bold text-[#140b3c]">Team photos &amp; alumni</p>
+            <p className="mt-0.5 text-xs text-[#31217a]/70">
+              Upload full-team images and add or edit alumni profiles (OC / Co-OC / Research Lead).
+            </p>
+          </div>
+          <Link
+            href="/admin/editor"
+            className="inline-flex items-center gap-1.5 rounded-full bg-[#140b3c] px-4 py-2.5 text-xs font-bold text-white"
+          >
+            Open content editor <ExternalLink size={12} />
+          </Link>
+        </div>
+      )}
+
       <div className="mb-6 flex flex-wrap gap-2">
         <button
           type="button"
@@ -58,6 +78,14 @@ export function ProfileSection({ members }: { members: Member[] }) {
           >
             Approvals
           </button>
+        )}
+        {showTeamEditor && (
+          <Link
+            href="/admin/editor"
+            className="rounded-full bg-white/70 px-5 py-2.5 text-sm font-bold text-[#140b3c] hover:bg-white"
+          >
+            Content editor
+          </Link>
         )}
       </div>
 

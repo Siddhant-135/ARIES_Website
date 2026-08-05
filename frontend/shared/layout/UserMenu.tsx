@@ -2,9 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ChevronDown, ClipboardList, LogOut, UserRound } from "lucide-react";
+import { ChevronDown, ClipboardList, Image as ImageIcon, LogOut, UserRound } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
-import { canApprove } from "@/lib/roles";
+import { canApprove, canManageTeamContent } from "@/lib/roles";
 import { cn } from "@/lib/utils";
 
 /**
@@ -50,6 +50,7 @@ export function UserMenu({
   }
 
   const showApprovals = canApprove(session.level);
+  const showTeamEditor = canManageTeamContent(session.level);
 
   return (
     <div ref={ref} className="relative">
@@ -94,6 +95,15 @@ export function UserMenu({
               className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-ink hover:bg-lilac"
             >
               <ClipboardList size={15} /> Approvals
+            </Link>
+          )}
+          {showTeamEditor && (
+            <Link
+              href="/admin/editor"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-ink hover:bg-lilac"
+            >
+              <ImageIcon size={15} /> Team photos &amp; alumni
             </Link>
           )}
           <button
