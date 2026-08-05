@@ -39,11 +39,16 @@ function supabasePublic() {
 export async function getMembers(): Promise<Member[]> {
   const { data, error } = await supabasePublic()
     .from("members")
-    .select("slug, data, level")
+    .select("slug, data, level, entry_number, email")
     .neq("slug", "admin")
     .order("slug");
   if (error) throw error;
-  return (data ?? []).map((row) => ({ ...(row.data as Member), level: row.level as Member["level"] }));
+  return (data ?? []).map((row) => ({
+    ...(row.data as Member),
+    level: row.level as Member["level"],
+    entryNumber: (row.entry_number as string | null) ?? undefined,
+    email: (row.email as string | null) ?? undefined,
+  }));
 }
 
 export async function getMember(slug: string): Promise<Member | undefined> {

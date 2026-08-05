@@ -57,6 +57,9 @@ export type Member = {
   blocks: ProfileBlock[];
   /** Club tier from the members table (e.g. visitor, executive). Backup JSON omits this. */
   level?: MemberLevel;
+  /** Kerberos / entry number used for signup (from members.entry_number). */
+  entryNumber?: string;
+  email?: string;
 };
 
 /* ---------- Projects ---------- */
@@ -145,7 +148,10 @@ export type TeamMemberRef = {
 
 export type TeamYear = {
   year: string; // "2026-27"
+  /** Cover / first group photo (kept for older readers). */
   photo?: string;
+  /** Extra full-team photos for this year (carousel). */
+  photos?: string[];
   coreTeam: TeamMemberRef[];
   coordinators: TeamMemberRef[];
   executives: { group: string; members: TeamMemberRef[] }[];

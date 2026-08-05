@@ -1,7 +1,7 @@
 /**
- * Seed kerberos (entry_number) + IITD email onto members from Excel
- * (Name + IITD Email only). Amey override applied.
- * Uses SUPABASE_SERVICE_ROLE_KEY.
+ * Seed kerberos (entry_number) + IITD email onto members from Excel.
+ * Also creates stub member profiles for Excel rows that have IITD mail but no site profile.
+ * Usage: node scripts/seed-kerberos-from-excel.mjs [path-to-xlsx]
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -27,10 +27,8 @@ if (!url || !key) {
 }
 
 const sb = createClient(url, key, { auth: { persistSession: false } });
-
 const EXCEL = process.argv[2] || "d:/Downlod/ARIES '26-27.xlsx";
 
-/** User-specified overrides (kerberos / iitd email) */
 const OVERRIDES = {
   "amey chaudhari": {
     kerberos: "mt1251690",
@@ -49,47 +47,119 @@ function slugifyName(name) {
   return normName(name).replace(/\s+/g, "-");
 }
 
-async function main() {
-  const wb = XLSX.readFile(EXCEL);
-  const rows = XLSX.utils.sheet_to_json(wb.Sheets["Team Details"], { defval: "" });
+function isIitd(s) {
+  return /@[\w.-]*iitd\.ac\.in$/i.test(String(s || "").trim());
+}
 
-  const { data: members, error } = await sb.from("members").select("slug, data");
-  if (error) throw error;
+function resolveIitd(row, name) {
+  const override = OVERRIDES[normName(name)];
+  if (override) return override;
+  const iitdCol = String(row["IITD Email"] || "").trim().toLowerCase();
+  const emailCol = String(row["Email"] || "").trim().toLowerCase();
+  const iitd = isIitd(iitdCol) ? iitdCol : isIitd(emailCol) ? emailCol : "";
+  if (!iitd) return null;
+  return { kerberos: iitd.split("@")[0].toLowerCase(), iitdEmail: iitd };
+}
 
+function mapPostToLevel(post) {
+  const r = String(post || "").trim().toLowerCase();
+  if (r === "oc") return "oc";
+  if (r.includes("co-oc") || r.includes("co overall") || r.includes("co-overall")) {
+    return "co_overall_coordinator";
+  }
+  if (r.includes("research lead")) return "research_lead";
+  if (r.includes("coordinator")) return "coordinator";
+  if (r.includes("executive")) return "executive";
+  if (r.includes("alumni") || r.includes("alumn")) return "alumni";
+  return "executive";
+}
+
+function findMember(members, name) {
+  const n = normName(name);
   const byNorm = new Map();
-  for (const m of members ?? []) {
-    const n = normName(m.data?.name);
-    if (n) byNorm.set(n, m);
+  for (const m of members) {
+    const dn = normName(m.data?.name);
+    if (dn) byNorm.set(dn, m);
     byNorm.set(normName(m.slug.replace(/-/g, " ")), m);
   }
+  if (byNorm.has(n)) return byNorm.get(n);
+  if (byNorm.has(normName(slugifyName(name)))) return byNorm.get(normName(slugifyName(name)));
+
+  // Fuzzy: unique first-name match
+  const first = n.split(" ")[0];
+  const firstHits = members.filter((m) => normName(m.data?.name).split(" ")[0] === first);
+  if (firstHits.length === 1) return firstHits[0];
+
+  // Contained name
+  const contains = members.filter((m) => {
+    const dn = normName(m.data?.name);
+    return dn.includes(n) || n.includes(dn);
+  });
+  if (contains.length === 1) return contains[0];
+  return null;
+}
+
+async function main() {
+  const wb = XLSX.readFile(EXCEL);
+  const sheet = wb.Sheets["Team Details"] || wb.Sheets[wb.SheetNames[0]];
+  const rows = XLSX.utils.sheet_to_json(sheet, { defval: "" });
+
+  const { data: members, error } = await sb
+    .from("members")
+    .select("slug, data, entry_number, username, email, level");
+  if (error) throw error;
 
   let updated = 0;
-  let skipped = 0;
+  let created = 0;
+  let skippedNoMail = 0;
+  let unmatched = [];
+  const blockedNoMail = [];
 
   for (const row of rows) {
     const name = String(row["Name"] || "").trim();
     if (!name) continue;
-    const override = OVERRIDES[normName(name)];
-    let iitd = String(row["IITD Email"] || "").trim().toLowerCase();
-    let kerberos = "";
-
-    if (override) {
-      iitd = override.iitdEmail;
-      kerberos = override.kerberos;
-    } else if (/@[\w.-]*iitd\.ac\.in$/i.test(iitd)) {
-      kerberos = iitd.split("@")[0].toLowerCase();
-    } else {
-      skipped++;
-      continue; // no IITD mail yet — add later
+    const post = String(row["Post"] || "").trim();
+    const resolved = resolveIitd(row, name);
+    if (!resolved) {
+      skippedNoMail++;
+      blockedNoMail.push(`${name} (${post || "—"})`);
+      continue;
     }
 
-    const match =
-      byNorm.get(normName(name)) ||
-      byNorm.get(normName(slugifyName(name))) ||
-      (members ?? []).find((m) => normName(m.data?.name).includes(normName(name).split(" ")[0]));
+    const { kerberos, iitdEmail } = resolved;
+    let match = findMember(members ?? [], name);
 
     if (!match) {
-      console.warn("No member profile for", name, kerberos);
+      const slug = slugifyName(name);
+      const level = mapPostToLevel(post);
+      const data = {
+        slug,
+        name,
+        role: post || "Member, ARIES",
+        tagline: "",
+        location: "IIT Delhi",
+        socials: [],
+        blocks: [],
+      };
+      const { error: cErr } = await sb.from("members").upsert(
+        {
+          slug,
+          data,
+          level,
+          entry_number: kerberos,
+          username: kerberos,
+          email: iitdEmail,
+        },
+        { onConflict: "slug" },
+      );
+      if (cErr) {
+        console.warn("CREATE FAIL", name, cErr.message);
+        unmatched.push(`${name} → ${kerberos}`);
+      } else {
+        created++;
+        console.log("CREATED", slug, "←", kerberos, level);
+        members.push({ slug, data, entry_number: kerberos, username: kerberos, email: iitdEmail, level });
+      }
       continue;
     }
 
@@ -97,7 +167,7 @@ async function main() {
       .from("members")
       .update({
         entry_number: kerberos,
-        email: iitd,
+        email: iitdEmail,
         username: kerberos,
       })
       .eq("slug", match.slug);
@@ -108,7 +178,18 @@ async function main() {
     }
   }
 
-  console.log(`Updated ${updated}, skipped (no iitd mail) ${skipped}`);
+  console.log("\n--- Summary ---");
+  console.log(`Updated existing: ${updated}`);
+  console.log(`Created stubs:    ${created}`);
+  console.log(`Skipped (no IITD mail in Excel): ${skippedNoMail}`);
+  if (blockedNoMail.length) {
+    console.log("Needs IITD email before signup:");
+    for (const line of blockedNoMail) console.log("  -", line);
+  }
+  if (unmatched.length) {
+    console.log("Failed to create:");
+    for (const line of unmatched) console.log("  -", line);
+  }
 }
 
 main().catch((e) => {

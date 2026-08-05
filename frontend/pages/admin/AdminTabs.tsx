@@ -13,7 +13,6 @@ import {
   ExternalLink,
   Image as ImageIcon,
   ClipboardList,
-  GraduationCap,
 } from "lucide-react";
 import type { AriesEvent, Member, Project, Resource, TeamData } from "@/lib/types";
 import { ProfileEditor } from "./ProfileEditor";
@@ -31,11 +30,10 @@ import { cn } from "@/lib/utils";
 
 const BASE_TABS = [
   { id: "members", label: "Members", icon: Users },
-  { id: "alumni", label: "Alumni", icon: GraduationCap, adminOnly: true },
+  { id: "team", label: "Team", icon: ImageIcon, adminOnly: true },
   { id: "projects", label: "Projects", icon: FolderPlus },
   { id: "events", label: "Events", icon: CalendarPlus },
   { id: "resources", label: "Resources", icon: BookOpen, publisherOnly: true },
-  { id: "team-photo", label: "Team photo", icon: ImageIcon, adminOnly: true },
   { id: "profile", label: "My profile", icon: UserRound },
   { id: "approvals", label: "Approvals", icon: ClipboardList, adminOnly: true },
 ] as const;
@@ -43,8 +41,8 @@ const BASE_TABS = [
 type TabId = (typeof BASE_TABS)[number]["id"];
 
 /**
- * Full CMS shell — create/edit members, projects, events, team photos.
- * Alumni + full team photo tabs are leadership (admin) only.
+ * Full CMS shell — create/edit members, projects, events, team photos/alumni.
+ * Team tab (photos + alumni) is leadership (admin) only.
  */
 export function AdminTabs({
   members: initialMembers,
@@ -186,6 +184,7 @@ export function AdminTabs({
             </label>
             <MemberForm
               key={editMember || "new-member"}
+              canSetKerberos={isAdmin}
               initial={
                 selectedMember
                   ? {
@@ -196,6 +195,8 @@ export function AdminTabs({
                       year: selectedMember.year,
                       location: selectedMember.location,
                       photo: selectedMember.avatar,
+                      entryNumber: selectedMember.entryNumber,
+                      email: selectedMember.email,
                       about:
                         typeof selectedMember.blocks.find((b) => b.type === "text")?.data === "string"
                           ? (selectedMember.blocks.find((b) => b.type === "text")?.data as string)
@@ -207,14 +208,26 @@ export function AdminTabs({
           </>
         )}
 
-        {tab === "alumni" && isAdmin && (
-          <AlumniForm
-            team={teamData}
-            onSaved={(next) => {
-              setTeamData(next);
-              router.refresh();
-            }}
-          />
+        {tab === "team" && isAdmin && (
+          <div className="space-y-10">
+            <TeamPhotoForm
+              team={teamData}
+              onSaved={(next) => {
+                setTeamData(next);
+                router.refresh();
+              }}
+            />
+            <div>
+              <h2 className="mb-4 text-lg font-black text-ink">Alumni profiles</h2>
+              <AlumniForm
+                team={teamData}
+                onSaved={(next) => {
+                  setTeamData(next);
+                  router.refresh();
+                }}
+              />
+            </div>
+          </div>
         )}
 
         {tab === "projects" && (
@@ -378,16 +391,6 @@ export function AdminTabs({
               }}
             />
           </>
-        )}
-
-        {tab === "team-photo" && isAdmin && (
-          <TeamPhotoForm
-            team={teamData}
-            onSaved={(next) => {
-              setTeamData(next);
-              router.refresh();
-            }}
-          />
         )}
 
         {tab === "profile" && member && (

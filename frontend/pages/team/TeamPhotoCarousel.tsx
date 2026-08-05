@@ -2,31 +2,72 @@
 
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import type { TeamYear } from "@/lib/types";
+import { yearPhotos } from "@/lib/team-photos";
 
 const ACTIVE_SCALE = 0.9;
 
+type Slide = {
+  key: string;
+  year: string;
+  src?: string;
+  photoIndex: number;
+  photoCount: number;
+};
+
+function buildSlides(years: TeamYear[]): Slide[] {
+  const slides: Slide[] = [];
+  for (const y of years) {
+    const photos = yearPhotos(y);
+    if (photos.length === 0) {
+      slides.push({
+        key: `${y.year}-empty`,
+        year: y.year,
+        src: undefined,
+        photoIndex: 0,
+        photoCount: 0,
+      });
+      continue;
+    }
+    photos.forEach((src, i) => {
+      slides.push({
+        key: `${y.year}-${i}`,
+        year: y.year,
+        src,
+        photoIndex: i,
+        photoCount: photos.length,
+      });
+    });
+  }
+  return slides;
+}
+
 /**
- * Stacked full-team photo switcher. Only the hero photo changes per year;
+ * Stacked full-team photo switcher. Supports multiple photos per year;
  * rosters elsewhere stay on the current year entry.
  */
 export function TeamPhotoCarousel({ years }: { years: TeamYear[] }) {
+  const slides = useMemo(() => buildSlides(years), [years]);
   const [idx, setIdx] = useState(0);
 
   const goTo = useCallback(
-    (next: number) => setIdx(Math.max(0, Math.min(years.length - 1, next))),
-    [years.length],
+    (next: number) => setIdx(Math.max(0, Math.min(slides.length - 1, next))),
+    [slides.length],
   );
 
   const goOlder = useCallback(() => goTo(idx + 1), [goTo, idx]);
   const goNewer = useCallback(() => goTo(idx - 1), [goTo, idx]);
 
-  const year = years[idx];
-  if (!year) return null;
+  const slide = slides[idx];
+  if (!slide) return null;
 
-  const hasOlder = idx < years.length - 1;
+  const hasOlder = idx < slides.length - 1;
   const hasNewer = idx > 0;
+  const caption =
+    slide.photoCount > 1
+      ? `${slide.year} · ${slide.photoIndex + 1}/${slide.photoCount}`
+      : slide.year;
 
   return (
     <section className="mx-auto max-w-4xl">
@@ -40,10 +81,9 @@ export function TeamPhotoCarousel({ years }: { years: TeamYear[] }) {
           if (e.key === "ArrowLeft" && hasNewer) goNewer();
         }}
       >
-        {/* External arrows — reliable fallback for Safari */}
         <button
           type="button"
-          aria-label={`Newer team photo${hasNewer ? `: ${years[idx - 1].year}` : ""}`}
+          aria-label="Previous team photo"
           disabled={!hasNewer}
           onClick={goNewer}
           className="absolute left-0 top-1/2 z-50 grid size-10 -translate-y-1/2 place-items-center rounded-full bg-white text-ink shadow-card transition hover:text-purple disabled:pointer-events-none disabled:opacity-30"
@@ -52,7 +92,7 @@ export function TeamPhotoCarousel({ years }: { years: TeamYear[] }) {
         </button>
         <button
           type="button"
-          aria-label={`Older team photo${hasOlder ? `: ${years[idx + 1].year}` : ""}`}
+          aria-label="Next team photo"
           disabled={!hasOlder}
           onClick={goOlder}
           className="absolute right-0 top-1/2 z-50 grid size-10 -translate-y-1/2 place-items-center rounded-full bg-white text-ink shadow-card transition hover:text-purple disabled:pointer-events-none disabled:opacity-30"
@@ -64,8 +104,7 @@ export function TeamPhotoCarousel({ years }: { years: TeamYear[] }) {
           className="relative mx-12 aspect-[16/9] w-auto sm:mx-14"
           style={{ perspective: "1200px" }}
         >
-          {/* Peek cards behind the active slide */}
-          {years.map((y, i) => {
+          {slides.map((s, i) => {
             const offset = i - idx;
             if (offset === 0 || Math.abs(offset) > 2) return null;
 
@@ -76,7 +115,7 @@ export function TeamPhotoCarousel({ years }: { years: TeamYear[] }) {
 
             return (
               <div
-                key={y.year}
+                key={s.key}
                 aria-hidden
                 className="pointer-events-none absolute inset-0 overflow-hidden bg-[#e6e0d6] shadow-card transition-[transform,opacity] duration-500 ease-out"
                 style={{
@@ -85,11 +124,11 @@ export function TeamPhotoCarousel({ years }: { years: TeamYear[] }) {
                   zIndex,
                 }}
               >
-                {y.photo ? (
-                  <Image src={y.photo} alt="" fill draggable={false} className="object-cover" />
+                {s.src ? (
+                  <Image src={s.src} alt="" fill draggable={false} className="object-cover" />
                 ) : (
                   <p className="grid h-full place-items-center px-10 text-center text-lg font-bold uppercase tracking-wide text-[#a49f93] md:text-2xl">
-                    Add full team photo for {y.year}
+                    Add full team photo for {s.year}
                   </p>
                 )}
                 <span
@@ -97,21 +136,20 @@ export function TeamPhotoCarousel({ years }: { years: TeamYear[] }) {
                     offset > 0 ? "right-3" : "left-3"
                   }`}
                 >
-                  {y.year}
+                  {s.year}
                 </span>
               </div>
             );
           })}
 
-          {/* Active slide — 10% smaller so peeks show around it */}
           <div
             className="absolute inset-0 z-20 overflow-hidden bg-[#e6e0d6] shadow-card transition-transform duration-500 ease-out"
             style={{ transform: `scale(${ACTIVE_SCALE})` }}
           >
-            {year.photo ? (
+            {slide.src ? (
               <Image
-                src={year.photo}
-                alt={`ARIES full team ${year.year}`}
+                src={slide.src}
+                alt={`ARIES full team ${slide.year}`}
                 fill
                 draggable={false}
                 className="object-cover"
@@ -119,15 +157,14 @@ export function TeamPhotoCarousel({ years }: { years: TeamYear[] }) {
               />
             ) : (
               <p className="grid h-full place-items-center px-10 text-center text-xl font-bold uppercase tracking-wide text-[#a49f93] md:text-3xl">
-                Add full team photo for {year.year}
+                Add full team photo for {slide.year}
               </p>
             )}
 
-            {/* Left 20% — hover/tap overlay with arrow */}
             {hasNewer && (
               <button
                 type="button"
-                aria-label={`View ${years[idx - 1].year} team photo`}
+                aria-label="Previous team photo"
                 onClick={goNewer}
                 className="group absolute left-0 top-0 z-30 h-full w-1/5 cursor-pointer focus-visible:outline-none"
               >
@@ -138,11 +175,10 @@ export function TeamPhotoCarousel({ years }: { years: TeamYear[] }) {
               </button>
             )}
 
-            {/* Right 20% — hover/tap overlay with arrow */}
             {hasOlder && (
               <button
                 type="button"
-                aria-label={`View ${years[idx + 1].year} team photo`}
+                aria-label="Next team photo"
                 onClick={goOlder}
                 className="group absolute right-0 top-0 z-30 h-full w-1/5 cursor-pointer focus-visible:outline-none"
               >
@@ -156,15 +192,15 @@ export function TeamPhotoCarousel({ years }: { years: TeamYear[] }) {
         </div>
       </div>
 
-      <p className="mt-5 text-center text-lg font-bold text-ink">{year.year}</p>
+      <p className="mt-5 text-center text-lg font-bold text-ink">{caption}</p>
 
-      {years.length > 1 && (
-        <div className="mt-3 flex justify-center gap-2" aria-label="Select team year">
-          {years.map((item, i) => (
+      {slides.length > 1 && (
+        <div className="mt-3 flex justify-center gap-2" aria-label="Select team photo">
+          {slides.map((item, i) => (
             <button
-              key={item.year}
+              key={item.key}
               type="button"
-              aria-label={`View ${item.year}`}
+              aria-label={`View ${item.year} photo ${item.photoIndex + 1}`}
               aria-current={i === idx ? "true" : undefined}
               onClick={() => goTo(i)}
               className={`h-2 rounded-full transition-all ${

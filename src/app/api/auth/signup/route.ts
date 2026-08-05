@@ -18,7 +18,12 @@ export async function POST(req: Request) {
   };
 
   const secret = String(body.secret || "").trim();
-  const kerberos = String(body.kerberos || "").trim().toLowerCase();
+  // Allow pasting full IITD email — use local-part as Kerberos
+  const kerberos = String(body.kerberos || "")
+    .trim()
+    .toLowerCase()
+    .replace(/@[\w.-]*iitd\.ac\.in$/i, "")
+    .replace(/@.*$/, "");
   const password = String(body.password || "");
   const confirm = String(body.confirmPassword || "");
 

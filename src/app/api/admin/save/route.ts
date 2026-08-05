@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createSupabaseServerClient, createSupabaseServiceClient } from "@/lib/supabase/server";
 import {
   canDirectPublish,
   canManageTeamContent,
@@ -134,11 +134,13 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Unauthorized — please sign in again" }, { status: 401 });
   }
 
-  const { kind, slug, data, action } = (await req.json()) as {
+  const { kind, slug, data, action, entryNumber, email } = (await req.json()) as {
     kind?: string;
     slug?: string;
     data?: Record<string, unknown>;
     action?: string;
+    entryNumber?: string | null;
+    email?: string | null;
   };
 
   const ALLOWED = new Set(["members", "projects", "events", "team", "resources"]);
@@ -236,6 +238,40 @@ export async function POST(req: Request) {
     });
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+
+    // Leadership can set Kerberos so the person can sign up
+    if (isLeadership(level) && (entryNumber !== undefined || email !== undefined)) {
+      const kerberos = String(entryNumber || "")
+        .trim()
+        .toLowerCase()
+        .replace(/@.*$/, "");
+      const mail = String(email || "").trim().toLowerCase();
+      try {
+        const admin = createSupabaseServiceClient();
+        const patch: Record<string, string | null> = {};
+        if (entryNumber !== undefined) {
+          patch.entry_number = kerberos || null;
+          patch.username = kerberos || null;
+        }
+        if (email !== undefined || kerberos) {
+          patch.email = mail || (kerberos ? `${kerberos}@iitd.ac.in` : null);
+        }
+        const { error: uErr } = await admin.from("members").update(patch).eq("slug", slug!);
+        if (uErr) {
+          return NextResponse.json({ error: uErr.message }, { status: 400 });
+        }
+      } catch (e) {
+        return NextResponse.json(
+          {
+            error:
+              e instanceof Error
+                ? e.message
+                : "Could not update Kerberos (check SUPABASE_SERVICE_ROLE_KEY)",
+          },
+          { status: 500 },
+        );
+      }
     }
 
     revalidateContent("members", slug!);

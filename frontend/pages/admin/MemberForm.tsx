@@ -5,9 +5,10 @@ import { Save } from "lucide-react";
 import { Input, TextArea } from "./ProjectForm";
 import { ImageField } from "./ImageField";
 
-/** Create / update a member profile JSON. */
+/** Create / update a member profile JSON (+ optional Kerberos for leadership). */
 export function MemberForm({
   initial,
+  canSetKerberos = false,
 }: {
   initial?: {
     slug?: string;
@@ -18,9 +19,14 @@ export function MemberForm({
     location?: string;
     photo?: string;
     about?: string;
+    entryNumber?: string;
+    email?: string;
   };
+  /** OC / Co-OC / Research Lead can set Kerberos so the person can sign up. */
+  canSetKerberos?: boolean;
 }) {
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [photo, setPhoto] = useState(initial?.photo ?? "");
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -31,6 +37,8 @@ export function MemberForm({
       String(f.get("slug") ?? "").trim() ||
       name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
     const about = String(f.get("about") ?? "").trim();
+    const entryNumber = String(f.get("entryNumber") ?? "").trim().toLowerCase();
+    const email = String(f.get("email") ?? "").trim().toLowerCase();
 
     const data = {
       slug,
@@ -47,13 +55,31 @@ export function MemberForm({
     };
 
     setStatus("saving");
+    setErrorMsg(null);
     const res = await fetch("/api/admin/save", {
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ kind: "members", slug, data }),
+      body: JSON.stringify({
+        kind: "members",
+        slug,
+        data,
+        ...(canSetKerberos
+          ? {
+              entryNumber: entryNumber || null,
+              email: email || null,
+            }
+          : {}),
+      }),
     });
-    setStatus(res.ok ? "saved" : "error");
+    const body = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      setStatus("error");
+      setErrorMsg(body.error ?? `Save failed (${res.status})`);
+      setTimeout(() => setStatus("idle"), 3000);
+      return;
+    }
+    setStatus("saved");
     setTimeout(() => setStatus("idle"), 2500);
   };
 
@@ -70,6 +96,26 @@ export function MemberForm({
         <Input name="location" label="Location" defaultValue={initial?.location ?? "IIT Delhi"} />
         <Input name="tagline" label="Tagline" defaultValue={initial?.tagline} />
       </div>
+      {canSetKerberos && (
+        <div className="grid gap-4 rounded-xl border border-[#eee4d6] bg-[#fbf8ff] p-4 sm:grid-cols-2">
+          <Input
+            name="entryNumber"
+            label="Kerberos / entry number (signup ID)"
+            placeholder="cs1240559"
+            defaultValue={initial?.entryNumber}
+          />
+          <Input
+            name="email"
+            label="IITD email"
+            placeholder="cs1240559@iitd.ac.in"
+            defaultValue={initial?.email}
+          />
+          <p className="sm:col-span-2 text-[11px] text-ink/55">
+            Required for signup. Use the part before @ in their IITD mail (e.g.{" "}
+            <code>cs1240559</code>). Without this, signup shows “not on the roster”.
+          </p>
+        </div>
+      )}
       <ImageField label="Profile photo" kind="members" value={photo} onChange={setPhoto} />
       <TextArea name="about" label="About" rows={4} defaultValue={initial?.about} />
       <button
@@ -79,6 +125,7 @@ export function MemberForm({
         <Save size={15} />
         {status === "saving" ? "Saving…" : status === "saved" ? "Saved ✓" : status === "error" ? "Failed" : "Save member"}
       </button>
+      {errorMsg && <p className="text-xs font-semibold text-red-600">{errorMsg}</p>}
     </form>
   );
 }
