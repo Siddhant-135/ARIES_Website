@@ -34,6 +34,14 @@ const OVERRIDES = {
     kerberos: "mt1251690",
     iitdEmail: "mt1251690@maths.iitd.ac.in",
   },
+  sanidhya: {
+    kerberos: "ee3230694",
+    iitdEmail: "ee3230694@ee.iitd.ac.in",
+  },
+  "sanidhya sharma": {
+    kerberos: "ee3230694",
+    iitdEmail: "ee3230694@ee.iitd.ac.in",
+  },
 };
 
 function normName(s) {

@@ -68,6 +68,11 @@
               "photo": "/images/members/dhruv-gupta.jpg"
             },
             {
+              "name": "Eeshan",
+              "role": "Executive",
+              "slug": "eeshan"
+            },
+            {
               "name": "Harshita Prasad",
               "role": "Executive",
               "slug": "harshita-prasad"
