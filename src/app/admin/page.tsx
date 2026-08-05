@@ -4,16 +4,24 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { LogIn, UserPlus } from "lucide-react";
+import { LogIn, Shield, UserPlus } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
+import { canManageTeamContent } from "@/lib/roles";
+
+type Mode = "login" | "signup" | "admin";
+
+function afterLoginPathFor(level: string | undefined) {
+  if (level === "blogger" || canManageTeamContent(level)) return "/admin/editor";
+  return "/profile";
+}
 
 /**
- * Member login + signup (secret code + Kerberos + password).
+ * Member login + signup + bootstrap admin (admin / password).
  */
 export default function AdminLoginPage() {
   const router = useRouter();
   const { signIn, session, loading } = useAuth();
-  const [mode, setMode] = useState<"login" | "signup">("login");
+  const [mode, setMode] = useState<Mode>("login");
   const [entryNumber, setEntryNumber] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -21,11 +29,19 @@ export default function AdminLoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
-  const afterLoginPath = session?.level === "blogger" ? "/admin/editor" : "/profile";
+  const afterLoginPath = afterLoginPathFor(session?.level);
 
   useEffect(() => {
     if (!loading && session) router.replace(afterLoginPath);
   }, [loading, session, router, afterLoginPath]);
+
+  useEffect(() => {
+    if (mode === "admin") {
+      setEntryNumber("admin");
+      setPassword("");
+      setError(null);
+    }
+  }, [mode]);
 
   return (
     <div className="relative grid min-h-screen place-items-center overflow-hidden bg-[#0b1035] px-6">
@@ -45,14 +61,14 @@ export default function AdminLoginPage() {
         </Link>
 
         <div className="rounded-3xl bg-[#fbf4ec] p-8 shadow-[0_24px_60px_rgba(0,0,0,0.35)]">
-          <div className="mb-6 flex gap-2 rounded-full bg-white p-1">
+          <div className="mb-6 flex gap-1 rounded-full bg-white p-1">
             <button
               type="button"
               onClick={() => {
                 setMode("login");
                 setError(null);
               }}
-              className={`flex-1 rounded-full py-2 text-xs font-bold ${mode === "login" ? "bg-navy text-white" : "text-ink/60"}`}
+              className={`flex-1 rounded-full py-2 text-[11px] font-bold ${mode === "login" ? "bg-navy text-white" : "text-ink/60"}`}
             >
               Sign in
             </button>
@@ -62,19 +78,32 @@ export default function AdminLoginPage() {
                 setMode("signup");
                 setError(null);
               }}
-              className={`flex-1 rounded-full py-2 text-xs font-bold ${mode === "signup" ? "bg-navy text-white" : "text-ink/60"}`}
+              className={`flex-1 rounded-full py-2 text-[11px] font-bold ${mode === "signup" ? "bg-navy text-white" : "text-ink/60"}`}
             >
               Sign up
+            </button>
+            <button
+              type="button"
+              onClick={() => setMode("admin")}
+              className={`flex-1 rounded-full py-2 text-[11px] font-bold ${mode === "admin" ? "bg-navy text-white" : "text-ink/60"}`}
+            >
+              Admin
             </button>
           </div>
 
           <h1 className="text-center text-2xl font-black text-ink">
-            {mode === "login" ? "Member Login" : "Create account"}
+            {mode === "login"
+              ? "Member Login"
+              : mode === "signup"
+                ? "Create account"
+                : "Admin Login"}
           </h1>
           <p className="mt-2 text-center text-xs leading-5 text-ink/55">
             {mode === "login"
               ? "Kerberos ID or username + password."
-              : "Enter your secret code, Kerberos ID, and password."}
+              : mode === "signup"
+                ? "Enter your secret code, Kerberos ID, and password."
+                : "Bootstrap CMS account for OC / site admin. Opens the content editor."}
           </p>
 
           <form
@@ -83,10 +112,7 @@ export default function AdminLoginPage() {
               setError(null);
               setSubmitting(true);
               try {
-                if (mode === "login") {
-                  const data = await signIn(entryNumber.trim(), password);
-                  router.push(data.level === "blogger" ? "/admin/editor" : "/profile");
-                } else {
+                if (mode === "signup") {
                   const res = await fetch("/api/auth/signup", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -107,6 +133,10 @@ export default function AdminLoginPage() {
                   setMode("login");
                   setError(null);
                   alert(data.message ?? "Account created — please sign in.");
+                } else {
+                  const user = mode === "admin" ? "admin" : entryNumber.trim();
+                  const data = await signIn(user, password);
+                  router.push(afterLoginPathFor(data.level));
                 }
               } catch (err) {
                 setError(err instanceof Error ? err.message : "You're not a member");
@@ -129,19 +159,27 @@ export default function AdminLoginPage() {
               </label>
             )}
 
-            <label className={`block ${mode === "signup" ? "mt-4" : ""}`}>
-              <span className="text-xs font-semibold text-ink">
-                {mode === "signup" ? "Kerberos ID" : "Kerberos / username"}
-              </span>
-              <input
-                value={entryNumber}
-                onChange={(e) => setEntryNumber(e.target.value)}
-                className="mt-2 w-full rounded-xl border border-ink/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-purple/35"
-                placeholder={mode === "signup" ? "mt1251690" : "admin or kerberos"}
-                autoComplete="username"
-                required
-              />
-            </label>
+            {mode !== "admin" && (
+              <label className={`block ${mode === "signup" ? "mt-4" : ""}`}>
+                <span className="text-xs font-semibold text-ink">
+                  {mode === "signup" ? "Kerberos ID" : "Kerberos / username"}
+                </span>
+                <input
+                  value={entryNumber}
+                  onChange={(e) => setEntryNumber(e.target.value)}
+                  className="mt-2 w-full rounded-xl border border-ink/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-purple/35"
+                  placeholder={mode === "signup" ? "mt1251690" : "kerberos or username"}
+                  autoComplete="username"
+                  required
+                />
+              </label>
+            )}
+
+            {mode === "admin" && (
+              <div className="rounded-xl border border-ink/10 bg-white px-4 py-3 text-sm text-ink/70">
+                Username locked to <span className="font-bold text-ink">admin</span>
+              </div>
+            )}
 
             <label className="mt-4 block">
               <span className="text-xs font-semibold text-ink">Password</span>
@@ -150,7 +188,7 @@ export default function AdminLoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="mt-2 w-full rounded-xl border border-ink/10 bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-purple/35"
-                placeholder="••••••••"
+                placeholder={mode === "admin" ? "password" : "••••••••"}
                 autoComplete={mode === "signup" ? "new-password" : "current-password"}
                 required
               />
@@ -181,14 +219,22 @@ export default function AdminLoginPage() {
               disabled={submitting}
               className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-navy px-6 py-3.5 text-sm font-bold text-white transition hover:bg-purple disabled:opacity-60"
             >
-              {mode === "login" ? <LogIn size={16} /> : <UserPlus size={16} />}
+              {mode === "admin" ? (
+                <Shield size={16} />
+              ) : mode === "login" ? (
+                <LogIn size={16} />
+              ) : (
+                <UserPlus size={16} />
+              )}
               {submitting
-                ? mode === "login"
-                  ? "Signing in…"
-                  : "Creating…"
-                : mode === "login"
-                  ? "Sign in"
-                  : "Create account"}
+                ? mode === "signup"
+                  ? "Creating…"
+                  : "Signing in…"
+                : mode === "admin"
+                  ? "Sign in as admin"
+                  : mode === "login"
+                    ? "Sign in"
+                    : "Create account"}
             </button>
           </form>
         </div>

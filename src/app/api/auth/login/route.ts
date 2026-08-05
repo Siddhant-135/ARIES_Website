@@ -26,13 +26,16 @@ export async function POST(req: Request) {
     identifier: id,
   });
 
-  const BLOGGER_USER = process.env.BLOGGER_USER || "blogger";
+  const ADMIN_USER = (process.env.ADMIN_USER || "admin").toLowerCase();
+  const BLOGGER_USER = (process.env.BLOGGER_USER || "blogger").toLowerCase();
+  const idLower = id.toLowerCase();
+
   const email =
     (typeof resolved === "string" && resolved) ||
-    // Fallback for bootstrap before/during seed: admin → synthetic email
-    (id.toLowerCase() === (process.env.ADMIN_USER || "admin").toLowerCase()
-      ? syntheticLoginEmail(process.env.ADMIN_USER || "admin")
-      : id.toLowerCase() === BLOGGER_USER.toLowerCase()
+    // Bootstrap accounts always map to synthetic emails
+    (idLower === ADMIN_USER
+      ? syntheticLoginEmail(ADMIN_USER)
+      : idLower === BLOGGER_USER
         ? syntheticLoginEmail(BLOGGER_USER)
         : null);
 
