@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { getProject, getProjects, getMembers } from "@/lib/content";
 import { normalizeContributors } from "@/lib/contributors";
+import { hydrateContributors } from "@/lib/member-hydrate";
 import { CategoryBadge } from "frontend/shared/ui/CategoryBadge";
 import { Tag } from "frontend/shared/ui/Tag";
 import { ContributorList } from "frontend/shared/projects/ContributorList";
@@ -48,7 +49,10 @@ export default async function ProjectDetailPage({
   if (!project) notFound();
 
   const members = await getMembers();
-  const contributors = normalizeContributors(project.contributors, members);
+  const contributors = hydrateContributors(
+    normalizeContributors(project.contributors, members),
+    members,
+  );
   const links = project.links ?? [];
   const highlights = project.highlights ?? [];
   const features = project.features ?? [];

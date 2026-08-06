@@ -8,6 +8,11 @@ import {
   isLeadership,
 } from "@/lib/roles";
 import { revalidateContent } from "@/lib/revalidate";
+import {
+  applyMemberIdentityToContributors,
+  applyMemberIdentityToTeam,
+} from "@/lib/member-hydrate";
+import type { Project, TeamData } from "@/lib/types";
 
 async function sessionInfo(supabase: Awaited<ReturnType<typeof createSupabaseServerClient>>) {
   const {
@@ -272,6 +277,56 @@ export async function POST(req: Request) {
           { status: 500 },
         );
       }
+    }
+
+    // Propagate name/avatar to JWT, team roster, alumni, and project contributor chips.
+    try {
+      const admin = createSupabaseServiceClient();
+      const memberData = payload as { name?: string; avatar?: string };
+      const nextName = String(memberData.name ?? "").trim();
+      const nextAvatar = memberData.avatar ? String(memberData.avatar) : "";
+
+      const { data: memberRow } = await admin
+        .from("members")
+        .select("auth_user_id")
+        .eq("slug", slug!)
+        .maybeSingle();
+      if (memberRow?.auth_user_id && nextName) {
+        await admin.auth.admin.updateUserById(String(memberRow.auth_user_id), {
+          user_metadata: { name: nextName },
+        });
+      }
+
+      const { data: teamRow } = await admin.from("team").select("data").eq("id", 1).maybeSingle();
+      if (teamRow?.data) {
+        const { team: nextTeam, changed } = applyMemberIdentityToTeam(
+          teamRow.data as TeamData,
+          slug!,
+          { name: nextName || undefined, avatar: nextAvatar },
+        );
+        if (changed) {
+          await admin.from("team").update({ data: nextTeam }).eq("id", 1);
+        }
+      }
+
+      if (nextName) {
+        const { data: projectRows } = await admin.from("projects").select("slug, data");
+        for (const row of projectRows ?? []) {
+          const project = row.data as Project;
+          const { contributors, changed } = applyMemberIdentityToContributors(
+            project.contributors,
+            slug!,
+            nextName,
+          );
+          if (!changed) continue;
+          await admin
+            .from("projects")
+            .update({ data: { ...project, contributors } })
+            .eq("slug", row.slug);
+        }
+      }
+    } catch {
+      // Profile save already succeeded; denormalized sync is best-effort.
     }
 
     revalidateContent("members", slug!);

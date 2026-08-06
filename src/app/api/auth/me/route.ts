@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { resolveMemberDisplay } from "@/lib/auth-profile";
 
 export async function GET() {
   const supabase = await createSupabaseServerClient();
@@ -9,14 +10,22 @@ export async function GET() {
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  const level = String(user.app_metadata?.level ?? "");
-  const memberSlug = String(user.app_metadata?.member_slug ?? "");
+
+  const metaSlug = String(user.app_metadata?.member_slug ?? "");
+  const metaLevel = String(user.app_metadata?.level ?? "");
+  const display = await resolveMemberDisplay(supabase, {
+    userId: user.id,
+    memberSlug: metaSlug,
+    fallbackName: String(user.user_metadata?.name || metaSlug || "Member"),
+  });
+
   return NextResponse.json({
     token: "",
-    memberSlug,
-    level,
-    name: String(user.user_metadata?.name || memberSlug || "Member"),
+    memberSlug: display.memberSlug || metaSlug,
+    level: display.level || metaLevel,
+    name: display.name,
+    avatar: display.avatar ?? "",
     email: user.email ?? "",
-    role: level,
+    role: display.level || metaLevel,
   });
 }

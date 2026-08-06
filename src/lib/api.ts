@@ -31,6 +31,7 @@ export const login = (entryNumber: string, password: string) =>
     level: string;
     name: string;
     email: string;
+    avatar?: string;
   }>("/auth/login", { method: "POST", body: JSON.stringify({ entryNumber, password }) });
 
 export const me = () =>
@@ -40,6 +41,7 @@ export const me = () =>
     level: string;
     name: string;
     email: string;
+    avatar?: string;
   }>("/auth/me", {});
 
 export const logout = () => apiFetch("/auth/logout", { method: "POST" });

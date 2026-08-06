@@ -58,7 +58,7 @@ export function AdminTabs({
   team: TeamData;
 }) {
   const router = useRouter();
-  const { session, signOut, role } = useAuth();
+  const { session, signOut, role, refreshSession } = useAuth();
   const isAdmin = canManageTeamContent(session?.level);
   const showApprovals = canApprove(session?.level);
   const isBlogger = session?.level === "blogger";
@@ -206,6 +206,11 @@ export function AdminTabs({
                     }
                   : undefined
               }
+              onSaved={(slug) => {
+                setEditMember(slug);
+                void refreshSession();
+                router.refresh();
+              }}
             />
           </>
         )}
@@ -400,6 +405,7 @@ export function AdminTabs({
             member={member}
             onSaved={(updated) => {
               setMembers((prev) => prev.map((m) => (m.slug === updated.slug ? updated : m)));
+              void refreshSession();
               router.refresh();
             }}
           />

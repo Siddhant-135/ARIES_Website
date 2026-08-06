@@ -11,7 +11,16 @@ import type {
 } from "./types";
 import { createClient } from "@supabase/supabase-js";
 
-function supabasePublic() {
+function taggedFetch(tags: string[]) {
+  return (input: RequestInfo | URL, init?: RequestInit) =>
+    fetch(input, {
+      ...init,
+      cache: "force-cache",
+      next: { revalidate: 30, tags: ["content", ...tags] },
+    });
+}
+
+function supabaseTagged(tags: string[]) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key =
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
@@ -23,21 +32,15 @@ function supabasePublic() {
   }
   return createClient(url, key, {
     auth: { persistSession: false, autoRefreshToken: false },
-    // ISR-friendly caching (no-store breaks generateStaticParams for /[slug])
-    global: {
-      fetch: (input, init) =>
-        fetch(input, {
-          ...init,
-          cache: "force-cache",
-          next: { revalidate: 30 },
-        }),
-    },
+    // ISR-friendly caching (no-store breaks generateStaticParams for /[slug]).
+    // Tags are busted via revalidateTag in revalidateContent after CMS writes.
+    global: { fetch: taggedFetch(tags) },
   });
 }
 
 /* Members */
 export async function getMembers(): Promise<Member[]> {
-  const { data, error } = await supabasePublic()
+  const { data, error } = await supabaseTagged(["members"])
     .from("members")
     .select("slug, data, level, entry_number, email")
     .neq("slug", "admin")
@@ -52,7 +55,7 @@ export async function getMembers(): Promise<Member[]> {
 }
 
 export async function getMember(slug: string): Promise<Member | undefined> {
-  const { data, error } = await supabasePublic()
+  const { data, error } = await supabaseTagged(["members"])
     .from("members")
     .select("data, level")
     .eq("slug", slug)
@@ -64,13 +67,16 @@ export async function getMember(slug: string): Promise<Member | undefined> {
 
 /* Projects */
 export async function getProjects(): Promise<Project[]> {
-  const { data, error } = await supabasePublic().from("projects").select("data").order("slug");
+  const { data, error } = await supabaseTagged(["projects"])
+    .from("projects")
+    .select("data")
+    .order("slug");
   if (error) throw error;
   return (data ?? []).map((row) => row.data as Project);
 }
 
 export async function getProject(slug: string): Promise<Project | undefined> {
-  const { data, error } = await supabasePublic()
+  const { data, error } = await supabaseTagged(["projects"])
     .from("projects")
     .select("data")
     .eq("slug", slug)
@@ -81,7 +87,7 @@ export async function getProject(slug: string): Promise<Project | undefined> {
 
 /* Events */
 export async function getEvents(): Promise<AriesEvent[]> {
-  const { data, error } = await supabasePublic()
+  const { data, error } = await supabaseTagged(["events"])
     .from("events")
     .select("data")
     .order("date", { ascending: false });
@@ -90,7 +96,7 @@ export async function getEvents(): Promise<AriesEvent[]> {
 }
 
 export async function getEvent(slug: string): Promise<AriesEvent | undefined> {
-  const { data, error } = await supabasePublic()
+  const { data, error } = await supabaseTagged(["events"])
     .from("events")
     .select("data")
     .eq("slug", slug)
@@ -110,7 +116,7 @@ export async function splitEvents(now = new Date()) {
 
 /* Resources */
 export async function getResources(): Promise<Resource[]> {
-  const { data, error } = await supabasePublic()
+  const { data, error } = await supabaseTagged(["resources"])
     .from("resources")
     .select("data")
     .eq("id", 1)
@@ -126,7 +132,7 @@ export async function getResource(slug: string): Promise<Resource | undefined> {
 
 /* Team */
 export async function getTeam(): Promise<TeamData> {
-  const { data, error } = await supabasePublic()
+  const { data, error } = await supabaseTagged(["team"])
     .from("team")
     .select("data")
     .eq("id", 1)

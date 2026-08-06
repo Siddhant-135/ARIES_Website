@@ -1,15 +1,16 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { login as apiLogin, logout as apiLogout, me } from "@/lib/api";
 import { levelToUiRole, type UiRole } from "@/lib/roles";
 
-interface AuthSession {
+export interface AuthSession {
   token: string;
   memberSlug: string;
   level: string;
   name: string;
   email: string;
+  avatar?: string;
 }
 
 interface AuthState {
@@ -18,6 +19,8 @@ interface AuthState {
   loading: boolean;
   signIn: (entryNumber: string, password: string) => Promise<AuthSession>;
   signOut: () => Promise<void>;
+  /** Re-fetch /api/auth/me so name/avatar match the latest profile save. */
+  refreshSession: () => Promise<AuthSession | null>;
 }
 
 const AuthContext = createContext<AuthState>({
@@ -28,6 +31,7 @@ const AuthContext = createContext<AuthState>({
     throw new Error("AuthProvider not mounted");
   },
   signOut: async () => {},
+  refreshSession: async () => null,
 });
 
 const SESSION_KEY = "aries_session";
@@ -43,30 +47,36 @@ function deleteCookie(name: string) {
   document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; SameSite=Lax`;
 }
 
+function persist(next: AuthSession) {
+  localStorage.setItem(SESSION_KEY, JSON.stringify(next));
+  setCookie(SESSION_KEY, JSON.stringify(next));
+}
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<AuthSession | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    me()
-      .then((data) => {
-        const next = data as AuthSession;
-        localStorage.setItem(SESSION_KEY, JSON.stringify(next));
-        setCookie(SESSION_KEY, JSON.stringify(next));
-        setSession(next);
-      })
-      .catch(() => {
-        localStorage.removeItem(SESSION_KEY);
-        deleteCookie(SESSION_KEY);
-        setSession(null);
-      })
-      .finally(() => setLoading(false));
+  const refreshSession = useCallback(async () => {
+    try {
+      const data = (await me()) as AuthSession;
+      persist(data);
+      setSession(data);
+      return data;
+    } catch {
+      localStorage.removeItem(SESSION_KEY);
+      deleteCookie(SESSION_KEY);
+      setSession(null);
+      return null;
+    }
   }, []);
 
+  useEffect(() => {
+    refreshSession().finally(() => setLoading(false));
+  }, [refreshSession]);
+
   const signIn = async (entryNumber: string, password: string) => {
-    const data = await apiLogin(entryNumber, password);
-    localStorage.setItem(SESSION_KEY, JSON.stringify(data));
-    setCookie(SESSION_KEY, JSON.stringify(data));
+    const data = (await apiLogin(entryNumber, password)) as AuthSession;
+    persist(data);
     setSession(data);
     return data;
   };
@@ -86,6 +96,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         loading,
         signIn,
         signOut,
+        refreshSession,
       }}
     >
       {children}

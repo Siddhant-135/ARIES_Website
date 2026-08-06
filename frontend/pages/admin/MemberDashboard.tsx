@@ -42,7 +42,7 @@ export function MemberDashboard({
   team: TeamData;
 }) {
   const router = useRouter();
-  const { session, signOut } = useAuth();
+  const { session, signOut, refreshSession } = useAuth();
   const level = session?.level ?? "";
   const showApprovals = canApprove(level);
   const showCreate = canDirectCreate(level) || level === "executive";
@@ -203,6 +203,7 @@ export function MemberDashboard({
                   setMembers((prev) =>
                     prev.map((m) => (m.slug === updated.slug ? updated : m)),
                   );
+                  void refreshSession();
                   router.refresh();
                 }}
               />

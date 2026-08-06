@@ -1,13 +1,23 @@
 import Image from "next/image";
 import Link from "next/link";
-import type { Project } from "@/lib/types";
+import type { Member, Project } from "@/lib/types";
 import { CategoryBadge } from "frontend/shared/ui/CategoryBadge";
 import { Tag } from "frontend/shared/ui/Tag";
 import { contributorLabel, normalizeContributors } from "@/lib/contributors";
+import { hydrateContributors } from "@/lib/member-hydrate";
 
 /** Project card: cover (image or event-style gradient), category, name, description, tags. */
-export function ProjectCard({ project }: { project: Project }) {
-  const contributors = normalizeContributors(project.contributors);
+export function ProjectCard({
+  project,
+  members = [],
+}: {
+  project: Project;
+  members?: Pick<Member, "slug" | "name" | "avatar" | "role">[];
+}) {
+  const contributors = hydrateContributors(
+    normalizeContributors(project.contributors, members),
+    members,
+  );
   return (
     <Link
       href={`/projects/${project.slug}`}

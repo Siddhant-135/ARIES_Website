@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { syntheticLoginEmail } from "@/lib/supabase/env";
+import { resolveMemberDisplay } from "@/lib/auth-profile";
 
 /**
  * Login with username / entry number + password.
@@ -48,15 +49,20 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "You're not a member" }, { status: 401 });
   }
 
-  const level = String(data.user.app_metadata?.level ?? "member");
-  const memberSlug = String(data.user.app_metadata?.member_slug ?? "");
-  const name = String(data.user.user_metadata?.name || memberSlug || "Member");
+  const metaLevel = String(data.user.app_metadata?.level ?? "member");
+  const metaSlug = String(data.user.app_metadata?.member_slug ?? "");
+  const display = await resolveMemberDisplay(supabase, {
+    userId: data.user.id,
+    memberSlug: metaSlug,
+    fallbackName: String(data.user.user_metadata?.name || metaSlug || "Member"),
+  });
 
   return NextResponse.json({
     token: data.session?.access_token ?? "",
-    memberSlug,
-    level,
-    name,
+    memberSlug: display.memberSlug || metaSlug,
+    level: display.level || metaLevel,
+    name: display.name,
+    avatar: display.avatar ?? "",
     email: data.user.email ?? email,
   });
 }

@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ExternalLink } from "lucide-react";
 import type { Member } from "@/lib/types";
 import { useAuth } from "@/context/AuthContext";
@@ -12,17 +12,23 @@ import { ApprovalsPanel } from "frontend/pages/admin/ApprovalsPanel";
 import { cn } from "@/lib/utils";
 
 export function ProfileSection({ members }: { members: Member[] }) {
-  const { session, loading } = useAuth();
+  const router = useRouter();
+  const { session, loading, refreshSession } = useAuth();
   const params = useSearchParams();
   const showApprovals = canApprove(session?.level);
   const showTeamEditor = canManageTeamContent(session?.level);
   const initialTab =
     params.get("tab") === "approvals" && showApprovals ? "approvals" : "profile";
   const [tab, setTab] = useState<"profile" | "approvals">(initialTab);
+  const [localMembers, setLocalMembers] = useState(members);
+
+  useEffect(() => {
+    setLocalMembers(members);
+  }, [members]);
 
   const member = useMemo(
-    () => members.find((m) => m.slug === session?.memberSlug) ?? null,
-    [members, session?.memberSlug],
+    () => localMembers.find((m) => m.slug === session?.memberSlug) ?? null,
+    [localMembers, session?.memberSlug],
   );
 
   if (loading) {
@@ -91,7 +97,16 @@ export function ProfileSection({ members }: { members: Member[] }) {
 
       {tab === "profile" && member && (
         <div className="rounded-3xl bg-white/85 p-4 shadow-[0_18px_40px_rgba(35,24,100,0.12)] backdrop-blur md:p-6">
-          <ProfileEditor member={member} />
+          <ProfileEditor
+            member={member}
+            onSaved={(updated) => {
+              setLocalMembers((prev) =>
+                prev.map((m) => (m.slug === updated.slug ? updated : m)),
+              );
+              void refreshSession();
+              router.refresh();
+            }}
+          />
         </div>
       )}
       {tab === "profile" && !member && (

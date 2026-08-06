@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { ChevronDown, ClipboardList, Image as ImageIcon, LogOut, UserRound } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
@@ -51,6 +52,7 @@ export function UserMenu({
 
   const showApprovals = canApprove(session.level);
   const showTeamEditor = canManageTeamContent(session.level);
+  const avatar = session.avatar?.trim();
 
   return (
     <div ref={ref} className="relative">
@@ -65,7 +67,13 @@ export function UserMenu({
           collapsed && "justify-center px-0",
         )}
       >
-        <UserRound size={18} />
+        {avatar ? (
+          <span className="relative size-[18px] shrink-0 overflow-hidden rounded-full">
+            <Image src={avatar} alt="" fill sizes="18px" className="object-cover" />
+          </span>
+        ) : (
+          <UserRound size={18} />
+        )}
         {!collapsed && (
           <>
             <span className="min-w-0 flex-1 truncate text-left">{session.name}</span>

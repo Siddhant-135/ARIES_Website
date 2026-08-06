@@ -16,6 +16,7 @@ const MEMBER_ROLES = [
 export function MemberForm({
   initial,
   canSetKerberos = false,
+  onSaved,
 }: {
   initial?: {
     slug?: string;
@@ -31,6 +32,7 @@ export function MemberForm({
   };
   /** OC / Co-OC / Research Lead can set Kerberos so the person can sign up. */
   canSetKerberos?: boolean;
+  onSaved?: (slug: string) => void;
 }) {
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -87,6 +89,7 @@ export function MemberForm({
       return;
     }
     setStatus("saved");
+    onSaved?.(slug);
     setTimeout(() => setStatus("idle"), 2500);
   };
 

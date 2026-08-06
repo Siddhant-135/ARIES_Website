@@ -17,7 +17,7 @@ export function ProjectsExplorer({
   members = [],
 }: {
   projects: Project[];
-  members?: Pick<Member, "slug" | "name">[];
+  members?: Pick<Member, "slug" | "name" | "avatar" | "role">[];
 }) {
   const router = useRouter();
   const { session } = useAuth();
@@ -159,7 +159,7 @@ export function ProjectsExplorer({
         <div className="mt-8 grid gap-8 sm:grid-cols-2 xl:grid-cols-3">
           {filtered.map((p) => (
             <div key={p.slug} className="relative">
-              <ProjectCard project={p} />
+              <ProjectCard project={p} members={members} />
               {canEdit && (
                 <button
                   type="button"
